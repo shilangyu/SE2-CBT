@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "lint": "prettier --check .",
     "lint-fix": "prettier --write .",
-    "test": "jest --watchAll"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "react": "^17.0.2",
