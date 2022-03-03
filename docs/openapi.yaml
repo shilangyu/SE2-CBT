@@ -1,0 +1,1061 @@
+openapi: 3.0.1
+info:
+  title: Team-CBT API
+  description: "This is an API for Team-CBT web app"
+  version: 1.0.0
+servers:
+  - url: https://teamcbt.com/v1
+  - url: http://teamcbt.com/v1
+tags:
+  - name: user
+    description: Operations about user
+  - name: session
+    description: Operations about session
+  - name: evaluation
+    description: Operations about evaluation
+  - name: statistics
+    description: Operations about statistics
+
+paths:
+  /session:
+    post:
+      tags:
+        - session
+      summary: Add a new session
+      operationId: addSession
+      requestBody:
+        description: Session object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Session"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Session"
+        required: true
+      responses:
+        200:
+          description: Success
+          content: {}
+        400:
+          description: Invalid input
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+      x-codegen-request-body-name: body
+  /session/findByStatus:
+    get:
+      tags:
+        - session
+      summary: Finds Session by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findSessionByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              default: finished
+              enum:
+                - not_started
+                - started_testing
+                - started_agenda
+                - started_methods
+                - started_testing_finish
+                - finished
+        - name: email
+          in: query
+          description: User's email
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+        400:
+          description: Invalid status value or email
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+  /session/findByUserID:
+    get:
+      tags:
+        - session
+      summary: Finds Session by UserID
+      operationId: findSessionByUserID
+      parameters:
+        - name: UserID
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Session"
+        400:
+          description: Invalid status value or email
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+  /session/{sessionID}:
+    get:
+      tags:
+        - session
+      summary: Find Session by ID
+      description: Returns a single session
+      operationId: getSessionById
+      parameters:
+        - name: sessionID
+          in: path
+          description: ID of session to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Session"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Session"
+        400:
+          description: Invalid ID supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Session not found
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - api_key: []
+    put:
+      tags:
+        - session
+      summary: Updates a Session in the database with form data
+      operationId: updateSessionWithForm
+      parameters:
+        - name: sessionID
+          in: path
+          description: ID of session that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/Session"
+        required: true
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+    delete:
+      tags:
+        - session
+      summary: Deletes a session
+      operationId: deleteSession
+      parameters:
+        - name: api_key
+          in: header
+          schema:
+            type: string
+        - name: sessionID
+          in: path
+          description: Session id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Session not found
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+  /user:
+    post:
+      tags:
+        - user
+      summary: Register user
+      description: Register user
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        400:
+          description: Operation failed or User already exists
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      x-codegen-request-body-name: body
+      security:
+        - teamcbt_auth:
+            - write:user
+    get:
+      tags:
+        - user
+      summary: get list of users
+      operationId: getAllUsers
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: Failure of users retrieval
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:session
+            - read:session
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+        - name: email
+          in: query
+          description: Email of the user
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          headers:
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Invalid username/password supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - read:user
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      responses:
+        200:
+          description: successful operation
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+  /user/{email}:
+    get:
+      tags:
+        - user
+      summary: Get user by email
+      operationId: getUserByEmail
+      parameters:
+        - name: email
+          in: path
+          description: "The email of the user that needs to be fetched. Use user1@gmail.com for testing. "
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/User"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Invalid email supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: User not found
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+    put:
+      tags:
+        - user
+      summary: Updated user
+      description: This can be used for manage account and ban user use cases
+      operationId: updateUser
+      parameters:
+        - name: email
+          in: path
+          description: name that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated user object
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        400:
+          description: Invalid user supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: User not found
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: email
+          in: path
+          description: The email that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        400:
+          description: Invalid username supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: User not found
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+  /evaluation:
+    post:
+      tags:
+        - evaluation
+      summary: Add a new evaluation
+      operationId: addEvaluation
+      requestBody:
+        description: Evaluation object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Evaluation"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Evaluation"
+        required: true
+      responses:
+        200:
+          description: Success
+          content: {}
+        400:
+          description: Invalid input
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:evaluation
+            - read:evaluation
+      x-codegen-request-body-name: body
+  /evaluation/findByStatus:
+    get:
+      tags:
+        - evaluation
+      summary: Finds Evaluation by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findEvaluationByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              default: Not_Started
+              enum:
+                - Not_Started
+                - In_Progress
+                - On_Hold
+                - Finished
+        - name: email
+          in: query
+          description: User's email
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Evaluation"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Evaluation"
+        400:
+          description: Invalid status value or email
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:evaluation
+            - read:evaluation
+  /evaluation/findByUserID:
+    get:
+      tags:
+        - evaluation
+      summary: Finds Evaluation by userID
+      operationId: findEvaluationByuserID
+      parameters:
+        - name: userID
+          in: query
+          description: User's ID
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Evaluation"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Evaluation"
+        400:
+          description: Invalid status value or email
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:evaluation
+            - read:evaluation
+  /evaluation/{evaluationID}:
+    get:
+      tags:
+        - evaluation
+      summary: Find Evaluation by ID
+      description: Returns a single session
+      operationId: getEvaluationById
+      parameters:
+        - name: evaluationID
+          in: path
+          description: ID of evaluation to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Evaluation"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Evaluation"
+        400:
+          description: Invalid ID supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Evaluation not found
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - api_key: []
+    put:
+      tags:
+        - evaluation
+      summary: Updates an Evaluation in the database with form data
+      operationId: updateEvaluationWithForm
+      parameters:
+        - name: evaluationID
+          in: path
+          description: ID of evaluation that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              $ref: "#/components/schemas/Evaluation"
+        required: true
+      responses:
+        400:
+          description: Invalid input
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:evaluation
+            - read:evaluation
+    delete:
+      tags:
+        - evaluation
+      summary: Deletes an evaluation
+      operationId: deleteEvaluation
+      parameters:
+        - name: api_key
+          in: header
+          schema:
+            type: string
+        - name: evaluationID
+          in: path
+          description: Evaluation id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        400:
+          description: Invalid ID supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Evaluation not found
+          content: {}
+        500:
+          description: failure
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:evaluation
+            - read:evaluation
+  /statistics/{statisticID}:
+    put:
+      tags:
+        - statistics
+      summary: Update an existing statistic
+      operationId: updateStatistics
+      parameters:
+        - name: statisticID
+          in: path
+          description: ID of statistic that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Evluation object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Statistics"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Statistics"
+        required: true
+      responses:
+        200:
+          description: Success
+          content: {}
+        400:
+          description: Invalid input
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: Server error
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:statistics
+            - read:statistics
+      x-codegen-request-body-name: body
+  /statistics:
+    post:
+      tags:
+        - statistics
+      summary: Add a new statistic
+      operationId: addStatistic
+      requestBody:
+        description: Statistic object that needs to be added
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Statistics"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Statistics"
+        required: true
+      responses:
+        200:
+          description: Success
+          content: {}
+        400:
+          description: Invalid input
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        500:
+          description: Server error
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:statistics
+            - read:statistics
+      x-codegen-request-body-name: body
+  /statistics/{email}:
+    get:
+      tags:
+        - statistics
+      summary: Get Statistics of a user
+      description: Returns a statistics object
+      operationId: getStatisticsByEmail
+      parameters:
+        - name: email
+          in: path
+          description: email of user to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+        400:
+          description: Invalid email supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Evaluation not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:statistics
+            - read:statistics
+  /statistics/{userID}:
+    get:
+      tags:
+        - statistics
+      summary: Get Statistics of a user
+      description: Returns a statistics object
+      operationId: getStatisticsByUserID
+      parameters:
+        - name: userID
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+        400:
+          description: Invalid ID supplied
+          content: {}
+        403:
+          description: Access Forbidden
+          content: {}
+        404:
+          description: Evaluation not found
+          content: {}
+        500:
+          description: Server error
+          content: {}
+        503:
+          description: Server is currently down
+          content: {}
+      security:
+        - teamcbt_auth:
+            - write:statistics
+            - read:statistics
+components:
+  schemas:
+    User:
+      required:
+        - email
+        - password
+        - age
+        - gender
+        - banned
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
+        userStatus:
+          type: integer
+        banned:
+          type: boolean
+      xml:
+        name: User
+    Session:
+      required:
+        - sessionID
+        - testStep
+        - agendaStep
+        - methodStep
+      type: object
+      properties:
+        sessionID:
+          type: integer
+          format: int64
+        testStep:
+          type: object
+        agendaStep:
+          type: object
+        methodStep:
+          type: object
+        userID:
+          type: integer
+        status:
+          type: string
+          description: session status
+          enum:
+            - not_started
+            - started_testing
+            - started_agenda
+            - started_methods
+            - started_testing_finish
+            - finished
+      xml:
+        name: Session
+    Evaluation:
+      required:
+        - date
+        - status
+        - totalScore
+        - arrayScore
+        - questionSet
+        - evaluationID
+      type: object
+      properties:
+        evaluationID:
+          type: integer
+          format: int64
+        date:
+          type: string
+        status:
+          type: string
+          description: evaluation status
+          enum:
+            - Not_Started
+            - In_Progress
+            - Finished
+            - Rejected
+        totalScore:
+          type: integer
+        arrayScore:
+          type: array
+          items:
+            type: integer
+        questionSet:
+          type: array
+          items:
+            type: string
+      xml:
+        name: Evaluation
+    Statistics:
+      required:
+        - improvement
+        - anxietyTestResults
+        - depressionTestResults
+        - relationshipTestResults
+        - happinessTestResults
+        - addictionTestResults
+      type: object
+      properties:
+        statisticID:
+          type: integer
+        improvement:
+          type: array
+          items:
+            type: integer
+        anxietyTestResults:
+          type: array
+          items:
+            type: integer
+        depressionTestResults:
+          type: array
+          items:
+            type: integer
+        relationshipTestResults:
+          type: array
+          items:
+            type: integer
+        happinessTestResults:
+          type: array
+          items:
+            type: integer
+        addictionTestResults:
+          type: array
+          items:
+            type: integer
+        date:
+          type: string
+        userID:
+          type: integer
+      xml:
+        name: Statistics
+  securitySchemes:
+    teamcbt_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://teamcbt.com/oauth/dialog
+          scopes:
+            write:session: modify session in your account
+            read:session: read your session
+            read:user: login to an account
+            write:evaluation: modify your evaluation
+            read:evaluation: read your evaluation
+            write:statistics: modify your statistics
+            read:statistics: read your statistics
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
