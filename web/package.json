@@ -1,26 +1,36 @@
 {
-  "name": "cbt-web",
-  "private": true,
-  "version": "0.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "prettier --check .",
-    "lint-fix": "prettier --write .",
-    "test": "jest --passWithNoTests"
-  },
-  "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "devDependencies": {
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.13",
-    "@vitejs/plugin-react": "^1.2.0",
-    "jest": "^27.5.1",
-    "prettier": "^2.5.1",
-    "typescript": "^4.6.2",
-    "vite": "^2.8.6"
-  }
+    "name": "cbt-web",
+    "private": true,
+    "version": "0.0.0",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "prettier --check . --ignore-path .gitignore && eslint ./src --ext .jsx,.js,.ts,.tsx --ignore-path .gitignore",
+        "lint:fix": "prettier --write . --ignore-path .gitignore && eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path .gitignore",
+        "test": "jest --passWithNoTests"
+    },
+    "dependencies": {
+        "@emotion/react": "^11.8.1",
+        "@emotion/styled": "^11.8.1",
+        "@mui/material": "^5.4.4",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "zustand": "^3.7.1"
+    },
+    "devDependencies": {
+        "@types/react": "^17.0.39",
+        "@types/react-dom": "^17.0.13",
+        "@typescript-eslint/eslint-plugin": "^5.13.0",
+        "@typescript-eslint/parser": "^5.13.0",
+        "@vitejs/plugin-react": "^1.2.0",
+        "eslint": "^8.10.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-react": "^7.29.3",
+        "jest": "^27.5.1",
+        "prettier": "^2.5.1",
+        "typescript": "^4.6.2",
+        "vite": "^2.8.6"
+    }
 }
