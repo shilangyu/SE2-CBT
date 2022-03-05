@@ -1,0 +1,36 @@
+name: backend-ci
+
+on:
+  push:
+    branches: [main]
+    paths: [backend/**]
+  pull_request:
+    paths: [backend/**]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.102"
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run analyzer
+        run: dotnet format --severity info --verify-no-changes --no-restore
+
+      - name: Build
+        run: dotnet build --no-restore
