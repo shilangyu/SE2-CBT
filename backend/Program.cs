@@ -11,16 +11,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Explicitly set data protection keys directory to make it Docker-volume compatible
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-{
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
     builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys"));
 }
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
