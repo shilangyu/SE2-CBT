@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
+        "build:gh-pages": "tsc && vite build --base=/SE2-CBT/",
         "preview": "vite preview",
         "lint": "prettier --check . --ignore-path .gitignore && eslint ./src --ext .jsx,.js,.ts,.tsx --ignore-path .gitignore",
         "lint:fix": "prettier --write . --ignore-path .gitignore && eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path .gitignore",
