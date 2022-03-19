@@ -14,7 +14,7 @@ Stack:
 ```sh
 cd backend
 docker build -t se2-back . # build image
-docker run -it -p 3000:80 se2-back # create container
+docker run -it --rm -p 3000:80 se2-back # create container
 ```
 
 ### development
@@ -37,7 +37,7 @@ Stack:
 ```sh
 cd web
 docker build -t se2-front . # build image
-docker run -it -p 3000:80 se2-front # create container
+docker run -it --rm -p 3001:80 se2-front # create container
 ```
 
 ### development
