@@ -3,6 +3,14 @@ using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment()) {
+    builder.Services.AddCors(options => {
+        options.AddDefaultPolicy(builder => {
+            builder.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback);
+        });
+    });
+}
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -24,6 +32,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
