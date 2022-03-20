@@ -256,3 +256,5 @@ dev/proxy/*.key
 
 dev/out/
 tilt_modules/
+
+keys/
