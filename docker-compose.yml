@@ -6,10 +6,11 @@ services:
       - "3000:80"
 
   web:
-    build: web
+    build:
+      context: web
+      args:
+        - VITE_API_URL=http://localhost:3000
     ports:
       - "3001:80"
-    environment:
-      - VITE_API_URL=http://localhost:3003
     depends_on:
       - backend
