@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  backend:
+    build: backend
+    ports:
+      - "3000:80"
+
+  web:
+    build: web
+    ports:
+      - "3001:80"
+    environment:
+      - VITE_API_URL=http://localhost:3003
+    depends_on:
+      - backend
