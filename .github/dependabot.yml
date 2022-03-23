@@ -3,4 +3,9 @@ updates:
   - package-ecosystem: "npm"
     directory: "/web"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+
+  - package-ecosystem: "nuget"
+    directory: "/backend"
+    schedule:
+      interval: "monthly"
