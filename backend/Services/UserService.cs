@@ -16,16 +16,24 @@ public interface IUserService {
 public class AuthenticationCredentialsException : Exception { }
 
 public class UserService : IUserService {
+    private readonly IJwtTokenService tokenService;
+    private readonly IConfiguration configuration;
+
     public IEnumerable<User> GetAllUsers() {
         throw new NotImplementedException();
     }
 
     public User GetUserById(int id) {
-        throw new NotImplementedException();
+        return GetExampleUser();
     }
 
     public User GetUserByEmail(string email) {
-        throw new NotImplementedException();
+        return GetExampleUser();
+    }
+
+    public UserService(IJwtTokenService tokenService, IConfiguration configuration) {
+        this.tokenService = tokenService;
+        this.configuration = configuration;
     }
 
     // implementation of user authentication
@@ -36,11 +44,23 @@ public class UserService : IUserService {
             throw new AuthenticationCredentialsException();
         }
 
-        throw new NotImplementedException ();
+        var validPeriod = configuration.GetValue<int>("jwt:ValidSeconds");
+        var expiration = DateTime.UtcNow.AddSeconds(validPeriod);
+
+        var response = new UserAuthenticationResponse() {
+            User = user,
+            Token = tokenService.GenerateToken(user, expiration, model.Scopes),
+            TokenExpiration = expiration
+        };
+
+        return response;
     }
 
-    // TODO: move this to different class?
-    private string GenerateJwtToken (User user, DateTime expiration) {
-        throw new NotImplementedException();
+    private static User GetExampleUser() {
+        return new User() {
+            Email = "mail@mail.com",
+            Password = "password",
+            Gender = "male"
+        };
     }
 }
