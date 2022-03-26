@@ -40,7 +40,7 @@ public class UserService : IUserService {
     }
 
     // TODO: move this to different class?
-    private string generateJwtToken (User user, DateTime expiration) {
+    private string GenerateJwtToken (User user, DateTime expiration) {
         throw new NotImplementedException();
     }
 }
