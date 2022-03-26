@@ -20,14 +20,14 @@ public class JwtTokenService : IJwtTokenService {
     }
 
     public string GenerateToken(User user, DateTime expiration, string[] scopes) {
-        var claims = new List<Claim>() { 
+        var claims = new List<Claim>() {
             new Claim("id", user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Email)
         };
-        
+
         // TODO: verify if user can have this role
         if (scopes != null) {
-            foreach(var scope in scopes) {
+            foreach (var scope in scopes) {
                 claims.Add(new Claim(ClaimTypes.Role, scope));
             }
         }

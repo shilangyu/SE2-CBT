@@ -31,8 +31,8 @@ builder.Services.AddSwaggerGen();
 
 // authentication
 {
-    builder.Services.AddAuthentication("jwtauth").AddJwtBearer ("jwtauth", options => {
-        options.TokenValidationParameters = new TokenValidationParameters () {
+    builder.Services.AddAuthentication("jwtauth").AddJwtBearer("jwtauth", options => {
+        options.TokenValidationParameters = new TokenValidationParameters() {
             ValidateIssuerSigningKey = true,
             ValidateIssuer = true,
             ValidateAudience = true,
@@ -48,9 +48,7 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
     builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys"));
 }
 
-var app = builder.Build();
-
-{
+var app = builder.Build(); {
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment()) {
         app.UseSwagger();

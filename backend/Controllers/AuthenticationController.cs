@@ -13,7 +13,7 @@ public class AuthenticationController : ControllerBase {
     private readonly ILogger<AuthenticationController> logger;
     private readonly IUserService userService;
 
-    public AuthenticationController (IUserService userService, ILogger<AuthenticationController> logger) {
+    public AuthenticationController(IUserService userService, ILogger<AuthenticationController> logger) {
         this.logger = logger;
         this.userService = userService;
     }
@@ -21,14 +21,15 @@ public class AuthenticationController : ControllerBase {
     [AllowAnonymous]
     [HttpPost(Name = "PostAuthentication")]
     public IActionResult Post(UserAuthenticationRequest authenticationRequest) {
-        logger.LogInformation("authenticating user with data [email = {email}, password = {password}]", 
+        logger.LogInformation("authenticating user with data [email = {email}, password = {password}]",
             authenticationRequest.Email, authenticationRequest.Password);
-        
+
         try {
             var token = userService.Authenticate(authenticationRequest);
             return Ok(token);
-        } catch (AuthenticationCredentialsException) {
-            return Unauthorized(new { message = "invalid username or password" }); 
+        }
+        catch (AuthenticationCredentialsException) {
+            return Unauthorized(new { message = "invalid username or password" });
         }
     }
 }

@@ -17,6 +17,6 @@ public class User {
     public string? Gender { get; set; }
 
     public int UserStatus { get; set; }
-    
+
     public bool Banned { get; set; }
 }
