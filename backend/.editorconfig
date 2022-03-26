@@ -69,7 +69,7 @@ csharp_style_conditional_delegate_call                                   = true 
 
 csharp_prefer_braces                                                     = true : warning # I won't allow changing that :P
 
-dotnet_sort_system_directives_first                                      = true
+dotnet_sort_system_directives_first                                      = false
 dotnet_separate_import_directive_groups                                  = false
 
 csharp_new_line_before_open_brace                                        = none
