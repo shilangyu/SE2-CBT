@@ -1,4 +1,4 @@
-namespace CbtBackend;
+namespace CbtBackend.Models;
 
 public class WeatherForecast {
     public DateTime Date { get; set; }
