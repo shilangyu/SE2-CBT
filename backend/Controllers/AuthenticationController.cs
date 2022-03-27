@@ -7,7 +7,7 @@ using CbtBackend.Services;
 namespace CbtBackend.Controllers;
 
 [ApiController]
-[Route("/user/login")]
+[Route("user")]
 [Produces("application/json")]
 public class AuthenticationController : ControllerBase {
     public const string TokenExpireHeader = "X-Expires-After";
@@ -21,8 +21,8 @@ public class AuthenticationController : ControllerBase {
     }
 
     [AllowAnonymous]
-    [HttpPost(Name = "PostAuthentication")]
-    public IActionResult Post([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
+    [HttpPost("login")]
+    public IActionResult Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
         logger.LogDebug("authenticating user with data [email = {email}, password = {password}]", email, password);
 
         try {
@@ -40,5 +40,11 @@ public class AuthenticationController : ControllerBase {
         catch (AuthenticationCredentialsException) {
             return BadRequest(new { message = "invalid username or password" });
         }
+    }
+
+    [HttpPost("logout")]
+    public IActionResult Logout() {
+        // This is here just to adhere to the spec. This is a no-op.
+        return Ok();
     }
 }
