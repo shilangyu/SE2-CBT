@@ -6,7 +6,7 @@ export class ApiClient {
         console.log(`Initialized ApiClient for ${baseUrl}`)
     }
 
-    async #baseRequest<T>(path: string, options: RequestInit = {}) {
+    private async baseRequest<T>(path: string, options: RequestInit = {}) {
         const token = useLoginStore.getState().token
         const { headers, ...otherOptions } = options
 
@@ -37,7 +37,7 @@ export class ApiClient {
         const params = new URLSearchParams({ email, password })
 
         try {
-            return await this.#baseRequest<string>(`user/login?${params}`, {
+            return await this.baseRequest<string>(`user/login?${params}`, {
                 method: 'POST',
             })
         } catch (err) {
