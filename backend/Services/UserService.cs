@@ -61,7 +61,7 @@ public class UserService : IUserService {
             Email = "mail@mail.com",
             Password = "password",
             Gender = "male",
-            Roles = { "test" }
+            Roles = new List<string> { "test" }
         };
     }
 }
