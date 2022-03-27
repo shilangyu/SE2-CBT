@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+using CbtBackend.Entities;
+using CbtBackend.Models;
 
 namespace CbtBackend.Controllers;
 
@@ -16,6 +20,7 @@ public class WeatherForecastController : ControllerBase {
         this.logger = logger;
     }
 
+    [Authorize(Roles = "test")]
     [HttpGet(Name = "GetWeatherForecast")]
     public IEnumerable<WeatherForecast> Get() {
         logger.LogDebug("Sending weather");
