@@ -2,10 +2,10 @@ import * as React from 'react'
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
-import { loginStoreSelects, useLoginStore } from './stores/loginStore'
+import { useLoginStore } from './stores/loginStore'
 
 function App() {
-    const isLoggedIn = useLoginStore(loginStoreSelects.isLoggedIn)
+    const isLoggedIn = useLoginStore(s => s.isLoggedIn())
 
     return (
         <HashRouter>

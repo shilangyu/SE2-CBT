@@ -1,14 +1,20 @@
 import create from 'zustand'
 import { apiClient, UnauthorizedError } from '../api'
 
+const tokenStorageKey = 'token'
+
 type LoginStore = {
     token?: string
+    isLoggedIn: () => boolean
     logIn: (email: string, password: string) => Promise<boolean>
     logOut: () => void
 }
 
 export const useLoginStore = create<LoginStore>(set => ({
-    token: undefined,
+    token: localStorage[tokenStorageKey],
+    isLoggedIn() {
+        return this.token !== undefined
+    },
     async logIn(email, password) {
         try {
             const token = await apiClient.logIn(email, password)
@@ -28,6 +34,6 @@ export const useLoginStore = create<LoginStore>(set => ({
     },
 }))
 
-export const loginStoreSelects = {
-    isLoggedIn: (s: LoginStore) => s.token !== undefined,
-}
+useLoginStore.subscribe(state => {
+    localStorage[tokenStorageKey] = state.token
+})
