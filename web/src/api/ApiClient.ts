@@ -37,7 +37,9 @@ export class ApiClient {
         const params = new URLSearchParams({ email, password })
 
         try {
-            return await this.#baseRequest<string>(`user/login?${params}`)
+            return await this.#baseRequest<string>(`user/login?${params}`, {
+                method: 'POST',
+            })
         } catch (err) {
             // 400 status code is used for failed login instead of standard 401
             if (
