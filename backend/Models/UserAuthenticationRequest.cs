@@ -3,12 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace CbtBackend.Models;
 
 public class UserAuthenticationRequest {
-    [NotNull]
-    public string? Email { get; set; }
+    public string Email { get; set; } = default!;
 
-    [NotNull]
-    public string? Password { get; set; }
-
-    [NotNull]
-    public string[]? Scopes { get; set; }
+    public string Password { get; set; } = default!;
 }
