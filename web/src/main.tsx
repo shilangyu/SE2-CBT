@@ -1,16 +1,16 @@
 import { ThemeProvider } from '@emotion/react'
+import { SnackbarProvider } from 'notistack'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ApiClient } from './api/api_client'
 import App from './App'
 import { theme } from './theme'
-
-const apiClient = new ApiClient(import.meta.env.VITE_API_URL)
 
 ReactDOM.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <App />
+            <SnackbarProvider maxSnack={3}>
+                <App />
+            </SnackbarProvider>
         </ThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
