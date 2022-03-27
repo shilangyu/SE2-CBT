@@ -8,6 +8,7 @@ namespace CbtBackend.Controllers;
 
 [ApiController]
 [Route("/user/login")]
+[Produces("application/json")]
 public class AuthenticationController : ControllerBase {
     public const string TokenExpireHeader = "X-Expires-After";
 

@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 if (builder.Environment.IsDevelopment()) {
     builder.Services.AddCors(options => {
         options.AddDefaultPolicy(builder => {
-            builder.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback);
+            builder.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback)
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
     });
 }
