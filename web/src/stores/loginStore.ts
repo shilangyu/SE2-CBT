@@ -35,5 +35,9 @@ export const useLoginStore = create<LoginStore>(set => ({
 }))
 
 useLoginStore.subscribe(state => {
-    localStorage[tokenStorageKey] = state.token
+    if (state.token === undefined) {
+        localStorage.removeItem(tokenStorageKey)
+    } else {
+        localStorage[tokenStorageKey] = state.token
+    }
 })
