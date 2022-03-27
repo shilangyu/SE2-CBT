@@ -30,7 +30,7 @@ function LoginPage() {
         if (success) {
             enqueueSnackbar('Login successful', { variant: 'success' })
         } else {
-            setCredentialsError('wrong crentials')
+            setCredentialsError('wrong credentials')
         }
     }
 
