@@ -7,7 +7,7 @@ using CbtBackend.Services;
 namespace CbtBackend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/user/login")]
 public class AuthenticationController : ControllerBase {
     public const string TokenExpireHeader = "X-Expires-After";
 
