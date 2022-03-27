@@ -49,7 +49,7 @@ public class UserService : IUserService {
 
         var response = new UserAuthenticationResponse() {
             User = user,
-            Token = tokenService.GenerateToken(user, expiration, model.Scopes),
+            Token = tokenService.GenerateToken(user, expiration),
             TokenExpiration = expiration
         };
 
@@ -60,7 +60,8 @@ public class UserService : IUserService {
         return new User() {
             Email = "mail@mail.com",
             Password = "password",
-            Gender = "male"
+            Gender = "male",
+            Roles = { "test" }
         };
     }
 }

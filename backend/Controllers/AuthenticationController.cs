@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using CbtBackend.Models;
-using CbtBackend.Entities;
 using CbtBackend.Services;
 
 namespace CbtBackend.Controllers;
@@ -20,16 +19,19 @@ public class AuthenticationController : ControllerBase {
 
     [AllowAnonymous]
     [HttpPost(Name = "PostAuthentication")]
-    public IActionResult Post(UserAuthenticationRequest authenticationRequest) {
-        logger.LogInformation("authenticating user with data [email = {email}, password = {password}]",
-            authenticationRequest.Email, authenticationRequest.Password);
+    public IActionResult Post([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
+        logger.LogInformation("authenticating user with data [email = {email}, password = {password}]", email, password);
 
         try {
-            var token = userService.Authenticate(authenticationRequest);
-            return Ok(token);
+            var token = userService.Authenticate(new UserAuthenticationRequest() {
+                Email = email,
+                Password = password
+            });
+
+            return Ok(token.Token);
         }
         catch (AuthenticationCredentialsException) {
-            return Unauthorized(new { message = "invalid username or password" });
+            return BadRequest(new { message = "invalid username or password" });
         }
     }
 }

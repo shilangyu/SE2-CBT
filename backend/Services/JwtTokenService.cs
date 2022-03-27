@@ -9,7 +9,7 @@ using CbtBackend.Entities;
 namespace CbtBackend.Services;
 
 public interface IJwtTokenService {
-    string GenerateToken(User user, DateTime expiration, string[] scopes);
+    string GenerateToken(User user, DateTime expiration);
 }
 
 public class JwtTokenService : IJwtTokenService {
@@ -19,17 +19,15 @@ public class JwtTokenService : IJwtTokenService {
         this.configuration = configuration;
     }
 
-    public string GenerateToken(User user, DateTime expiration, string[] scopes) {
+    public string GenerateToken(User user, DateTime expiration) {
         var claims = new List<Claim>() {
             new Claim("id", user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Email)
         };
 
         // TODO: verify if user can have this role
-        if (scopes != null) {
-            foreach (var scope in scopes) {
-                claims.Add(new Claim(ClaimTypes.Role, scope));
-            }
+        foreach (var role in user.Roles) {
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetValue<string>("Jwt:Key")));
