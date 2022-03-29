@@ -16,6 +16,9 @@ indent_size = 2
 [*.{cshtml, cstxt}]
 insert_final_newline = false
 
+[Migrations/*.cs]
+generated_code = true
+
 [*.{cs}]
 indent_size = 4
 
