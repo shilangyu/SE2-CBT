@@ -11,6 +11,7 @@ import * as React from 'react'
 import { useSnackbar } from 'notistack'
 import { useLoginStore } from '../../stores/loginStore'
 import { useAsync } from '../../hooks/useAsync'
+import { Link } from 'react-router-dom'
 
 function LoginPage() {
     const theme = useTheme()
@@ -62,7 +63,16 @@ function LoginPage() {
                     onChange={e => setPassword(e.target.value)}
                 />
             </Grid>
-            <Grid item>
+            <Grid
+                item
+                container
+                direction="row"
+                justifyContent="center"
+                gap={4}
+            >
+                <Button component={Link} to="/register">
+                    Create account
+                </Button>
                 <Button variant="contained" size="large" onClick={onSubmit}>
                     Log in
                 </Button>

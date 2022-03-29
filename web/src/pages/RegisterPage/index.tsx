@@ -11,6 +11,7 @@ import * as React from 'react'
 import { useSnackbar } from 'notistack'
 import { useLoginStore } from '../../stores/loginStore'
 import { useAsync } from '../../hooks/useAsync'
+import { Link } from 'react-router-dom'
 
 function RegisterPage() {
     const theme = useTheme()
@@ -99,9 +100,18 @@ function RegisterPage() {
                     onChange={e => setGender(e.target.value)}
                 />
             </Grid>
-            <Grid item>
-                <Button variant="contained" size="large" onClick={onSubmit}>
+            <Grid
+                item
+                container
+                direction="row"
+                justifyContent="center"
+                gap={4}
+            >
+                <Button component={Link} to="/login">
                     Log in
+                </Button>
+                <Button variant="contained" size="large" onClick={onSubmit}>
+                    Create account
                 </Button>
             </Grid>
             {loading && (
