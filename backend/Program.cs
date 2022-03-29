@@ -29,6 +29,7 @@ builder.Services.AddSwaggerGen();
 {
     builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
     builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddDbContext<CbtDbContext>();
 }
 
 // authentication

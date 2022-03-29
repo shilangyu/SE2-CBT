@@ -22,11 +22,11 @@ public class AuthenticationController : ControllerBase {
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
+    public async Task<IActionResult> Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
         logger.LogDebug("authenticating user with data [email = {email}, password = {password}]", email, password);
 
         try {
-            var token = userService.Authenticate(new UserAuthenticationRequest() {
+            var token = await userService.Authenticate(new UserAuthenticationRequest() {
                 Email = email,
                 Password = password
             });
@@ -36,8 +36,7 @@ public class AuthenticationController : ControllerBase {
 
             // return token as string
             return Ok(token.Token);
-        }
-        catch (AuthenticationCredentialsException) {
+        } catch (AuthenticationCredentialsException) {
             return BadRequest(new { message = "invalid username or password" });
         }
     }
