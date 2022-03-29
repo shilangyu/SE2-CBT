@@ -1,5 +1,5 @@
 import create from 'zustand'
-import { apiClient, UnauthorizedError } from '../api'
+import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
 
 const tokenStorageKey = 'token'
 
@@ -7,6 +7,12 @@ type LoginStore = {
     token?: string
     isLoggedIn: () => boolean
     logIn: (email: string, password: string) => Promise<boolean>
+    register: (
+        email: string,
+        password: string,
+        age: number,
+        gender: string
+    ) => Promise<boolean>
     logOut: () => void
 }
 
@@ -23,6 +29,23 @@ export const useLoginStore = create<LoginStore>(set => ({
             return true
         } catch (err) {
             if (err instanceof UnauthorizedError) {
+                return false
+            }
+
+            throw err
+        }
+    },
+    async register(
+        email: string,
+        password: string,
+        age: number,
+        gender: string
+    ) {
+        try {
+            await apiClient.register(email, password, age, gender)
+            return await this.logIn(email, password)
+        } catch (err) {
+            if (err instanceof EmailUsedError) {
                 return false
             }
 

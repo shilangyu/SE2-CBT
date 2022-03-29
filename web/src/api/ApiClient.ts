@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '.'
+import { EmailUsedError, UnauthorizedError } from '.'
 import { useLoginStore } from '../stores/loginStore'
 
 export class ApiClient {
@@ -47,6 +47,33 @@ export class ApiClient {
                 err.response.status === 400
             ) {
                 throw new UnauthorizedError()
+            }
+            throw err
+        }
+    }
+
+    async register(
+        email: string,
+        password: string,
+        age: number,
+        gender: string
+    ) {
+        try {
+            return await this.baseRequest<void>(`user`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email,
+                    password,
+                    age,
+                    gender,
+                }),
+            })
+        } catch (err) {
+            if (
+                err instanceof FailedRequestError &&
+                err.response.status === 400
+            ) {
+                throw new EmailUsedError()
             }
             throw err
         }
