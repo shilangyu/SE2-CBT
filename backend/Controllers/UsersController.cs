@@ -73,7 +73,7 @@ public class UsersController : ControllerBase {
             Age = userRequest.Age,
             Gender = userRequest.Gender,
             UserStatus = 1, // what is this used for???
-            Roles = new List<string> {UserRoles.UserWrite}
+            Roles = new List<string> { UserRoles.UserWrite }
         };
 
         // add user to db

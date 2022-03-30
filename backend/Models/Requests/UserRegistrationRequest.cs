@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace CbtBackend.Models.Requests; 
+namespace CbtBackend.Models.Requests;
 
 public class UserRegistrationRequest {
     [Required]

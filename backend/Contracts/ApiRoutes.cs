@@ -1,4 +1,4 @@
-namespace CbtBackend.Contracts; 
+namespace CbtBackend.Contracts;
 
 public static class ApiRoutes {
 
@@ -12,5 +12,5 @@ public static class ApiRoutes {
         public const string UpdateByEmail = "user/{email}";   // PUT
         public const string DeleteByEmail = "user/{email}";   // DELETE
     }
-    
+
 }

@@ -3,7 +3,7 @@ using CbtBackend.Models;
 using CbtBackend.Models.Requests;
 using CbtBackend.Models.Responses;
 
-namespace CbtBackend.Services; 
+namespace CbtBackend.Services;
 
 public interface IUserService {
     // basic operations
