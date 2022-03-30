@@ -63,7 +63,8 @@ public class UsersController : ControllerBase {
             return BadRequest(new { message = "User already exists" });
         }
 
-        logger.LogDebug("Registering user with data [email = {email}, password = {password}]", userRequest.Email, userRequest.Password);
+        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}",
+            userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned);
 
         var user = new User {
             Email = userRequest.Email,
