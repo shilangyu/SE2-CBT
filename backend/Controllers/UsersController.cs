@@ -71,39 +71,9 @@ public class UsersController : ControllerBase {
             Banned = userRequest.Banned,
             Age = userRequest.Age,
             Gender = userRequest.Gender,
-            UserStatus = 1,
-            Roles = new List<string> {"write:user"}
+            UserStatus = 1, // what is this used for???
+            Roles = new List<string> {UserRoles.UserWrite}
         };
-
-
-
-        //var user = new User {
-        //    // Id will be given automatically by DB?
-        //    // is UserStatus needed to be declared?
-
-        //    Email = userRequest.Email,
-        //    Password = userRequest.Password,
-        //    Banned = userRequest.Banned,
-        //    Age = userRequest.Age,
-        //    Gender = userRequest.Gender,
-
-        //    //Email = "a@b.c",
-        //    //Password = "password",
-        //    //Banned = false,
-        //    //Age = 1,
-        //    //Gender = "gender",
-        //    //UserStatus = 1,
-
-        //    UserStatus = 1,
-        //    Roles = {"write:user"}
-        //};
-
-        if (user == null) {
-            return BadRequest(new { message = "USER NULL" });
-        }
-        if (userRequest == null) {
-            return BadRequest(new { message = "USERREQUEST NULL" });
-        }
 
         // add user to db
         var registered = await userService.RegisterUserAsync(user);
@@ -112,13 +82,11 @@ public class UsersController : ControllerBase {
         }
 
         return Ok();
-        // the lines below is the proper way but spec wants us to return status code 200
+        // the lines below is the proper way to return (using Created()) but spec wants us to return status code 200, perhaps
+        // we can talk with other groups and change the return status to 201
         //var response = new UserRegistrationResponse() { User = user };
         //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
         //var locationUri = baseUrl + "/" + ApiRoutes.User.GetByEmail.Replace("{email}", user.Email);
         //return Created(locationUri, response);
     }
-
-    
-
 }

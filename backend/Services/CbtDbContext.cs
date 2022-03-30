@@ -8,7 +8,7 @@ public sealed class CbtDbContext : DbContext {
     public DbSet<User> Users { get; set; }
     public CbtDbContext(IConfiguration configuration) {
         this.configuration = configuration;
-        this.Users = Set<User>();
+        Users = Set<User>();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
