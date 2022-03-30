@@ -10,6 +10,9 @@ public static class UserRoles {
     // login to an account
     public const string UserRead = "read:user";
 
+    // register new account
+    public const string UserWrite = "write:user";
+
     // modify your evaluation
     public const string EvaluationWrite = "write:evaluation";
 

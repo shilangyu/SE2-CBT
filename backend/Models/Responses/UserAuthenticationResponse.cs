@@ -1,7 +1,6 @@
-using System.Diagnostics.CodeAnalysis;
 using CbtBackend.Entities;
 
-namespace CbtBackend.Models;
+namespace CbtBackend.Models.Responses;
 
 public class UserAuthenticationResponse {
     public User User { get; set; } = default!;
