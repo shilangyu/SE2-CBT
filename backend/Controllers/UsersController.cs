@@ -56,42 +56,21 @@ public class UsersController : ControllerBase {
     }
 
     [HttpPost(ApiRoutes.User.Register)]
-    public async Task<IActionResult> Register([FromBody] UserRegistrationRequest userRequest) {
-        // check if user already exists
-        var existingUser = await userService.GetUserByEmailAsync(userRequest.Email);
-        if (existingUser != null) {
-            return BadRequest(new { message = "User already exists" });
-        }
-
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequest userRequest) {
         logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned);
 
-        var user = new User {
-            Email = userRequest.Email,
-            Password = userRequest.Password,
-            Banned = userRequest.Banned,
-            Age = userRequest.Age,
-            Gender = userRequest.Gender,
-            UserStatus = 1, // what is this used for???
-            Roles = new List<string> { UserRoles.UserWrite }
-        };
+        try {
+            var response = await userService.RegisterUserAsync(userRequest);
 
-        if (userRequest.UserStatus != null) {
-            user.UserStatus = userRequest.UserStatus.Value;
+            return Ok();
+            // the lines below is the proper way to return (using Created()) but spec wants us to return status code 200, perhaps
+            // we can talk with other groups and change the return status to 201. keeping the code in case it's decided to use 201.
+            //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
+            //var locationUri = baseUrl + "/" + ApiRoutes.User.GetByEmail.Replace("{email}", user.Email);
+            //return Created(locationUri, response);
+        } catch (RegistrationException e) {
+            return BadRequest(new { message = e.Message });
         }
-
-        // add user to db
-        var registered = await userService.RegisterUserAsync(user);
-        if (!registered) {
-            return BadRequest(new { message = "Operation failed" });
-        }
-
-        return Ok();
-        // the lines below is the proper way to return (using Created()) but spec wants us to return status code 200, perhaps
-        // we can talk with other groups and change the return status to 201
-        //var response = new UserRegistrationResponse() { User = user };
-        //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
-        //var locationUri = baseUrl + "/" + ApiRoutes.User.GetByEmail.Replace("{email}", user.Email);
-        //return Created(locationUri, response);
     }
 }

@@ -12,11 +12,10 @@ public interface IUserService {
     Task<List<User>> GetAllUsersAsync();
     Task<bool> UpdateUserAsync(User userToUpdate);
     Task<bool> DeleteUserAsync(string email);
-    Task<bool> RegisterUserAsync(User user);
 
-
-
+    // registration
+    Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest);
     // authentication
-    Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest model);
+    Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest);
 }
 

@@ -8,6 +8,14 @@ namespace CbtBackend.Services;
 
 public class AuthenticationCredentialsException : Exception { }
 
+public class RegistrationException : Exception {
+    public new string Message { get; set; } = default!;
+    public RegistrationException() { }
+    public RegistrationException(string message) {
+        Message = message;
+    }
+}
+
 public class UserService : IUserService {
     private readonly IJwtTokenService tokenService;
     private readonly IConfiguration configuration;
@@ -48,15 +56,45 @@ public class UserService : IUserService {
         return deleted > 0;
     }
 
-    public async Task<bool> RegisterUserAsync(User user) {
+    // implementation of user registration
+    public async Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest) {
+        // check if user already exists
+        var existingUser = await GetUserByEmailAsync(userRequest.Email);
+        if (existingUser != null) {
+            throw new RegistrationException("User already exists");
+        }
+
+        var user = new User {
+            Email = userRequest.Email,
+            Password = userRequest.Password,
+            Banned = userRequest.Banned,
+            Age = userRequest.Age,          // could it be null in userRequest? if yes then assign it outside like UserStatus below.
+            Gender = userRequest.Gender,    // could it be null in userRequest? if yes then assign it outside like UserStatus below.
+            UserStatus = 0,
+            Roles = new List<string> { UserRoles.UserWrite }
+        };
+
+        if (userRequest.UserStatus != null) {
+            user.UserStatus = userRequest.UserStatus.Value;
+        }
+
+        // add user to db
         await dbContext.Users.AddAsync(user);
         var registered = await dbContext.SaveChangesAsync();
-        return registered > 0;
+        if (registered <= 0) {
+            throw new RegistrationException("Operation failed");
+        }
+
+        var response = new UserRegistrationResponse() { // won't matter much if RegisterUser() returns status code 200 on success
+            User = user
+        };
+
+        return response;
     }
 
     // implementation of user authentication
-    public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest model) {
-        var user = await GetUserByEmailAsync(model.Email);
+    public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest) {
+        var user = await GetUserByEmailAsync(userRequest.Email);
 
         if (user == null) {
             throw new AuthenticationCredentialsException();
