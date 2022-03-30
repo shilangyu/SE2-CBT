@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
-
-namespace CbtBackend.Models;
+namespace CbtBackend.Models.Requests;
 
 public class UserAuthenticationRequest {
     public string Email { get; set; } = default!;

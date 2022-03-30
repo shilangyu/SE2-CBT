@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using CbtBackend.Models;
+using CbtBackend.Models.Requests;
 
 namespace CbtBackend.Entities;
 
