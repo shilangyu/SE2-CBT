@@ -66,6 +66,7 @@ export class ApiClient {
                     password,
                     age,
                     gender,
+                    banned: false,
                 }),
             })
         } catch (err) {
