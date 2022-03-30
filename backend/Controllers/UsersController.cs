@@ -63,7 +63,7 @@ public class UsersController : ControllerBase {
         try {
             var response = await userService.RegisterUserAsync(userRequest);
 
-            return Ok();
+            return Ok(new { });
             // the lines below is the proper way to return (using Created()) but spec wants us to return status code 200, perhaps
             // we can talk with other groups and change the return status to 201. keeping the code in case it's decided to use 201.
             //var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";

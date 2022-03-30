@@ -16,10 +16,10 @@ type LoginStore = {
     logOut: () => void
 }
 
-export const useLoginStore = create<LoginStore>(set => ({
+export const useLoginStore = create<LoginStore>((set, get) => ({
     token: localStorage[tokenStorageKey],
     isLoggedIn() {
-        return this.token !== undefined
+        return get().token !== undefined
     },
     async logIn(email, password) {
         try {
@@ -43,7 +43,7 @@ export const useLoginStore = create<LoginStore>(set => ({
     ) {
         try {
             await apiClient.register(email, password, age, gender)
-            return await this.logIn(email, password)
+            return await get().logIn(email, password)
         } catch (err) {
             if (err instanceof EmailUsedError) {
                 return false
