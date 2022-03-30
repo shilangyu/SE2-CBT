@@ -13,5 +13,6 @@ public class UserRegistrationRequest {
     public string Gender { get; set; } = default!;
     [Required]
     public bool Banned { get; set; }
+    public int? UserStatus { get; set; }
 }
 

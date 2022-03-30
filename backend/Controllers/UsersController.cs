@@ -76,6 +76,10 @@ public class UsersController : ControllerBase {
             Roles = new List<string> { UserRoles.UserWrite }
         };
 
+        if (userRequest.UserStatus != null) {
+            user.UserStatus = userRequest.UserStatus.Value;
+        }
+
         // add user to db
         var registered = await userService.RegisterUserAsync(user);
         if (!registered) {
