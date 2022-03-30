@@ -9,8 +9,7 @@ namespace CbtBackend.Services;
 public class AuthenticationCredentialsException : Exception { }
 
 public class RegistrationException : Exception {
-    public new string Message { get; set; } = default!;
-    public RegistrationException() { }
+    public new string Message { get; set; }
     public RegistrationException(string message) {
         Message = message;
     }
