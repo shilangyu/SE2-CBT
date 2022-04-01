@@ -54,6 +54,14 @@ public class UserService : IUserService {
             throw new RegistrationException("User does not exist");
         }
 
+        // check if user's email is being updated it's not already in the db
+        if (!userRequest.Email.Equals(existingUser.Email)) {
+            var emailOwner = await GetUserByEmailAsync(userRequest.Email);
+            if (emailOwner != null) {
+                throw new UpdateException("Email already belongs to another user");
+            }
+        }
+
         var user = new User {
             Id = existingUser.Id,
             Email = userRequest.Email,
