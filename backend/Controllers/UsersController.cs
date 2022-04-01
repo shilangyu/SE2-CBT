@@ -55,6 +55,18 @@ public class UsersController : ControllerBase {
         return Ok(await userService.GetAllUsersAsync());
     }
 
+    [HttpGet(ApiRoutes.User.GetByEmail)]
+    public async Task<IActionResult> GetUserByEmail([FromRoute]string email) {
+
+        var user = await userService.GetUserByEmailAsync(email);
+
+        if (user == null) {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
     [HttpPost(ApiRoutes.User.Register)]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequest userRequest) {
         logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}",
