@@ -26,10 +26,6 @@ public class UserService : IUserService {
         this.dbContext = dbContext;
     }
 
-    public async Task<User?> GetUserByIdAsync(int userId) {
-        return await dbContext.Users.SingleOrDefaultAsync(e => e.Id == userId);
-    }
-
     public async Task<User?> GetUserByEmailAsync(string email) {
         return await dbContext.Users.SingleOrDefaultAsync(e => e.Email == email);
     }
