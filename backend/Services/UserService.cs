@@ -14,6 +14,19 @@ public class RegistrationException : Exception {
         Message = message;
     }
 }
+public class UpdateException : Exception {
+    public new string Message { get; set; }
+    public UpdateException(string message) {
+        Message = message;
+    }
+}
+
+public class DeleteException : Exception {
+    public new string Message { get; set; }
+    public DeleteException(string message) {
+        Message = message;
+    }
+}
 
 public class UserService : IUserService {
     private readonly IJwtTokenService tokenService;
@@ -34,21 +47,49 @@ public class UserService : IUserService {
         return await dbContext.Users.ToListAsync();
     }
 
-    public async Task<bool> UpdateUserAsync(User userToUpdate) {
-        dbContext.Users.Update(userToUpdate);
+    public async Task<bool> UpdateUserAsync(string email, UserUpdateRequest userRequest) {
+        // check that user exists
+        var existingUser = await GetUserByEmailAsync(email);
+        if (existingUser == null) {
+            throw new RegistrationException("User does not exist");
+        }
+
+        var user = new User {
+            Id = existingUser.Id,
+            Email = userRequest.Email,
+            Password = userRequest.Password,
+            Banned = userRequest.Banned,
+            Age = userRequest.Age,
+            Gender = userRequest.Gender,
+            UserStatus = userRequest.UserStatus,
+            Roles = existingUser.Roles
+        };
+
+        // update user in db
+        dbContext.ChangeTracker.Clear();
+        dbContext.Users.Update(user);
         var updated = await dbContext.SaveChangesAsync();
-        return updated > 0;
+        if (updated <= 0) {
+            throw new UpdateException("Operation failed");
+        }
+
+        return true;
     }
 
     public async Task<bool> DeleteUserAsync(string email) {
+        // check that user exists
         var user = await GetUserByEmailAsync(email);
         if (user == null) {
-            return false;
+            throw new DeleteException("User does not exist");
         }
 
         dbContext.Users.Remove(user);
         var deleted = await dbContext.SaveChangesAsync();
-        return deleted > 0;
+        if (deleted <= 0) {
+            throw new DeleteException("Operation failed");
+        }
+
+        return true;
     }
 
     // implementation of user registration
