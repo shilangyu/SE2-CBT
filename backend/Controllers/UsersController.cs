@@ -55,7 +55,7 @@ public class UsersController : ControllerBase {
     }
 
     [HttpGet(ApiRoutes.User.GetByEmail)]
-    public async Task<IActionResult> GetUserByEmail([FromRoute]string email) {
+    public async Task<IActionResult> GetUserByEmail([FromRoute] string email) {
 
         var user = await userService.GetUserByEmailAsync(email);
 
@@ -67,7 +67,7 @@ public class UsersController : ControllerBase {
     }
 
     [HttpPut(ApiRoutes.User.UpdateByEmail)]
-    public async Task<IActionResult> UpdateUser([FromRoute]string email, [FromBody] UserUpdateRequest userRequest) {
+    public async Task<IActionResult> UpdateUser([FromRoute] string email, [FromBody] UserUpdateRequest userRequest) {
         logger.LogDebug("Updating user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
 
@@ -84,7 +84,7 @@ public class UsersController : ControllerBase {
     }
 
     [HttpDelete(ApiRoutes.User.DeleteByEmail)]
-    public async Task<IActionResult> DeleteUser([FromRoute]string email) {
+    public async Task<IActionResult> DeleteUser([FromRoute] string email) {
         logger.LogDebug("Deleting user with data [email = {email}]", email);
 
         try {
