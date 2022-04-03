@@ -2,7 +2,6 @@ using CbtBackend.Contracts;
 using CbtBackend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 using CbtBackend.Models;
 using CbtBackend.Models.Requests;
 using CbtBackend.Models.Responses;
@@ -53,6 +52,51 @@ public class UsersController : ControllerBase {
     [HttpGet(ApiRoutes.User.GetAll)]
     public async Task<IActionResult> GetAllUsers() {
         return Ok(await userService.GetAllUsersAsync());
+    }
+
+    [HttpGet(ApiRoutes.User.GetByEmail)]
+    public async Task<IActionResult> GetUserByEmail([FromRoute] string email) {
+
+        var user = await userService.GetUserByEmailAsync(email);
+
+        if (user == null) {
+            return NotFound();
+        }
+
+        return Ok(user);
+    }
+
+    [HttpPut(ApiRoutes.User.UpdateByEmail)]
+    public async Task<IActionResult> UpdateUser([FromRoute] string email, [FromBody] UserUpdateRequest userRequest) {
+        logger.LogDebug("Updating user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
+            userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
+
+        try {
+            var response = await userService.UpdateUserAsync(email, userRequest);
+            return Ok(new { });
+
+        } catch (RegistrationException e) {
+            if (e.Message.Equals("User does not exist")) {
+                return NotFound();
+            }
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+    [HttpDelete(ApiRoutes.User.DeleteByEmail)]
+    public async Task<IActionResult> DeleteUser([FromRoute] string email) {
+        logger.LogDebug("Deleting user with data [email = {email}]", email);
+
+        try {
+            var response = await userService.DeleteUserAsync(email);
+            return Ok(new { });
+
+        } catch (DeleteException e) {
+            if (e.Message.Equals("User does not exist")) {
+                return NotFound();
+            }
+            return BadRequest(new { message = e.Message });
+        }
     }
 
     [HttpPost(ApiRoutes.User.Register)]
