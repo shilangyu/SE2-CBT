@@ -3,9 +3,15 @@ name: backend-ci
 on:
   push:
     branches: [main]
-    paths: [backend/**]
+    paths:
+      - backend/**
+      - backend-tests/**
+      - .github/**
   pull_request:
-    paths: [backend/**]
+    paths:
+      - backend/**
+      - backend-tests/**
+      - .github/**
 
 jobs:
   build:
@@ -34,3 +40,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
+
+      - name: Test
+        working-directory: backend-tests
+        run: dotnet test
