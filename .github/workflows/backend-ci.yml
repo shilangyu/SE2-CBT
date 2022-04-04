@@ -34,3 +34,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore
+
+      - name: Test
+        working-directory: backend-tests
+        run: dotnet test
