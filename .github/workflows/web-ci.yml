@@ -3,9 +3,13 @@ name: web-ci
 on:
   push:
     branches: [main]
-    paths: [web/**]
+    paths:
+      - web/**
+      - .github/**
   pull_request:
-    paths: [web/**]
+    paths:
+      - web/**
+      - .github/**
 
 jobs:
   build:

@@ -3,9 +3,15 @@ name: backend-ci
 on:
   push:
     branches: [main]
-    paths: [backend/**]
+    paths:
+      - backend/**
+      - backend-tests/**
+      - .github/**
   pull_request:
-    paths: [backend/**]
+    paths:
+      - backend/**
+      - backend-tests/**
+      - .github/**
 
 jobs:
   build:
