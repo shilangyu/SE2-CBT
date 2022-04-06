@@ -26,6 +26,6 @@ USER 1000:1000
 COPY --from=build --chown=1000:1000 /app/build .
 
 EXPOSE 80
-VOLUME [ "/keys" ]
+VOLUME [ "/app/keys" ]
 
 ENTRYPOINT [ "./CbtBackend" ]
