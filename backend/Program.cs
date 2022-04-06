@@ -1,10 +1,11 @@
 using System.Text;
 using System.Runtime.InteropServices;
-
+using CbtBackend;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 
 using CbtBackend.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,12 @@ if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
     builder.Services.AddDataProtection().PersistKeysToFileSystem(new DirectoryInfo("keys"));
 }
 
+// Forwarded Headers Middleware
+// https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/proxy-load-balancer?view=aspnetcore-6.0
+builder.Services.Configure<ForwardedHeadersOptions>(options => {
+    options.ForwardedHeaders = ForwardedHeaders.All;
+});
+
 var app = builder.Build(); {
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment()) {
@@ -58,7 +65,14 @@ var app = builder.Build(); {
         app.UseSwaggerUI();
     }
 
-    app.UseHttpsRedirection();
+    // Current deploy uses an HTTPS proxy with redirection enabled
+    // It also passes X-Forwarded-* headers with true client IPs
+    if (Utilities.IsDocker()) {
+        app.UseForwardedHeaders();
+    } else {
+        app.UseHttpsRedirection();
+    }
+
     app.UseCors();
     app.UseAuthentication();
     app.UseAuthorization();
