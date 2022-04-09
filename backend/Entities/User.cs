@@ -6,6 +6,7 @@ using CbtBackend.Models.Requests;
 namespace CbtBackend.Entities;
 
 public class User {
+    [Key]
     public int Id { get; set; }
 
     public string Email { get; set; } = default!;
