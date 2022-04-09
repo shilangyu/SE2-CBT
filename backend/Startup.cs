@@ -3,6 +3,7 @@ namespace CbtBackend;
 using System.Text;
 using System.Runtime.InteropServices;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -50,7 +51,9 @@ public class Startup {
         {
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddDbContext<CbtDbContext>();
+            services.AddDbContext<CbtDbContext>(options => {
+                options.UseNpgsql(Configuration.GetValue<string>("db:ConnectionString"));
+            });
         }
 
         // authentication
