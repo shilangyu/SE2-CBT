@@ -36,7 +36,7 @@ jobs:
         run: dotnet restore
 
       - name: Run analyzer
-        run: dotnet format --severity info --verify-no-changes --no-restore
+        run: dotnet format CbtBackend.sln --severity info --verify-no-changes --no-restore
 
       - name: Build
         run: dotnet build --no-restore

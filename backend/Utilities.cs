@@ -1,4 +1,4 @@
-﻿namespace CbtBackend;
+namespace CbtBackend;
 
 public static class Utilities {
     public static bool IsDocker() {

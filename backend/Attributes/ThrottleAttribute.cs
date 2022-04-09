@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +25,7 @@ public class Throttle : ActionFilterAttribute {
         base.OnActionExecuting(context);
 
         var key = BuildKey(context);
-        if (key is null)
-        {
+        if (key is null) {
             // failed to build the key, no throttle will be applied
             // TODO: log it (warning)
             return;
