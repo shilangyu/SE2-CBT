@@ -1,3 +1,4 @@
+using CbtBackend.Attributes;
 using CbtBackend.Contracts;
 using CbtBackend.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -24,6 +25,7 @@ public class UsersController : ControllerBase {
 
     [AllowAnonymous]
     [HttpPost(ApiRoutes.User.Login)]
+    [Throttle(5, 1)]
     public async Task<IActionResult> Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
         logger.LogDebug("Authenticating user with data [email = {email}, password = {password}]", email, password);
 
