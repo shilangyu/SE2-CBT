@@ -1,10 +1,10 @@
-using Xunit;
+namespace CbtBackend.Tests;
 
-namespace backend_tests;
+using Xunit;
 
 public class UnitTestTest {
     [Fact]
     public void TestUnitTestWorking() {
-        Assert.Equal(4 + 4, 8);
+        Assert.Equal(8, 4 + 4);
     }
 }
