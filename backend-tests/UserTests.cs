@@ -36,6 +36,9 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
         HttpResponseMessage res;
         string token;
 
+        var expirationDate = System.DateTime.Now;
+        expirationDate = expirationDate.AddDays(5);
+
         using (var scope = factory.Services.CreateScope()) {
             var jwtTokenService = scope.ServiceProvider.GetRequiredService<IJwtTokenService>();
             var user = new User();
@@ -44,7 +47,7 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
             user.Password = "9494949494d949d4w9d9w4d9w";
             user.Roles = new List<string>();
 
-            token = jwtTokenService.GenerateToken(user, System.DateTime.Now);
+            token = jwtTokenService.GenerateToken(user, expirationDate);
         }
 
         using (var reqMessage = new HttpRequestMessage(HttpMethod.Get, endpoint)) {
