@@ -90,7 +90,9 @@ public class Startup {
         IWebHostEnvironment env,
         CbtDbContext dbContext,
         RoleManager<IdentityRole> roleManager) {
-        dbContext.Database.Migrate();
+        if (!dbContext.Database.IsInMemory()) {
+            dbContext.Database.Migrate();
+        }
 
         if (env.IsDevelopment()) {
             app.UseSwagger();
