@@ -3,6 +3,7 @@ using CbtBackend.Models;
 using CbtBackend.Models.Requests;
 using CbtBackend.Models.Responses;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CbtBackend.Services;
 
@@ -32,15 +33,13 @@ public class UserService : IUserService {
     private readonly IJwtTokenService tokenService;
     private readonly IConfiguration configuration;
     private readonly CbtDbContext dbContext;
+    private readonly UserManager<User> userManager;
 
-    public UserService(IJwtTokenService tokenService, IConfiguration configuration, CbtDbContext dbContext) {
+    public UserService(IJwtTokenService tokenService, IConfiguration configuration, CbtDbContext dbContext, UserManager<User> userManager) {
         this.tokenService = tokenService;
         this.configuration = configuration;
         this.dbContext = dbContext;
-    }
-
-    public async Task<User?> GetUserByEmailAsync(string email) {
-        return await dbContext.Users.SingleOrDefaultAsync(e => e.Email == email);
+        this.userManager = userManager;
     }
 
     public async Task<List<User>> GetAllUsersAsync() {
@@ -49,36 +48,29 @@ public class UserService : IUserService {
 
     public async Task<bool> UpdateUserAsync(string email, UserUpdateRequest userRequest) {
         // check that user exists
-        var existingUser = await GetUserByEmailAsync(email);
+        var existingUser = await userManager.FindByEmailAsync(email);
         if (existingUser == null) {
             throw new RegistrationException("User does not exist");
         }
 
         // check if user's email is being updated it's not already in the db
-        if (!userRequest.Email.Equals(existingUser.Email)) {
-            var emailOwner = await GetUserByEmailAsync(userRequest.Email);
+        if (userRequest.Email != existingUser.Email) {
+            var emailOwner = await userManager.FindByEmailAsync(userRequest.Email);
             if (emailOwner != null) {
                 throw new UpdateException("Email already belongs to another user");
             }
         }
 
-        var user = new User {
-            Id = existingUser.Id,
-            Email = userRequest.Email,
-            Password = userRequest.Password,
-            Banned = userRequest.Banned,
-            Age = userRequest.Age,
-            Gender = userRequest.Gender,
-            UserStatus = userRequest.UserStatus,
-            Roles = existingUser.Roles
-        };
+        existingUser.Email = userRequest.Email;
+        existingUser.Banned = userRequest.Banned;
+        existingUser.Age = userRequest.Age;
+        existingUser.Gender = userRequest.Gender;
+        existingUser.UserStatus = userRequest.UserStatus;
 
         // update user in db
-        dbContext.ChangeTracker.Clear();
-        dbContext.Users.Update(user);
-        var updated = await dbContext.SaveChangesAsync();
-        if (updated <= 0) {
-            throw new UpdateException("Operation failed");
+        var identityResult = await userManager.UpdateAsync(existingUser);
+        if (!identityResult.Succeeded) {
+            throw new RegistrationException("Operation failed");
         }
 
         return true;
@@ -86,15 +78,14 @@ public class UserService : IUserService {
 
     public async Task<bool> DeleteUserAsync(string email) {
         // check that user exists
-        var user = await GetUserByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email);
         if (user == null) {
             throw new DeleteException("User does not exist");
         }
 
-        dbContext.Users.Remove(user);
-        var deleted = await dbContext.SaveChangesAsync();
-        if (deleted <= 0) {
-            throw new DeleteException("Operation failed");
+        var identityResult = await userManager.DeleteAsync(user);
+        if (!identityResult.Succeeded) {
+            throw new RegistrationException("Operation failed");
         }
 
         return true;
@@ -103,19 +94,18 @@ public class UserService : IUserService {
     // implementation of user registration
     public async Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest) {
         // check if user already exists
-        var existingUser = await GetUserByEmailAsync(userRequest.Email);
+        var existingUser = await userManager.FindByEmailAsync(userRequest.Email);
         if (existingUser != null) {
             throw new RegistrationException("User already exists");
         }
 
         var user = new User {
+            UserName = userRequest.Email,
             Email = userRequest.Email,
-            Password = userRequest.Password,
             Banned = userRequest.Banned,
             Age = userRequest.Age,          // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             Gender = userRequest.Gender,    // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             UserStatus = 0,
-            Roles = new List<string> { UserRoles.UserWrite }
         };
 
         if (userRequest.UserStatus != null) {
@@ -123,9 +113,14 @@ public class UserService : IUserService {
         }
 
         // add user to db
-        await dbContext.Users.AddAsync(user);
-        var registered = await dbContext.SaveChangesAsync();
-        if (registered <= 0) {
+        var identityResult = await userManager.CreateAsync(user, userRequest.Password);
+        if (!identityResult.Succeeded) {
+            throw new RegistrationException("Operation failed");
+        }
+
+        // grant default role
+        identityResult = await userManager.AddToRolesAsync(user, new[] { UserRoles.UserRead, UserRoles.UserWrite });
+        if (!identityResult.Succeeded) {
             throw new RegistrationException("Operation failed");
         }
 
@@ -138,18 +133,25 @@ public class UserService : IUserService {
 
     // implementation of user authentication
     public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest) {
-        var user = await GetUserByEmailAsync(userRequest.Email);
+        var user = await userManager.FindByEmailAsync(userRequest.Email);
 
         if (user == null) {
             throw new AuthenticationCredentialsException();
         }
 
+        var validPassword = await userManager.CheckPasswordAsync(user, userRequest.Password);
+        if (!validPassword) {
+            throw new AuthenticationCredentialsException();
+        }
+
         var validPeriod = configuration.GetValue<int>("jwt:ValidSeconds");
         var expiration = DateTime.UtcNow.AddSeconds(validPeriod);
+        var roles = await userManager.GetRolesAsync(user);
+
 
         var response = new UserAuthenticationResponse() {
             User = user,
-            Token = tokenService.GenerateToken(user, expiration),
+            Token = tokenService.GenerateToken(user, roles, expiration),
             TokenExpiration = expiration
         };
 

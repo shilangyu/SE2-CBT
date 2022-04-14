@@ -24,4 +24,15 @@ public static class UserRoles {
 
     // read your statistics
     public const string StatisticsRead = "read:statistics";
+
+    public static string[] All => new[] {
+        SessionWrite,
+        SessionRead,
+        UserRead,
+        UserWrite,
+        EvaluationWrite,
+        EvaluationRead,
+        StatisticsWrite,
+        StatisticsRead,
+    };
 }

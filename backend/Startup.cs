@@ -6,8 +6,10 @@ using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 using CbtBackend.Services;
+using CbtBackend.Entities;
 using Microsoft.AspNetCore.HttpOverrides;
 
 public class Startup {
@@ -68,11 +70,19 @@ public class Startup {
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
+
+            services.AddIdentity<User, IdentityRole>(options => {
+                options.User.RequireUniqueEmail = false;
+            })
+            .AddEntityFrameworkStores<CbtDbContext>()
+            .AddDefaultTokenProviders();
         }
 
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CbtDbContext dbContext, RoleManager<IdentityRole> roleManager) {
+        dbContext.Database.Migrate();
+
         if (env.IsDevelopment()) {
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -86,6 +96,8 @@ public class Startup {
             app.UseHttpsRedirection();
         }
 
+        SeedRoles(roleManager).Wait();
+
         app.UseCors();
         app.UseAuthentication();
         app.UseRouting();
@@ -94,5 +106,14 @@ public class Startup {
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();
         });
+    }
+
+    private async Task SeedRoles(RoleManager<IdentityRole> roleManager) {
+        foreach (var roleName in UserRoles.All) {
+            var roleExist = await roleManager.RoleExistsAsync(roleName);
+            if (!roleExist) {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
     }
 }

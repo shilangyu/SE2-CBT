@@ -3,6 +3,7 @@ using CbtBackend.Contracts;
 using CbtBackend.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using CbtBackend.Models;
 using CbtBackend.Models.Requests;
 using CbtBackend.Models.Responses;
@@ -17,10 +18,12 @@ public class UsersController : ControllerBase {
 
     private readonly ILogger<UsersController> logger;
     private readonly IUserService userService;
+    private readonly UserManager<User> userManager;
 
-    public UsersController(IUserService userService, ILogger<UsersController> logger) {
-        this.logger = logger;
+    public UsersController(IUserService userService, UserManager<User> userManager, ILogger<UsersController> logger) {
         this.userService = userService;
+        this.userManager = userManager;
+        this.logger = logger;
     }
 
     [AllowAnonymous]
@@ -58,8 +61,7 @@ public class UsersController : ControllerBase {
 
     [HttpGet(ApiRoutes.User.GetByEmail)]
     public async Task<IActionResult> GetUserByEmail([FromRoute] string email) {
-
-        var user = await userService.GetUserByEmailAsync(email);
+        var user = await userManager.FindByEmailAsync(email);
 
         if (user == null) {
             return NotFound();
@@ -90,7 +92,7 @@ public class UsersController : ControllerBase {
         logger.LogDebug("Deleting user with data [email = {email}]", email);
 
         try {
-            var response = await userService.DeleteUserAsync(email);
+            var response = await userManager.FindByEmailAsync(email);
             return Ok(new { });
 
         } catch (DeleteException e) {
