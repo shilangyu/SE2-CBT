@@ -73,6 +73,11 @@ public class Startup {
 
             services.AddIdentity<User, IdentityRole>(options => {
                 options.User.RequireUniqueEmail = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Lockout.AllowedForNewUsers = false;
             })
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
@@ -80,7 +85,11 @@ public class Startup {
 
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CbtDbContext dbContext, RoleManager<IdentityRole> roleManager) {
+    public void Configure(
+        IApplicationBuilder app,
+        IWebHostEnvironment env,
+        CbtDbContext dbContext,
+        RoleManager<IdentityRole> roleManager) {
         dbContext.Database.Migrate();
 
         if (env.IsDevelopment()) {
