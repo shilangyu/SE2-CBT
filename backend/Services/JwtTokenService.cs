@@ -1,6 +1,7 @@
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Linq;
 
 using Microsoft.IdentityModel.Tokens;
 
@@ -9,7 +10,7 @@ using CbtBackend.Entities;
 namespace CbtBackend.Services;
 
 public interface IJwtTokenService {
-    string GenerateToken(User user, DateTime expiration);
+    string GenerateToken(User user, IList<string> roles, DateTime expiration);
 }
 
 public class JwtTokenService : IJwtTokenService {
@@ -19,16 +20,13 @@ public class JwtTokenService : IJwtTokenService {
         this.configuration = configuration;
     }
 
-    public string GenerateToken(User user, DateTime expiration) {
+    public string GenerateToken(User user, IList<string> roles, DateTime expiration) {
         var claims = new List<Claim>() {
             new Claim("id", user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Email)
         };
 
-        // TODO: verify if user can have this role
-        foreach (var role in user.Roles) {
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        }
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetValue<string>("Jwt:Key")));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);

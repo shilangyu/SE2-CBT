@@ -41,13 +41,12 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
 
         using (var scope = factory.Services.CreateScope()) {
             var jwtTokenService = scope.ServiceProvider.GetRequiredService<IJwtTokenService>();
-            var user = new User();
+            var user = new User {
+                Email = "xd@xd.pl",
+                PasswordHash = "9494949494d949d4w9d9w4d9w",
+            };
 
-            user.Email = "xd@xd.pl";
-            user.Password = "9494949494d949d4w9d9w4d9w";
-            user.Roles = new List<string>();
-
-            token = jwtTokenService.GenerateToken(user, expirationDate);
+            token = jwtTokenService.GenerateToken(user, new string[] { }, expirationDate);
         }
 
         using (var reqMessage = new HttpRequestMessage(HttpMethod.Get, endpoint)) {
