@@ -1,6 +1,7 @@
+import { apiUrl } from '../utils/config'
 import { ApiClient } from './ApiClient'
 
-export const apiClient = new ApiClient(import.meta.env.VITE_API_URL)
+export const apiClient = new ApiClient(apiUrl)
 
 export class UnauthorizedError extends Error {}
 export class EmailUsedError extends Error {}

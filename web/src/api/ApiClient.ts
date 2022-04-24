@@ -33,7 +33,7 @@ export class ApiClient {
         }
     }
 
-    async logIn(email: string, password: string) {
+    async logIn(email: string, password: string): Promise<string> {
         const params = new URLSearchParams({ email, password })
 
         try {
@@ -57,7 +57,7 @@ export class ApiClient {
         password: string,
         age: number,
         gender: string
-    ) {
+    ): Promise<void> {
         try {
             return await this.baseRequest<void>(`user`, {
                 method: 'POST',

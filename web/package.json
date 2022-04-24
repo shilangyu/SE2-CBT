@@ -19,6 +19,7 @@
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-router-dom": "^6.3.0",
+        "ts-jest": "^27.1.4",
         "zustand": "^3.7.2"
     },
     "devDependencies": {
