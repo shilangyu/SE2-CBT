@@ -6,12 +6,12 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { useState } from 'react'
-import * as React from 'react'
 import { useSnackbar } from 'notistack'
-import { useLoginStore } from '../../stores/loginStore'
-import { useAsync } from '../../hooks/useAsync'
+import * as React from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAsync } from '../../hooks/useAsync'
+import { useLoginStore } from '../../stores/loginStore'
 
 function RegisterPage() {
     const theme = useTheme()
