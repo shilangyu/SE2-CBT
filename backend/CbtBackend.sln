@@ -1,6 +1,8 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{0A9DD490-84FC-46CF-8308-4C9EE5F86DCD}") = "CbtBackend", "CbtBackend.csproj", "{0C369C35-BB62-429B-9963-90DE9B9F5B6E}"
+Project("{0A9DD490-84FC-46CF-8308-4C9EE5F86DCD}") = "CbtBackend", "CbtBackend/CbtBackend.csproj", "{0C369C35-BB62-429B-9963-90DE9B9F5B6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CbtBackend.Test", "CbtBackend.Test\CbtBackend.Test.csproj", "{06A9977B-5312-4277-93A3-F029107BA3CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{0C369C35-BB62-429B-9963-90DE9B9F5B6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C369C35-BB62-429B-9963-90DE9B9F5B6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C369C35-BB62-429B-9963-90DE9B9F5B6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A9977B-5312-4277-93A3-F029107BA3CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A9977B-5312-4277-93A3-F029107BA3CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A9977B-5312-4277-93A3-F029107BA3CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A9977B-5312-4277-93A3-F029107BA3CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

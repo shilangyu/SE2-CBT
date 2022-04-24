@@ -2,10 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>backend_tests</RootNamespace>
     <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\backend\CbtBackend.csproj" />
+    <ProjectReference Include="..\CbtBackend\CbtBackend.csproj" />
   </ItemGroup>
+
+  <!-- <ItemGroup>
+    <ProjectReference Include="..\backend\CbtBackend.csproj" />
+  </ItemGroup> -->
 
 </Project>

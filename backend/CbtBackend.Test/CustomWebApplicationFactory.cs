@@ -1,15 +1,10 @@
-namespace CbtBackend.Tests;
-
-using System;
-using System.Linq;
-
+using CbtBackend.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
-using CbtBackend.Services;
+namespace CbtBackend.Test;
 
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class {
     protected override void ConfigureWebHost(IWebHostBuilder builder) {
