@@ -1,7 +1,7 @@
 const localStorageMock = new (class implements Storage {
     [name: string]: any
 
-    length: number = 0
+    length = 0
 
     clear(): void {
         this.length = 0
@@ -25,5 +25,11 @@ const localStorageMock = new (class implements Storage {
 })()
 
 global.localStorage = localStorageMock
+
+jest.mock('../utils/config.ts', () => ({
+    apiUrl: 'something',
+}))
+
+jest.mock('../api/ApiClient.ts')
 
 export {}

@@ -1,12 +1,6 @@
 import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
 import { useLoginStore } from '../stores/loginStore'
 
-jest.mock('../utils/config.ts', () => ({
-    apiUrl: 'something',
-}))
-
-jest.mock('../api/ApiClient.ts')
-
 describe('LoginStore', () => {
     afterEach(() => {
         jest.restoreAllMocks()
@@ -86,7 +80,9 @@ describe('LoginStore', () => {
         })
 
         it('returns true on success', async () => {
-            ;(apiClient.register as jest.Mock).mockImplementationOnce(() => {})
+            ;(apiClient.register as jest.Mock).mockImplementationOnce(() =>
+                Promise.resolve()
+            )
 
             expect(
                 await useLoginStore
@@ -108,7 +104,9 @@ describe('LoginStore', () => {
         })
 
         it('logs in after register', async () => {
-            ;(apiClient.register as jest.Mock).mockImplementationOnce(() => {})
+            ;(apiClient.register as jest.Mock).mockImplementationOnce(() =>
+                Promise.resolve()
+            )
 
             await useLoginStore
                 .getState()
