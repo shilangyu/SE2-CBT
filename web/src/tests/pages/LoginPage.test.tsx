@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { apiClient, UnauthorizedError } from '../../api'
 import LoginPage from '../../pages/LoginPage'
 import { act, fireEvent, render, screen } from '../test-utils'

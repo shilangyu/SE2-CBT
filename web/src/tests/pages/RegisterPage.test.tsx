@@ -1,4 +1,5 @@
 import { cleanup } from '@testing-library/react'
+import * as React from 'react'
 import { apiClient, EmailUsedError } from '../../api'
 import RegisterPage from '../../pages/RegisterPage'
 import { act, fireEvent, render, screen } from '../test-utils'
