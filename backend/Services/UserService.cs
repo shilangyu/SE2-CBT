@@ -94,23 +94,19 @@ public class UserService : IUserService {
     // implementation of user registration
     public async Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest) {
         // check if user already exists
-        var existingUser = await userManager.FindByEmailAsync(userRequest.Email);
+        var existingUser = await userManager.FindByEmailAsync(userRequest.Login);
         if (existingUser != null) {
             throw new RegistrationException("User already exists");
         }
 
         var user = new User {
-            UserName = userRequest.Email,
-            Email = userRequest.Email,
-            Banned = userRequest.Banned,
+            UserName = userRequest.Login,
+            Email = userRequest.Login,
+            Banned = false,
             Age = userRequest.Age,          // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             Gender = userRequest.Gender,    // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             UserStatus = 0,
         };
-
-        if (userRequest.UserStatus != null) {
-            user.UserStatus = userRequest.UserStatus.Value;
-        }
 
         // add user to db
         var identityResult = await userManager.CreateAsync(user, userRequest.Password);
@@ -133,7 +129,7 @@ public class UserService : IUserService {
 
     // implementation of user authentication
     public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest) {
-        var user = await userManager.FindByEmailAsync(userRequest.Email);
+        var user = await userManager.FindByEmailAsync(userRequest.Login);
 
         if (user == null) {
             throw new AuthenticationCredentialsException();

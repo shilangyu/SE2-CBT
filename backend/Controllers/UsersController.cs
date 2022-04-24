@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CbtBackend.Models;
 using CbtBackend.Models.Requests;
-using CbtBackend.Models.Responses;
 using CbtBackend.Services;
 
 namespace CbtBackend.Controllers;
@@ -29,22 +28,18 @@ public class UsersController : ControllerBase {
     [AllowAnonymous]
     [HttpPost(ApiRoutes.User.Login)]
     [Throttle(5, 1)]
-    public async Task<IActionResult> Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
-        logger.LogDebug("Authenticating user with data [email = {email}, password = {password}]", email, password);
+    public async Task<IActionResult> Login([FromBody] UserAuthenticationRequest userRequest) {
+        logger.LogDebug("Authenticating user with data [email = {login}, password = {password}]", userRequest.Login, userRequest.Password);
 
         try {
-            var token = await userService.AuthenticateUserAsync(new UserAuthenticationRequest() {
-                Email = email,
-                Password = password
-            });
+            var token = await userService.AuthenticateUserAsync(userRequest);
 
             // append token expiration date to header
             Response.Headers.Add(TokenExpireHeader, token.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
 
-            // return token as string
-            return Ok(token.Token);
+            return Ok(new UserTokenDTO(token.Token));
         } catch (AuthenticationCredentialsException) {
-            return BadRequest(new { message = "invalid username or password" });
+            return Unauthorized(new { message = "invalid login or password" });
         }
     }
 
@@ -56,27 +51,29 @@ public class UsersController : ControllerBase {
 
     [HttpGet(ApiRoutes.User.GetAll)]
     public async Task<IActionResult> GetAllUsers() {
-        return Ok(await userService.GetAllUsersAsync());
+        var users = await userService.GetAllUsersAsync();
+
+        return Ok(users.Select(e => new UserDTO(e)).ToList());
     }
 
     [HttpGet(ApiRoutes.User.GetByEmail)]
-    public async Task<IActionResult> GetUserByEmail([FromRoute] string email) {
-        var user = await userManager.FindByEmailAsync(email);
+    public async Task<IActionResult> GetUserByEmail([FromRoute] string login) {
+        var user = await userManager.FindByEmailAsync(login);
 
         if (user == null) {
             return NotFound();
         }
 
-        return Ok(user);
+        return Ok(new UserDTO(user));
     }
 
     [HttpPut(ApiRoutes.User.UpdateByEmail)]
-    public async Task<IActionResult> UpdateUser([FromRoute] string email, [FromBody] UserUpdateRequest userRequest) {
-        logger.LogDebug("Updating user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
+    public async Task<IActionResult> UpdateUser([FromRoute] string login, [FromBody] UserUpdateRequest userRequest) {
+        logger.LogDebug("Updating user with data [email = {login}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
 
         try {
-            var response = await userService.UpdateUserAsync(email, userRequest);
+            var response = await userService.UpdateUserAsync(login, userRequest);
             return Ok(new { });
 
         } catch (RegistrationException e) {
@@ -88,11 +85,11 @@ public class UsersController : ControllerBase {
     }
 
     [HttpDelete(ApiRoutes.User.DeleteByEmail)]
-    public async Task<IActionResult> DeleteUser([FromRoute] string email) {
-        logger.LogDebug("Deleting user with data [email = {email}]", email);
+    public async Task<IActionResult> DeleteUser([FromRoute] string login) {
+        logger.LogDebug("Deleting user with data [email = {login}]", login);
 
         try {
-            var response = await userManager.FindByEmailAsync(email);
+            var response = await userManager.FindByEmailAsync(login);
             return Ok(new { });
 
         } catch (DeleteException e) {
@@ -105,8 +102,8 @@ public class UsersController : ControllerBase {
 
     [HttpPost(ApiRoutes.User.Register)]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequest userRequest) {
-        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}",
-            userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned);
+        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}",
+            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
 
         try {
             var response = await userService.RegisterUserAsync(userRequest);
@@ -118,7 +115,7 @@ public class UsersController : ControllerBase {
             //var locationUri = baseUrl + "/" + ApiRoutes.User.GetByEmail.Replace("{email}", user.Email);
             //return Created(locationUri, response);
         } catch (RegistrationException e) {
-            return BadRequest(new { message = e.Message });
+            return Conflict(new { message = e.Message });
         }
     }
 }

@@ -34,22 +34,15 @@ export class ApiClient {
     }
 
     async logIn(email: string, password: string): Promise<string> {
-        const params = new URLSearchParams({ email, password })
-
-        try {
-            return await this.baseRequest<string>(`user/login?${params}`, {
+        const res = await this.baseRequest<{ accessToken: string }>(
+            `user/login`,
+            {
                 method: 'POST',
-            })
-        } catch (err) {
-            // 400 status code is used for failed login instead of standard 401
-            if (
-                err instanceof FailedRequestError &&
-                err.response.status === 400
-            ) {
-                throw new UnauthorizedError()
+                body: JSON.stringify({ login: email, password }),
             }
-            throw err
-        }
+        )
+
+        return res.accessToken
     }
 
     async register(
@@ -62,17 +55,16 @@ export class ApiClient {
             return await this.baseRequest<void>(`user`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    email,
+                    login: email,
                     password,
                     age,
                     gender,
-                    banned: false,
                 }),
             })
         } catch (err) {
             if (
                 err instanceof FailedRequestError &&
-                err.response.status === 400
+                err.response.status === 409
             ) {
                 throw new EmailUsedError()
             }
