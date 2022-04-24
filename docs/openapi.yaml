@@ -314,24 +314,17 @@ paths:
                 type: string
                 format: date-time
           content:
-            application/xml:
-              schema:
-                type: string
             application/json:
               schema:
-                type: string
-        400:
+                properties:
+                  accessToken:
+                    type: string
+        401:
           description: Invalid username/password supplied
-          content: {}
-        403:
-          description: Access Forbidden
           content: {}
         503:
           description: Server is currently down
           content: {}
-      security:
-        - teamcbt_auth:
-            - read:user
   /user/logout:
     post:
       tags:

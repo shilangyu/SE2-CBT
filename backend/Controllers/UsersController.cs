@@ -37,10 +37,9 @@ public class UsersController : ControllerBase {
             // append token expiration date to header
             Response.Headers.Add(TokenExpireHeader, token.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
 
-            // return token as string
-            return Ok(token.Token);
+            return Ok(new UserTokenDTO(token.Token));
         } catch (AuthenticationCredentialsException) {
-            return BadRequest(new { message = "invalid username or password" });
+            return Unauthorized(new { message = "invalid login or password" });
         }
     }
 
