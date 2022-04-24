@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom'
+
 const localStorageMock = new (class implements Storage {
     [name: string]: any
 
