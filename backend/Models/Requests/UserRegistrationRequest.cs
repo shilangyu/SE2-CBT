@@ -4,7 +4,7 @@ namespace CbtBackend.Models.Requests;
 
 public class UserRegistrationRequest {
     [Required]
-    public string Email { get; set; } = default!;
+    public string Login { get; set; } = default!;
     [Required]
     public string Password { get; set; } = default!;
     [Required]
@@ -15,4 +15,3 @@ public class UserRegistrationRequest {
     public bool Banned { get; set; }
     public int? UserStatus { get; set; }
 }
-

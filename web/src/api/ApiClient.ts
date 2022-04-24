@@ -62,7 +62,7 @@ export class ApiClient {
             return await this.baseRequest<void>(`user`, {
                 method: 'POST',
                 body: JSON.stringify({
-                    email,
+                    login: email,
                     password,
                     age,
                     gender,

@@ -383,14 +383,14 @@ paths:
         503:
           description: Server is currently down
           content: {}
-  /user/{email}:
+  /user/{login}:
     get:
       tags:
         - user
-      summary: Get user by email
+      summary: Get user by login (email)
       operationId: getUserByEmail
       parameters:
-        - name: email
+        - name: login
           in: path
           description: "The email of the user that needs to be fetched. Use user1@gmail.com for testing. "
           required: true
@@ -422,10 +422,10 @@ paths:
       tags:
         - user
       summary: Updated user
-      description: This can be used for manage account and ban user use cases
+      description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
-        - name: email
+        - name: login
           in: path
           description: name that need to be updated
           required: true
@@ -462,7 +462,7 @@ paths:
       description: This can only be done by the logged in user.
       operationId: deleteUser
       parameters:
-        - name: email
+        - name: login
           in: path
           description: The email that needs to be deleted
           required: true
@@ -822,7 +822,7 @@ paths:
             - write:statistics
             - read:statistics
       x-codegen-request-body-name: body
-  /statistics/{email}:
+  /statistics/{login}:
     get:
       tags:
         - statistics
@@ -830,7 +830,7 @@ paths:
       description: Returns a statistics object
       operationId: getStatisticsByEmail
       parameters:
-        - name: email
+        - name: login
           in: path
           description: email of user to return
           required: true
@@ -912,14 +912,14 @@ components:
   schemas:
     User:
       required:
-        - email
+        - login
         - password
-        - age
-        - gender
         - banned
       type: object
       properties:
-        email:
+        userID:
+          type: integer
+        login:
           type: string
         password:
           type: string
