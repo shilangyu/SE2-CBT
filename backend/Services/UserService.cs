@@ -102,15 +102,11 @@ public class UserService : IUserService {
         var user = new User {
             UserName = userRequest.Login,
             Email = userRequest.Login,
-            Banned = userRequest.Banned,
+            Banned = false,
             Age = userRequest.Age,          // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             Gender = userRequest.Gender,    // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             UserStatus = 0,
         };
-
-        if (userRequest.UserStatus != null) {
-            user.UserStatus = userRequest.UserStatus.Value;
-        }
 
         // add user to db
         var identityResult = await userManager.CreateAsync(user, userRequest.Password);

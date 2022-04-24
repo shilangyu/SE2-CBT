@@ -59,13 +59,12 @@ export class ApiClient {
                     password,
                     age,
                     gender,
-                    banned: false,
                 }),
             })
         } catch (err) {
             if (
                 err instanceof FailedRequestError &&
-                err.response.status === 400
+                err.response.status === 409
             ) {
                 throw new EmailUsedError()
             }

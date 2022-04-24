@@ -102,8 +102,8 @@ public class UsersController : ControllerBase {
 
     [HttpPost(ApiRoutes.User.Register)]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequest userRequest) {
-        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}, banned= {banned}",
-            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned);
+        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}",
+            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
 
         try {
             var response = await userService.RegisterUserAsync(userRequest);
@@ -115,7 +115,7 @@ public class UsersController : ControllerBase {
             //var locationUri = baseUrl + "/" + ApiRoutes.User.GetByEmail.Replace("{email}", user.Email);
             //return Created(locationUri, response);
         } catch (RegistrationException e) {
-            return BadRequest(new { message = e.Message });
+            return Conflict(new { message = e.Message });
         }
     }
 }

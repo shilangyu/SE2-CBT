@@ -250,17 +250,14 @@ paths:
         content:
           "*/*":
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/RegisterUser"
         required: true
       responses:
         200:
           description: successful operation
           content: {}
-        400:
+        409:
           description: Operation failed or User already exists
-          content: {}
-        403:
-          description: Access Forbidden
           content: {}
         503:
           description: Server is currently down
@@ -840,6 +837,21 @@ paths:
             - read:statistics
 components:
   schemas:
+    RegisterUser:
+      required:
+        - login
+        - password
+        - age
+        - gender
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+        age:
+          type: integer
+        gender:
+          type: string
     LoginUser:
       required:
         - login
@@ -977,18 +989,9 @@ components:
           type: integer
   securitySchemes:
     teamcbt_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://teamcbt.com/oauth/dialog
-          scopes:
-            write:session: modify session in your account
-            read:session: read your session
-            read:user: login to an account
-            write:evaluation: modify your evaluation
-            read:evaluation: read your evaluation
-            write:statistics: modify your statistics
-            read:statistics: read your statistics
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
     api_key:
       type: apiKey
       name: api_key
