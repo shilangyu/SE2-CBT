@@ -133,7 +133,7 @@ public class UserService : IUserService {
 
     // implementation of user authentication
     public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest) {
-        var user = await userManager.FindByEmailAsync(userRequest.Email);
+        var user = await userManager.FindByEmailAsync(userRequest.Login);
 
         if (user == null) {
             throw new AuthenticationCredentialsException();

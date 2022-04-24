@@ -28,14 +28,11 @@ public class UsersController : ControllerBase {
     [AllowAnonymous]
     [HttpPost(ApiRoutes.User.Login)]
     [Throttle(5, 1)]
-    public async Task<IActionResult> Login([FromQuery(Name = "email")] string email, [FromQuery(Name = "password")] string password) {
-        logger.LogDebug("Authenticating user with data [email = {email}, password = {password}]", email, password);
+    public async Task<IActionResult> Login([FromBody] UserAuthenticationRequest userRequest) {
+        logger.LogDebug("Authenticating user with data [email = {login}, password = {password}]", userRequest.Login, userRequest.Password);
 
         try {
-            var token = await userService.AuthenticateUserAsync(new UserAuthenticationRequest() {
-                Email = email,
-                Password = password
-            });
+            var token = await userService.AuthenticateUserAsync(userRequest);
 
             // append token expiration date to header
             Response.Headers.Add(TokenExpireHeader, token.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));

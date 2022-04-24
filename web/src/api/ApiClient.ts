@@ -34,11 +34,10 @@ export class ApiClient {
     }
 
     async logIn(email: string, password: string): Promise<string> {
-        const params = new URLSearchParams({ email, password })
-
         try {
-            return await this.baseRequest<string>(`user/login?${params}`, {
+            return await this.baseRequest<string>(`user/login`, {
                 method: 'POST',
+                body: JSON.stringify({ login: email, password }),
             })
         } catch (err) {
             // 400 status code is used for failed login instead of standard 401

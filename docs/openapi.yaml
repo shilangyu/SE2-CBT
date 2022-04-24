@@ -29,9 +29,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Session"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/Session"
         required: true
       responses:
         200:
@@ -89,11 +86,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Session"
             application/json:
               schema:
                 type: array
@@ -131,11 +123,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Session"
             application/json:
               schema:
                 type: array
@@ -173,9 +160,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/Session"
             application/json:
               schema:
                 $ref: "#/components/schemas/Session"
@@ -282,23 +266,15 @@ paths:
           description: Server is currently down
           content: {}
       x-codegen-request-body-name: body
-      security:
-        - teamcbt_auth:
-            - write:user
     get:
       tags:
         - user
       summary: get list of users
       operationId: getAllUsers
       responses:
-        200:
+        201:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
             application/json:
               schema:
                 type: array
@@ -323,19 +299,11 @@ paths:
         - user
       summary: Logs user into the system
       operationId: loginUser
-      parameters:
-        - name: email
-          in: query
-          description: Email of the user
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
       responses:
         200:
           description: successful operation
@@ -400,9 +368,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/User"
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
@@ -421,7 +386,7 @@ paths:
     put:
       tags:
         - user
-      summary: Updated user
+      summary: Update user
       description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
@@ -496,9 +461,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Evaluation"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/Evaluation"
         required: true
       responses:
         200:
@@ -557,11 +519,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Evaluation"
             application/json:
               schema:
                 type: array
@@ -602,11 +559,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Evaluation"
             application/json:
               schema:
                 type: array
@@ -647,9 +599,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/Evaluation"
             application/json:
               schema:
                 $ref: "#/components/schemas/Evaluation"
@@ -760,9 +709,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/Statistics"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/Statistics"
         required: true
       responses:
         200:
@@ -795,9 +741,6 @@ paths:
         description: Statistic object that needs to be added
         content:
           application/json:
-            schema:
-              $ref: "#/components/schemas/Statistics"
-          application/xml:
             schema:
               $ref: "#/components/schemas/Statistics"
         required: true
@@ -840,9 +783,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/Statistics"
             application/json:
               schema:
                 $ref: "#/components/schemas/Statistics"
@@ -883,9 +823,6 @@ paths:
         200:
           description: successful operation
           content:
-            application/xml:
-              schema:
-                $ref: "#/components/schemas/Statistics"
             application/json:
               schema:
                 $ref: "#/components/schemas/Statistics"
@@ -910,10 +847,22 @@ paths:
             - read:statistics
 components:
   schemas:
-    User:
+    LoginUser:
       required:
         - login
         - password
+      type: object
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+    User:
+      required:
+        - userID
+        - login
+        - password
+        - userStatus
         - banned
       type: object
       properties:
@@ -931,8 +880,6 @@ components:
           type: integer
         banned:
           type: boolean
-      xml:
-        name: User
     Session:
       required:
         - sessionID
@@ -962,8 +909,6 @@ components:
             - started_methods
             - started_testing_finish
             - finished
-      xml:
-        name: Session
     Evaluation:
       required:
         - date
@@ -997,8 +942,6 @@ components:
           type: array
           items:
             type: string
-      xml:
-        name: Evaluation
     Statistics:
       required:
         - improvement
@@ -1039,8 +982,6 @@ components:
           type: string
         userID:
           type: integer
-      xml:
-        name: Statistics
   securitySchemes:
     teamcbt_auth:
       type: oauth2
