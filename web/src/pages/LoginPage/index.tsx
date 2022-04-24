@@ -12,6 +12,7 @@ import { useSnackbar } from 'notistack'
 import { useLoginStore } from '../../stores/loginStore'
 import { useAsync } from '../../hooks/useAsync'
 import { Link } from 'react-router-dom'
+import { routes } from '../routes'
 
 function LoginPage() {
     const theme = useTheme()
@@ -70,7 +71,7 @@ function LoginPage() {
                 justifyContent="center"
                 gap={4}
             >
-                <Button component={Link} to="/register">
+                <Button component={Link} to={routes.register()}>
                     Create account
                 </Button>
                 <Button variant="contained" size="large" onClick={onSubmit}>

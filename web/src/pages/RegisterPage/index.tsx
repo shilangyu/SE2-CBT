@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAsync } from '../../hooks/useAsync'
 import { useLoginStore } from '../../stores/loginStore'
+import { routes } from '../routes'
 
 function RegisterPage() {
     const theme = useTheme()
@@ -107,7 +108,7 @@ function RegisterPage() {
                 justifyContent="center"
                 gap={4}
             >
-                <Button component={Link} to="/login">
+                <Button component={Link} to={routes.login()}>
                     Log in
                 </Button>
                 <Button variant="contained" size="large" onClick={onSubmit}>

@@ -3,7 +3,9 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ProfilePage from './pages/ProfilePage'
 import { useLoginStore } from './stores/loginStore'
+import { routes } from './pages/routes'
 
 function App() {
     const isLoggedIn = useLoginStore(s => s.isLoggedIn())
@@ -12,17 +14,22 @@ function App() {
         <HashRouter>
             {!isLoggedIn ? (
                 <Routes>
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/register" element={<RegisterPage />} />
+                    <Route
+                        path={routes.login.pattern}
+                        element={<LoginPage />}
+                    />
+                    <Route
+                        path={routes.register.pattern}
+                        element={<RegisterPage />}
+                    />
                     <Route
                         path="*"
-                        element={<Navigate to="/login" replace />}
+                        element={<Navigate to={routes.login()} replace />}
                     />
                 </Routes>
             ) : (
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route path="/*" element={<HomePage />} />
                 </Routes>
             )}
         </HashRouter>
