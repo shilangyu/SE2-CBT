@@ -3,7 +3,7 @@ import { useLoginStore } from '../stores/loginStore'
 
 describe('LoginStore', () => {
     afterEach(() => {
-        jest.restoreAllMocks()
+        jest.resetAllMocks()
         useLoginStore.getState().logOut()
     })
 
