@@ -49,6 +49,7 @@ public class UsersController : ControllerBase {
         return Ok();
     }
 
+    [Authorize(Roles = UserRoles.UserRead)]
     [HttpGet(ApiRoutes.User.GetAll)]
     public async Task<IActionResult> GetAllUsers() {
         var users = await userService.GetAllUsersAsync();
@@ -56,6 +57,7 @@ public class UsersController : ControllerBase {
         return Ok(users.Select(e => new UserDTO(e)).ToList());
     }
 
+    [Authorize(Roles = UserRoles.UserRead)]
     [HttpGet(ApiRoutes.User.GetByEmail)]
     public async Task<IActionResult> GetUserByEmail([FromRoute] string login) {
         var user = await userManager.FindByEmailAsync(login);
@@ -67,6 +69,7 @@ public class UsersController : ControllerBase {
         return Ok(new UserDTO(user));
     }
 
+    [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
     [HttpPut(ApiRoutes.User.UpdateByEmail)]
     public async Task<IActionResult> UpdateUser([FromRoute] string login, [FromBody] UserUpdateRequest userRequest) {
         logger.LogDebug("Updating user with data [email = {login}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
@@ -84,6 +87,7 @@ public class UsersController : ControllerBase {
         }
     }
 
+    [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
     [HttpDelete(ApiRoutes.User.DeleteByEmail)]
     public async Task<IActionResult> DeleteUser([FromRoute] string login) {
         logger.LogDebug("Deleting user with data [email = {login}]", login);

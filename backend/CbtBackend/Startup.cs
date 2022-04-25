@@ -75,7 +75,7 @@ public class Startup {
                 };
             });
 
-            services.AddIdentity<User, IdentityRole>(options => {
+            services.AddIdentityCore<User>(options => {
                 options.User.RequireUniqueEmail = false;
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -83,6 +83,7 @@ public class Startup {
                 options.Password.RequireUppercase = false;
                 options.Lockout.AllowedForNewUsers = false;
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
         }
