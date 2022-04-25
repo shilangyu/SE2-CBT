@@ -16,6 +16,6 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory<Sta
         var client = factory.CreateClient();
         var res = await client.GetAsync("/" + Contracts.ApiRoutes.User.Login);
 
-        Assert.Equal(HttpStatusCode.Forbidden, res.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
     }
 }
