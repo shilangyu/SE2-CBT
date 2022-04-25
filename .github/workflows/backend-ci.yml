@@ -5,12 +5,10 @@ on:
     branches: [main]
     paths:
       - backend/**
-      - backend-tests/**
       - .github/**
   pull_request:
     paths:
       - backend/**
-      - backend-tests/**
       - .github/**
 
 jobs:
@@ -36,11 +34,10 @@ jobs:
         run: dotnet restore
 
       - name: Run analyzer
-        run: dotnet format CbtBackend.sln --severity info --verify-no-changes --no-restore
+        run: dotnet format --no-restore --severity info --verify-no-changes --exclude CbtBackend/Migrations
 
       - name: Build
         run: dotnet build --no-restore
 
       - name: Test
-        working-directory: backend-tests
-        run: dotnet test
+        run: dotnet test --no-build
