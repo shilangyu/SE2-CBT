@@ -22,6 +22,8 @@ jobs:
           node-version: "17"
 
       - name: Build
+        env:
+          VITE_API_URL: https://school-se-back.monicz.pl
         run: |
           npm install
           npm run build:gh-pages
