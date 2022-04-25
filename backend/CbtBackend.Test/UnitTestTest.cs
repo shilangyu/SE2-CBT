@@ -1,6 +1,6 @@
-namespace CbtBackend.Tests;
-
 using Xunit;
+
+namespace CbtBackend.Test;
 
 public class UnitTestTest {
     [Fact]

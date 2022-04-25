@@ -1,14 +1,11 @@
-namespace CbtBackend.Tests;
-
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using CbtBackend.Entities;
 using CbtBackend.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+
+namespace CbtBackend.Test;
 
 public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
     private readonly CustomWebApplicationFactory<Startup> factory;

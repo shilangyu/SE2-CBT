@@ -22,15 +22,19 @@ public class Startup {
     public IWebHostEnvironment Environment { get; }
 
     public void ConfigureServices(IServiceCollection services) {
-        if (Environment.IsDevelopment()) {
-            services.AddCors(options => {
-                options.AddDefaultPolicy(builder => {
+        services.AddCors(options => {
+            options.AddDefaultPolicy(builder => {
+                if (Environment.IsDevelopment()) {
                     builder.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
-                });
+                } else {
+                    builder.WithOrigins("https://shilangyu.github.io")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                }
             });
-        }
+        });
 
         services.AddControllers();
 
