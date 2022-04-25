@@ -1,10 +1,25 @@
 version: "3.9"
+
 services:
+  db:
+    image: postgres:14-alpine
+
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
   backend:
     build: backend/CbtBackend
 
+    depends_on:
+      - db
+
+    environment:
+      db__ConnectionString: Host=db:5432;Database=postgres;Username=postgres;Password=postgres
+
     ports:
-      - 3000:80
+      - 127.0.0.1:3000:80
 
   web:
     build:
@@ -16,4 +31,4 @@ services:
       - backend
 
     ports:
-      - 3001:80
+      - 127.0.0.1:3001:80
