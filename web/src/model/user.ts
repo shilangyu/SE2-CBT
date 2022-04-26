@@ -9,12 +9,12 @@ export interface User {
 }
 
 export interface UserUpdateRequest {
-    email: string
-    password: string
-    age: number
-    gender: string
-    userStatus: number
-    banned: boolean
+    email?: string
+    password?: string
+    age?: number
+    gender?: string
+    userStatus?: number
+    banned?: boolean
 }
 
 export interface UserTokenClaims {
