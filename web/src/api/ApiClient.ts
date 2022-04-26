@@ -73,30 +73,23 @@ export class ApiClient {
         }
     }
 
-    async getUser(
-        login: string
-    ): Promise<User> {
+    async getUser(login: string): Promise<User> {
         return await this.baseRequest<User>(`user/${login}`, {
-            method: 'GET'
-        });
+            method: 'GET',
+        })
     }
 
-    async updateUser(
-        login: string,
-        body: UserUpdateRequest
-    ): Promise<void> {
+    async updateUser(login: string, body: UserUpdateRequest): Promise<void> {
         return await this.baseRequest<void>(`user/${login}`, {
             method: 'PUT',
-            body: JSON.stringify(body)
-        });
+            body: JSON.stringify(body),
+        })
     }
 
-    async deleteUser(
-        login: string
-    ): Promise<void> {
+    async deleteUser(login: string): Promise<void> {
         return await this.baseRequest<void>(`user/${login}`, {
-            method: 'DELETE'
-        });
+            method: 'DELETE',
+        })
     }
 }
 

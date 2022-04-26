@@ -11,5 +11,5 @@ export const ApiClient = jest.fn().mockImplementation(() => ({
     register: mockRegister,
     getUser: mockGetUser,
     updateUser: mockUpdateUser,
-    deleteUser: mockDeleteUser
+    deleteUser: mockDeleteUser,
 }))

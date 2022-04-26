@@ -19,28 +19,34 @@ import { apiClient } from '../../api'
 import { User } from '../../model/user'
 
 function ProfilePage() {
-    const theme = useTheme();
-    const loginStore = useLoginStore();
+    const theme = useTheme()
+    const loginStore = useLoginStore()
 
-    const [userLogin, setUserLogin] = React.useState<string>('...');
-    const [userData, setUserData] = React.useState<User | undefined>(undefined);
+    const [userLogin, setUserLogin] = React.useState<string>('...')
+    const [userData, setUserData] = React.useState<User | undefined>(undefined)
 
     const { enqueueSnackbar } = useSnackbar()
-    
+
     React.useEffect(() => {
         // assume token is not null
-        const tokenClaims = parseJwt(loginStore.token as string);
-        const tokenUserLogin = tokenClaims.unique_name;
+        const tokenClaims = parseJwt(loginStore.token as string)
+        const tokenUserLogin = tokenClaims.unique_name
 
         setUserLogin(tokenUserLogin)
         setUserData(undefined)
 
-        apiClient.getUser(tokenUserLogin).then(currentUser => {
-            setUserData(currentUser)
-        }).catch(error => {
-            console.error(`failed to fetch user data: ${error}`);
-            enqueueSnackbar('failed to fetch user data (details in console)', { variant: 'error' })
-        });
+        apiClient
+            .getUser(tokenUserLogin)
+            .then(currentUser => {
+                setUserData(currentUser)
+            })
+            .catch(error => {
+                console.error(`failed to fetch user data: ${error}`)
+                enqueueSnackbar(
+                    'failed to fetch user data (details in console)',
+                    { variant: 'error' }
+                )
+            })
     }, [])
 
     const renderUserProfile = () => {
