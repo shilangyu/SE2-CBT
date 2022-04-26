@@ -3,16 +3,10 @@ using System.ComponentModel.DataAnnotations;
 namespace CbtBackend.Models.Requests;
 
 public class UserUpdateRequest {
-    [Required]
-    public string Email { get; set; } = default!;
-    [Required]
-    public string Password { get; set; } = default!;
-    [Required]
-    public int Age { get; set; }
-    [Required]
-    public string Gender { get; set; } = default!;
-    [Required]
-    public bool Banned { get; set; }
-    [Required]
-    public int UserStatus { get; set; }
+    public string? Email { get; set; }
+    public string? Password { get; set; }
+    public int? Age { get; set; }
+    public string? Gender { get; set; }
+    public bool? Banned { get; set; }
+    public int? UserStatus { get; set; }
 }
