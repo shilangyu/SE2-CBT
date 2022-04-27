@@ -53,19 +53,33 @@ public class UserService : IUserService {
             throw new RegistrationException("User does not exist");
         }
 
-        // check if user's email is being updated it's not already in the db
-        if (userRequest.Email != existingUser.Email) {
-            var emailOwner = await userManager.FindByEmailAsync(userRequest.Email);
-            if (emailOwner != null) {
-                throw new UpdateException("Email already belongs to another user");
+        if (userRequest.Email != null) {
+            // check if user's email is being updated it's not already in the db
+            if (userRequest.Email != existingUser.Email) {
+                var emailOwner = await userManager.FindByEmailAsync(userRequest.Email);
+                if (emailOwner != null) {
+                    throw new UpdateException("Email already belongs to another user");
+                }
             }
+
+            existingUser.Email = userRequest.Email;
         }
 
-        existingUser.Email = userRequest.Email;
-        existingUser.Banned = userRequest.Banned;
-        existingUser.Age = userRequest.Age;
-        existingUser.Gender = userRequest.Gender;
-        existingUser.UserStatus = userRequest.UserStatus;
+        if (userRequest.Banned is bool banned) {
+            existingUser.Banned = banned;
+        }
+
+        if (userRequest.Age is int age) {
+            existingUser.Age = age;
+        }
+
+        if (userRequest.Gender != null) {
+            existingUser.Gender = userRequest.Gender;
+        }
+
+        if (userRequest.UserStatus is int userStatus) {
+            existingUser.UserStatus = userStatus;
+        }
 
         // update user in db
         var identityResult = await userManager.UpdateAsync(existingUser);
