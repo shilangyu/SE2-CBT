@@ -65,20 +65,20 @@ public class UserService : IUserService {
             existingUser.Email = userRequest.Email;
         }
 
-        if (userRequest.Banned.HasValue) {
-            existingUser.Banned = userRequest.Banned.Value;
+        if (userRequest.Banned is bool banned) {
+            existingUser.Banned = banned;
         }
 
-        if (userRequest.Age.HasValue) {
-            existingUser.Age = userRequest.Age.Value;
+        if (userRequest.Age is int age) {
+            existingUser.Age = age;
         }
 
         if (userRequest.Gender != null) {
             existingUser.Gender = userRequest.Gender;
         }
 
-        if (userRequest.UserStatus.HasValue) {
-            existingUser.UserStatus = userRequest.UserStatus.Value;
+        if (userRequest.UserStatus is int userStatus) {
+            existingUser.UserStatus = userStatus;
         }
 
         // update user in db

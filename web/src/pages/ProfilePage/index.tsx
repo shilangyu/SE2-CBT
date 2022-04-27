@@ -53,7 +53,7 @@ function ProfilePage() {
 
     const loadFromToken = () => {
         // assume token is not null
-        const tokenClaims = parseJwt(loginStore.token as string)
+        const tokenClaims = parseJwt(loginStore.token! as string)
         const tokenUserLogin = tokenClaims.unique_name
 
         setUserLogin(tokenUserLogin)
