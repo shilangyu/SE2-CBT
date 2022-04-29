@@ -29,7 +29,7 @@ public class Startup {
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 } else {
-                    builder.WithOrigins("https://shilangyu.dev")
+                    builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 }
