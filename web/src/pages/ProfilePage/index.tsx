@@ -1,30 +1,23 @@
+import PersonIcon from '@mui/icons-material/Person'
 import {
-    AppBar,
+    Backdrop,
     Button,
+    Card,
+    CircularProgress,
+    Container,
+    Divider,
     Grid,
-    IconButton,
     Stack,
     TextField,
-    Toolbar,
     Typography,
     useTheme,
-    Card,
-    Container,
-    Icon,
-    CircularProgress,
-    Divider,
-    Backdrop,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
-import { useLoginStore } from '../../stores/loginStore'
-import LogoutIcon from '@mui/icons-material/Logout'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { parseJwt } from '../../utils/jwt'
 import { apiClient } from '../../api'
 import { User } from '../../model/user'
-import { maxWidth, padding } from '@mui/system'
-import PersonIcon from '@mui/icons-material/Person'
+import { useLoginStore } from '../../stores/loginStore'
+import { parseJwt } from '../../utils/jwt'
 
 function ProfilePage() {
     const theme = useTheme()

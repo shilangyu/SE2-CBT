@@ -1,22 +1,20 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import HomeIcon from '@mui/icons-material/Home'
+import LogoutIcon from '@mui/icons-material/Logout'
 import {
     AppBar,
     Button,
-    Grid,
     IconButton,
     Stack,
-    TextField,
+    styled,
     Toolbar,
     Typography,
-    styled,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
-import LogoutIcon from '@mui/icons-material/Logout'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { HashRouter, Link, Navigate, Route, Routes } from 'react-router-dom'
 import ProfilePage from '../ProfilePage'
-import HomeIcon from '@mui/icons-material/Home'
 import { routes } from '../routes'
 
 const ToolbarOffset = styled('div')(({ theme }) => theme.mixins.toolbar)

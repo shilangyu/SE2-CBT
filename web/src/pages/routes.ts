@@ -1,4 +1,4 @@
-import { createRouting, number, query, segment, uuid } from 'ts-routes'
+import { createRouting, segment } from 'ts-routes'
 
 export const routes = createRouting({
     home: segment`/`,

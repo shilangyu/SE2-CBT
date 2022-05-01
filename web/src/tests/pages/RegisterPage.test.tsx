@@ -22,7 +22,7 @@ describe('RegisterPage', () => {
 
     it('does not call register with invalid data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.register as any as SpyInstance).mockImplementationOnce(
+        ;(apiClient.register as unknown as SpyInstance).mockImplementationOnce(
             () => promise
         )
 
@@ -37,7 +37,7 @@ describe('RegisterPage', () => {
     })
 
     it('displays email taken error', async () => {
-        ;(apiClient.register as any as SpyInstance).mockRejectedValueOnce(
+        ;(apiClient.register as unknown as SpyInstance).mockRejectedValueOnce(
             new EmailUsedError()
         )
 
@@ -66,7 +66,7 @@ describe('RegisterPage', () => {
 
     it('calls register with valid input data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.register as any as SpyInstance).mockImplementationOnce(
+        ;(apiClient.register as unknown as SpyInstance).mockImplementationOnce(
             () => promise
         )
 

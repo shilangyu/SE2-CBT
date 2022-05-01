@@ -22,7 +22,7 @@ describe('LoginPage', () => {
 
     it('calls login on submit', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.logIn as any as SpyInstance).mockImplementationOnce(
+        ;(apiClient.logIn as unknown as SpyInstance).mockImplementationOnce(
             () => promise
         )
 
@@ -40,7 +40,7 @@ describe('LoginPage', () => {
 
     it('calls login with input data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.logIn as any as SpyInstance).mockImplementationOnce(
+        ;(apiClient.logIn as unknown as SpyInstance).mockImplementationOnce(
             () => promise
         )
 
@@ -61,10 +61,9 @@ describe('LoginPage', () => {
     })
 
     it('displays error on failed login', async () => {
-        // const promise = Promise.reject(new UnauthorizedError())
-        ;(apiClient.logIn as any as SpyInstance).mockImplementationOnce(() => {
-            throw new UnauthorizedError()
-        })
+        ;(apiClient.logIn as unknown as SpyInstance).mockRejectedValueOnce(
+            new UnauthorizedError()
+        )
 
         const { findAllByText } = render(<LoginPage />)
 
@@ -78,7 +77,7 @@ describe('LoginPage', () => {
             fireEvent.click(screen.getByRole('button'))
         })
 
-        expect(await screen.findAllByText(/wrong credentials/i)).toHaveLength(2)
+        expect(await findAllByText(/wrong credentials/i)).toHaveLength(2)
     })
 
     it('has a register button', async () => {

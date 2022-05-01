@@ -3,9 +3,8 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-import ProfilePage from './pages/ProfilePage'
-import { useLoginStore } from './stores/loginStore'
 import { routes } from './pages/routes'
+import { useLoginStore } from './stores/loginStore'
 
 function App() {
     const isLoggedIn = useLoginStore(s => s.isLoggedIn())
