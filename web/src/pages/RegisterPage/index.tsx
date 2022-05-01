@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAsync } from '../../hooks/useAsync'
 import { useLoginStore } from '../../stores/loginStore'
+import { dataTestAttr, dataTestInputProp } from '../../utils/testing'
 import { routes } from '../routes'
 
 function RegisterPage() {
@@ -65,6 +66,7 @@ function RegisterPage() {
                     error={!!emailError}
                     helperText={emailError}
                     onChange={e => setEmail(e.target.value)}
+                    {...dataTestInputProp('register-email-input')}
                 />
             </Grid>
             <Grid item>
@@ -75,6 +77,7 @@ function RegisterPage() {
                     error={!!passwordError}
                     helperText={passwordError}
                     onChange={e => setPassword(e.target.value)}
+                    {...dataTestInputProp('register-password-input')}
                 />
             </Grid>
             <Grid item>
@@ -90,6 +93,7 @@ function RegisterPage() {
                             e.target.value = (+e.target.value).toString()
                         }
                     }}
+                    {...dataTestInputProp('register-age-input')}
                 />
             </Grid>
             <Grid item>
@@ -99,6 +103,7 @@ function RegisterPage() {
                     error={!!genderError}
                     helperText={genderError}
                     onChange={e => setGender(e.target.value)}
+                    {...dataTestInputProp('register-gender-input')}
                 />
             </Grid>
             <Grid
@@ -108,10 +113,19 @@ function RegisterPage() {
                 justifyContent="center"
                 gap={4}
             >
-                <Button component={Link} to={routes.login()}>
+                <Button
+                    component={Link}
+                    to={routes.login()}
+                    {...dataTestAttr('register-login-button')}
+                >
                     Log in
                 </Button>
-                <Button variant="contained" size="large" onClick={onSubmit}>
+                <Button
+                    variant="contained"
+                    size="large"
+                    onClick={onSubmit}
+                    {...dataTestAttr('register-create-account-button')}
+                >
                     Create account
                 </Button>
             </Grid>
