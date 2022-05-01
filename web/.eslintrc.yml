@@ -19,3 +19,5 @@ plugins:
 rules:
     prettier/prettier: error
     no-unused-vars: warn
+    '@typescript-eslint/no-non-null-assertion': off
+    '@typescript-eslint/ban-ts-comment': off

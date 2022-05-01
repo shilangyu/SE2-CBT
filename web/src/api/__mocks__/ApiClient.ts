@@ -1,12 +1,14 @@
-export const mockLogIn = jest.fn()
-export const mockRegister = jest.fn()
+import { vi } from 'vitest'
+
+export const mockLogIn = vi.fn()
+export const mockRegister = vi.fn()
 
 // user
-export const mockGetUser = jest.fn()
-export const mockUpdateUser = jest.fn()
-export const mockDeleteUser = jest.fn()
+export const mockGetUser = vi.fn()
+export const mockUpdateUser = vi.fn()
+export const mockDeleteUser = vi.fn()
 
-export const ApiClient = jest.fn().mockImplementation(() => ({
+export const ApiClient = vi.fn().mockImplementation(() => ({
     logIn: mockLogIn,
     register: mockRegister,
     getUser: mockGetUser,

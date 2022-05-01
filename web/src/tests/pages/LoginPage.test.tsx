@@ -1,11 +1,13 @@
 import * as React from 'react'
+import { expect, SpyInstance, vi } from 'vitest'
 import { apiClient, UnauthorizedError } from '../../api'
 import LoginPage from '../../pages/LoginPage'
-import { act, fireEvent, render, screen } from '../test-utils'
+import { act, cleanup, fireEvent, render, screen } from '../test-utils'
 
 describe('LoginPage', () => {
     afterEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
+        cleanup()
     })
 
     it('has all inputs', async () => {
@@ -20,12 +22,16 @@ describe('LoginPage', () => {
 
     it('calls login on submit', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.logIn as jest.Mock).mockImplementationOnce(() => promise)
+        ;(apiClient.logIn as unknown as SpyInstance).mockImplementationOnce(
+            () => promise
+        )
 
         render(<LoginPage />)
 
         const submit = screen.getByRole('button')
-        fireEvent.click(submit)
+        act(() => {
+            fireEvent.click(submit)
+        })
 
         expect(apiClient.logIn).toHaveBeenCalled()
 
@@ -34,7 +40,9 @@ describe('LoginPage', () => {
 
     it('calls login with input data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.logIn as jest.Mock).mockImplementationOnce(() => promise)
+        ;(apiClient.logIn as unknown as SpyInstance).mockImplementationOnce(
+            () => promise
+        )
 
         render(<LoginPage />)
 
@@ -53,11 +61,11 @@ describe('LoginPage', () => {
     })
 
     it('displays error on failed login', async () => {
-        ;(apiClient.logIn as jest.Mock).mockImplementationOnce(() => {
-            throw new UnauthorizedError()
-        })
+        ;(apiClient.logIn as unknown as SpyInstance).mockRejectedValueOnce(
+            new UnauthorizedError()
+        )
 
-        render(<LoginPage />)
+        const { findAllByText } = render(<LoginPage />)
 
         fireEvent.change(screen.getByLabelText(/email/i), {
             target: { value: 'email' },
@@ -65,10 +73,11 @@ describe('LoginPage', () => {
         fireEvent.change(screen.getByLabelText(/password/i), {
             target: { value: 'password' },
         })
+        await act(async () => {
+            fireEvent.click(screen.getByRole('button'))
+        })
 
-        fireEvent.click(screen.getByRole('button'))
-
-        expect(await screen.findAllByText(/wrong credentials/i)).toHaveLength(2)
+        expect(await findAllByText(/wrong credentials/i)).toHaveLength(2)
     })
 
     it('has a register button', async () => {
