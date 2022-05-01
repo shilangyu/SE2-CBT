@@ -1,9 +1,10 @@
+import { afterEach, beforeEach, describe, it, vi } from 'vitest'
 import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
 import { useLoginStore } from '../stores/loginStore'
 
 describe('LoginStore', () => {
     afterEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
         useLoginStore.getState().logOut()
     })
 

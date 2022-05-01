@@ -1,83 +1,92 @@
 import { cleanup } from '@testing-library/react'
 import * as React from 'react'
+import { expect, SpyInstance, vi } from 'vitest'
 import { apiClient, EmailUsedError } from '../../api'
 import RegisterPage from '../../pages/RegisterPage'
-import { act, fireEvent, render, screen } from '../test-utils'
+import { act, fireEvent, render } from '../test-utils'
 
 describe('RegisterPage', () => {
     afterEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
         cleanup()
     })
 
     it('has all inputs', async () => {
-        render(<RegisterPage />)
+        const { findByLabelText } = render(<RegisterPage />)
 
-        expect(screen.getByLabelText(/email/i)).toBeTruthy()
-        expect(screen.getByLabelText(/password/i)).toBeTruthy()
-        expect(screen.getByLabelText(/age/i)).toHaveAttribute('type', 'number')
-        expect(screen.getByLabelText(/gender/i)).toBeTruthy()
+        expect(await findByLabelText(/email/i)).toBeTruthy()
+        expect(await findByLabelText(/password/i)).toBeTruthy()
+        expect(await findByLabelText(/age/i)).toHaveAttribute('type', 'number')
+        expect(await findByLabelText(/gender/i)).toBeTruthy()
     })
 
     it('does not call register with invalid data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.register as jest.Mock).mockImplementationOnce(() => promise)
+        ;(apiClient.register as any as SpyInstance).mockImplementationOnce(
+            () => promise
+        )
 
-        render(<RegisterPage />)
+        const { findByRole } = render(<RegisterPage />)
 
-        fireEvent.click(screen.getByRole('button'))
-
+        await act(async () => {
+            fireEvent.click(await findByRole('button'))
+        })
         expect(apiClient.register).not.toHaveBeenCalled()
 
         await act(() => promise)
     })
 
     it('displays email taken error', async () => {
-        ;(apiClient.register as jest.Mock).mockImplementationOnce(() => {
-            throw new EmailUsedError()
-        })
+        ;(apiClient.register as any as SpyInstance).mockRejectedValueOnce(
+            new EmailUsedError()
+        )
 
-        render(<RegisterPage />)
+        const { findByLabelText, findByRole, findByText } = render(
+            <RegisterPage />
+        )
 
-        fireEvent.change(screen.getByLabelText(/email/i), {
+        fireEvent.change(await findByLabelText(/email/i), {
             target: { value: 'email@asd' },
         })
-        fireEvent.change(screen.getByLabelText(/password/i), {
+        fireEvent.change(await findByLabelText(/password/i), {
             target: { value: 'password' },
         })
-        fireEvent.change(screen.getByLabelText(/age/i), {
+        fireEvent.change(await findByLabelText(/age/i), {
             target: { value: 21 },
         })
-        fireEvent.change(screen.getByLabelText(/gender/i), {
+        fireEvent.change(await findByLabelText(/gender/i), {
             target: { value: 'male' },
         })
+        await act(async () => {
+            fireEvent.click(await findByRole('button'))
+        })
 
-        fireEvent.click(screen.getByRole('button'))
-
-        expect(await screen.findByText(/email taken/i)).toBeTruthy()
+        expect(await findByText(/email taken/i)).toBeTruthy()
     })
 
     it('calls register with valid input data', async () => {
         const promise = Promise.resolve()
-        ;(apiClient.register as jest.Mock).mockImplementationOnce(() => promise)
+        ;(apiClient.register as any as SpyInstance).mockImplementationOnce(
+            () => promise
+        )
 
-        render(<RegisterPage />)
+        const { findByLabelText, findByRole } = render(<RegisterPage />)
 
-        act(() => {
-            fireEvent.change(screen.getByLabelText(/email/i), {
-                target: { value: 'email@asd' },
-            })
-            fireEvent.change(screen.getByLabelText(/password/i), {
-                target: { value: 'password' },
-            })
-            fireEvent.change(screen.getByLabelText(/age/i), {
-                target: { value: 21 },
-            })
-            fireEvent.change(screen.getByLabelText(/gender/i), {
-                target: { value: 'male' },
-            })
+        fireEvent.change(await findByLabelText(/email/i), {
+            target: { value: 'email@asd' },
+        })
+        fireEvent.change(await findByLabelText(/password/i), {
+            target: { value: 'password' },
+        })
+        fireEvent.change(await findByLabelText(/age/i), {
+            target: { value: 21 },
+        })
+        fireEvent.change(await findByLabelText(/gender/i), {
+            target: { value: 'male' },
+        })
 
-            fireEvent.click(screen.getByRole('button'))
+        await act(async () => {
+            fireEvent.click(await findByRole('button'))
         })
 
         expect(apiClient.register).toHaveBeenCalledWith(
@@ -91,8 +100,8 @@ describe('RegisterPage', () => {
     })
 
     it('has a log in button', async () => {
-        render(<RegisterPage />)
+        const { findByRole } = render(<RegisterPage />)
 
-        expect(screen.getByRole('link')).toHaveTextContent(/log in/i)
+        expect(await findByRole('link')).toHaveTextContent(/log in/i)
     })
 })
