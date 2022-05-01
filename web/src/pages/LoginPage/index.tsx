@@ -6,12 +6,13 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { useState } from 'react'
-import * as React from 'react'
 import { useSnackbar } from 'notistack'
-import { useLoginStore } from '../../stores/loginStore'
-import { useAsync } from '../../hooks/useAsync'
+import * as React from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAsync } from '../../hooks/useAsync'
+import { useLoginStore } from '../../stores/loginStore'
+import { dataTestAttr, dataTestInputProp } from '../../utils/testing'
 import { routes } from '../routes'
 
 function LoginPage() {
@@ -52,6 +53,7 @@ function LoginPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setEmail(e.target.value)}
+                    {...dataTestInputProp('login-email-input')}
                 />
             </Grid>
             <Grid item>
@@ -62,6 +64,7 @@ function LoginPage() {
                     error={!!credentialsError}
                     helperText={credentialsError}
                     onChange={e => setPassword(e.target.value)}
+                    {...dataTestInputProp('login-password-input')}
                 />
             </Grid>
             <Grid
@@ -71,10 +74,19 @@ function LoginPage() {
                 justifyContent="center"
                 gap={4}
             >
-                <Button component={Link} to={routes.register()}>
+                <Button
+                    component={Link}
+                    to={routes.register()}
+                    {...dataTestAttr('login-create-account-button')}
+                >
                     Create account
                 </Button>
-                <Button variant="contained" size="large" onClick={onSubmit}>
+                <Button
+                    variant="contained"
+                    size="large"
+                    onClick={onSubmit}
+                    {...dataTestAttr('login-login-button')}
+                >
                     Log in
                 </Button>
             </Grid>
