@@ -12,7 +12,7 @@ export enum DataTestId {
     'login-login-button',
     'navbar-profile-button',
     'navbar-home-button',
-    'navbar-logout-button'
+    'navbar-logout-button',
 }
 
 export const dataTestAttr = (key: keyof typeof DataTestId) => ({

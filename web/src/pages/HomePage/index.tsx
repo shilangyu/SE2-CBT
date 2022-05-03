@@ -8,7 +8,7 @@ import {
     Stack,
     styled,
     Toolbar,
-    Typography
+    Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
@@ -49,7 +49,9 @@ function HomePage() {
                                         size="large"
                                         component={Link}
                                         to={routes.profile()}
-                                        {...dataTestAttr('navbar-profile-button')}
+                                        {...dataTestAttr(
+                                            'navbar-profile-button'
+                                        )}
                                     >
                                         <AccountCircleIcon fontSize="inherit" />
                                     </IconButton>
