@@ -8,12 +8,13 @@ import {
     Stack,
     styled,
     Toolbar,
-    Typography,
+    Typography
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
+import { dataTestAttr } from '../../utils/testing'
 import ProfilePage from '../ProfilePage'
 import { routes } from '../routes'
 
@@ -48,6 +49,7 @@ function HomePage() {
                                         size="large"
                                         component={Link}
                                         to={routes.profile()}
+                                        {...dataTestAttr('navbar-profile-button')}
                                     >
                                         <AccountCircleIcon fontSize="inherit" />
                                     </IconButton>
@@ -60,6 +62,7 @@ function HomePage() {
                                         size="large"
                                         component={Link}
                                         to={routes.home()}
+                                        {...dataTestAttr('navbar-home-button')}
                                     >
                                         <HomeIcon fontSize="inherit" />
                                     </IconButton>
@@ -72,6 +75,7 @@ function HomePage() {
                             variant="text"
                             onClick={onLogout}
                             startIcon={<LogoutIcon />}
+                            {...dataTestAttr('navbar-logout-button')}
                         >
                             Log out
                         </Button>

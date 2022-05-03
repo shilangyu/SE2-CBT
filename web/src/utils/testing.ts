@@ -10,6 +10,9 @@ export enum DataTestId {
     'login-password-input',
     'login-create-account-button',
     'login-login-button',
+    'navbar-profile-button',
+    'navbar-home-button',
+    'navbar-logout-button'
 }
 
 export const dataTestAttr = (key: keyof typeof DataTestId) => ({
