@@ -14,7 +14,7 @@ Stack:
 ```sh
 cd backend
 docker build -t se2-back . # build image
-docker run -it --rm -p 3000:80 se2-back # create container
+docker run --rm -p 3000:80 se2-back # create container
 ```
 
 ### development
@@ -37,9 +37,31 @@ Stack:
 ```sh
 cd web
 docker build -t se2-front . # build image
-docker run -it --rm -p 3001:80 se2-front # create container
+docker run --rm -p 3001:80 se2-front # create container
 ```
 
 ### development
 
 You will only need [node.js 17](https://nodejs.org/en/download/current/). Then cd into `web/` and run the project with `npm run dev`.
+
+## integration-tests
+
+Stack:
+
+- [Python 3.10](https://www.python.org)
+- [Pipenv](https://pipenv-es.readthedocs.io/es/stable/)
+- [Google Chrome](https://www.google.com/chrome/) *- Chromium won't work*
+
+### run locally
+
+```sh
+# set TEST_URL environment variable, e.g.: (.env file is supported)
+export TEST_URL=http://127.0.0.1:3001
+
+# optionally make the browser visible
+export SELENIUM_SHOW=1
+
+cd integration-tests
+pipenv install
+pipenv run python main.py
+```
