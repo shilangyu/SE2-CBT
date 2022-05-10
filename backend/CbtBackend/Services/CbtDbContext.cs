@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Identity;
 namespace CbtBackend.Services;
 
 public sealed class CbtDbContext : IdentityDbContext<User, IdentityRole, string> {
+    public DbSet<MudTest> Evaluations;
+    public DbSet<MudTestResponse> EvaluationResponses;
+
     public CbtDbContext(DbContextOptions<CbtDbContext> options) : base(options) {
     }
 }

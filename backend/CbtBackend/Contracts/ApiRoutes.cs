@@ -13,4 +13,17 @@ public static class ApiRoutes {
         public const string DeleteByEmail = "user/{login}";   // DELETE
     }
 
+    public static class Evaluation {
+        // evaluations (mood tests)
+        public const string GetEvaluations = "moodtest";
+        public const string GetEvaluation = "moodtest/{id}";
+
+        public const string PostEvaluationResponse = "evaluation";  // POST
+        public const string GetEvaluationResponse = "evaluation/{id}";
+        public const string PutEvaluationResponse = "evaluation/{id}";
+        public const string DeleteEvaluationResponse = "evaluation/{id}";
+        public const string GetEvaluationResponseById = "evaluation/findByUserId";
+        public const string GetEvaluationResponseByLogin = "evaluation/findByUserLogin";
+    }
+
 }
