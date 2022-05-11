@@ -22,7 +22,7 @@ public class JwtTokenService : IJwtTokenService {
 
     public string GenerateToken(User user, IList<string> roles, DateTime expiration) {
         var claims = new List<Claim>() {
-            new Claim("id", user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Email)
         };
 

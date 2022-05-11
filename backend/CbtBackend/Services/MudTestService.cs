@@ -32,6 +32,7 @@ public class EvaluationService : IEvaluationService {
         var response = new MudTestResponse() {
             Author = user,
             Evaluation = evaluation,
+            Submitted = DateTime.UtcNow,
             Response1 = request.Response1,
             Response2 = request.Response2,
             Response3 = request.Response3,
@@ -66,7 +67,7 @@ public class EvaluationService : IEvaluationService {
     }
 
     public async Task<List<MudTestResponse>> GetResponsesByUser(User user) {
-        return await dbContext.EvaluationResponses.Where(e => e.Author.Id == user.Id).ToListAsync();
+        return await dbContext.EvaluationResponses.Include(e => e.Evaluation).Where(e => e.Author.Id == user.Id).ToListAsync();
     }
 
     public async Task<MudTestResponse> UpdateResponse(int id, EvaluationUpdateRequest request) {

@@ -56,17 +56,17 @@ public class EvaluationController : ControllerBase {
     [HttpPost(ApiRoutes.Evaluation.PostEvaluationResponse)]
     public async Task<IActionResult> PostEvaluationResponse([FromBody] EvaluationCreateRequest request) {
         try {
-            var contextUser = HttpContext.User;
+            var contextUser = User;
             var author = await userManager.GetUserAsync(contextUser);
 
             if (author == null) {
-                return Unauthorized();
+                return Unauthorized("the context user was null, please try again later");
             }
 
-            await evaluationService.CreateResponse(author, request);
-            return Ok();
-        } catch (Exception) {
-            throw;
+            var response = await evaluationService.CreateResponse(author, request);
+            return Ok(response);
+        } catch (EvaluationNotFoundException) {
+            return BadRequest(string.Format("evaluation with id {0} does not exist", request.TestId));
         }
     }
 
@@ -83,5 +83,29 @@ public class EvaluationController : ControllerBase {
     [HttpDelete(ApiRoutes.Evaluation.DeleteEvaluationResponse)]
     public async Task<IActionResult> DeleteEvaluationResponse([FromRoute] int id) {
         return BadRequest();
+    }
+
+    [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseById)]
+    public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userID")] string userId) {
+        var queryUser = await userManager.FindByIdAsync(userId);
+
+        if (queryUser == null) {
+            return NotFound();
+        }
+
+        var responseList = await evaluationService.GetResponsesByUser(queryUser);
+        return Ok(responseList);
+    }
+
+    [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseByLogin)]
+    public async Task<IActionResult> GetResponsesByUserLogin([FromQuery(Name = "login")] string login) {
+        var queryUser = await userManager.FindByEmailAsync(login);
+
+        if (queryUser == null) {
+            return NotFound();
+        }
+
+        var responseList = await evaluationService.GetResponsesByUser(queryUser);
+        return Ok(responseList);
     }
 }
