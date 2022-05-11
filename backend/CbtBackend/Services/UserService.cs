@@ -129,7 +129,13 @@ public class UserService : IUserService {
         }
 
         // grant default role
-        identityResult = await userManager.AddToRolesAsync(user, new[] { UserRoles.UserRead, UserRoles.UserWrite });
+        identityResult = await userManager.AddToRolesAsync(user, new[] {
+            UserRoles.UserRead,
+            UserRoles.UserWrite,
+            UserRoles.EvaluationRead,
+            UserRoles.EvaluationWrite
+        });
+
         if (!identityResult.Succeeded) {
             throw new RegistrationException("Operation failed");
         }
