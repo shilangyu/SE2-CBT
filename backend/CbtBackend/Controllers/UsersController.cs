@@ -32,12 +32,12 @@ public class UsersController : ControllerBase {
         logger.LogDebug("Authenticating user with data [email = {login}, password = {password}]", userRequest.Login, userRequest.Password);
 
         try {
-            var token = await userService.AuthenticateUserAsync(userRequest);
+            var response = await userService.AuthenticateUserAsync(userRequest);
 
             // append token expiration date to header
-            Response.Headers.Add(TokenExpireHeader, token.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
+            Response.Headers.Add(TokenExpireHeader, response.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
 
-            return Ok(new UserTokenDTO(token.Token));
+            return Ok(new LoginResponseDTO(response.Token, response.User.UserStatus, response.User.Id.GetHashCode()));
         } catch (AuthenticationCredentialsException) {
             return Unauthorized(new { message = "invalid login or password" });
         }
@@ -94,7 +94,7 @@ public class UsersController : ControllerBase {
 
         try {
             var response = await userManager.FindByEmailAsync(login);
-            return Ok(new { });
+            return NoContent();
 
         } catch (DeleteException e) {
             if (e.Message.Equals("User does not exist")) {
@@ -110,7 +110,7 @@ public class UsersController : ControllerBase {
             userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
 
         try {
-            var response = await userService.RegisterUserAsync(userRequest);
+            var user = await userService.RegisterUserAsync(userRequest);
 
             return Ok(new { });
             // the lines below is the proper way to return (using Created()) but spec wants us to return status code 200, perhaps
