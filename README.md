@@ -21,6 +21,10 @@ docker run --rm -p 3000:80 se2-back # create container
 
 You will only need [.NET 6](https://dotnet.microsoft.com/en-us/download). Then cd into `backend/` and run the project with `dotnet run`. In vscode you can install the [C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) and run the project by pressing F5.
 
+### integration tests
+
+Run all with `dotnet test`. By default tests are performed in memory, however if `TEST_URL` environment variable is provided, tests are performed against that url.
+
 ## frontend
 
 [![](https://github.com/shilangyu/SE2-CBT/workflows/web-ci/badge.svg)](https://github.com/shilangyu/SE2-CBT/actions)
@@ -50,7 +54,7 @@ Stack:
 
 - [Python 3.10](https://www.python.org)
 - [Pipenv](https://pipenv-es.readthedocs.io/es/stable/)
-- [Google Chrome](https://www.google.com/chrome/) *- Chromium won't work*
+- [Google Chrome](https://www.google.com/chrome/) _- Chromium won't work_
 
 ### run locally
 

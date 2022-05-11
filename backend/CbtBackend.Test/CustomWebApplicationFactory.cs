@@ -24,4 +24,14 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             });
         });
     }
+
+    public HttpClient GetClient() {
+        var customTestUrl = Environment.GetEnvironmentVariable("TEST_URL");
+
+        if (customTestUrl is not null) {
+            return new() { BaseAddress = new(customTestUrl) };
+        } else {
+            return CreateClient();
+        }
+    }
 }
