@@ -57,6 +57,8 @@ public class Startup {
         {
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEvaluationService, EvaluationService>();
+
             services.AddDbContext<CbtDbContext>(options => {
                 options.UseNpgsql(Configuration.GetValue<string>("db:ConnectionString"));
             });

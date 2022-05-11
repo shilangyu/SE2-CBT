@@ -13,14 +13,29 @@ namespace CbtBackend.Controllers;
 [ApiController]
 [Produces("application/json")]
 public class EvaluationController : ControllerBase {
+    private readonly IEvaluationService evaluationService;
+    private readonly ILogger<EvaluationController> logger;
+
+    public EvaluationController(IEvaluationService evaluationService, ILogger<EvaluationController> logger) {
+        this.evaluationService = evaluationService;
+        this.logger = logger;
+    }
+
     [HttpGet(ApiRoutes.Evaluation.GetEvaluations)]
     public async Task<IActionResult> GetEvaluations() {
-        return BadRequest();
+        var evaluations = await evaluationService.GetAllEvaluations();
+        return Ok(evaluations);
     }
 
     [HttpGet(ApiRoutes.Evaluation.GetEvaluation)]
     public async Task<IActionResult> GetEvaluation([FromRoute] int id) {
-        return BadRequest();
+        var evaluation = await evaluationService.GetEvaluation(id);
+
+        if (evaluation == null) {
+            return NotFound();
+        }
+
+        return Ok(evaluation);
     }
 
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponse)]

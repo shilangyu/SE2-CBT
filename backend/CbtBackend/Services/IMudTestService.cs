@@ -8,7 +8,7 @@ namespace CbtBackend.Services;
 
 public interface IEvaluationService {
     Task<List<MudTest>> GetAllEvaluations();
-    Task<MudTest> GetEvaluation(int id);
+    Task<MudTest?> GetEvaluation(int id);
 
     // response handling
     Task<List<MudTestResponse>> GetResponsesByUser(User user);
