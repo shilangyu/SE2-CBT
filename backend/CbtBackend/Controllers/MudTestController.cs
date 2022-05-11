@@ -82,7 +82,12 @@ public class EvaluationController : ControllerBase {
 
     [HttpDelete(ApiRoutes.Evaluation.DeleteEvaluationResponse)]
     public async Task<IActionResult> DeleteEvaluationResponse([FromRoute] int id) {
-        return BadRequest();
+        try {
+            await evaluationService.DeleteResponse(id);
+            return Ok();
+        } catch (ResponseNotFoundException) {
+            return NotFound();
+        }
     }
 
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseById)]

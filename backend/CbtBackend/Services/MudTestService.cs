@@ -51,7 +51,20 @@ public class EvaluationService : IEvaluationService {
     }
 
     public async Task<bool> DeleteResponse(int id) {
-        throw new NotImplementedException();
+        var response = await GetResponse(id);
+
+        if (response == null) {
+            throw new ResponseNotFoundException();
+        }
+
+        dbContext.Remove(response);
+        var updated = await dbContext.SaveChangesAsync();
+
+        if (updated <= 0) {
+            throw new Exception("deleting response in db failed");
+        }
+
+        return true;
     }
 
     public async Task<List<MudTest>> GetAllEvaluations() {
@@ -63,7 +76,10 @@ public class EvaluationService : IEvaluationService {
     }
 
     public async Task<MudTestResponse?> GetResponse(int id) {
-        return await dbContext.EvaluationResponses.SingleOrDefaultAsync(e => e.Id == id);
+        return await dbContext.EvaluationResponses
+            .Include(e => e.Evaluation)
+            .Include(e => e.Author)
+            .SingleOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<List<MudTestResponse>> GetResponsesByUser(User user) {
