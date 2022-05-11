@@ -1,7 +1,6 @@
 export interface User {
-    userID: number
+    userId: number
     login: string
-    password: string
     age: number
     gender: string
     userStatus: number

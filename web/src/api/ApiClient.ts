@@ -1,6 +1,7 @@
 import { EmailUsedError, UnauthorizedError } from '.'
 import { useLoginStore } from '../stores/loginStore'
 import { User, UserUpdateRequest } from '../model/user'
+import { LoginResponse } from '../model/responses'
 
 export class ApiClient {
     constructor(private baseUrl: string) {
@@ -35,13 +36,10 @@ export class ApiClient {
     }
 
     async logIn(email: string, password: string): Promise<string> {
-        const res = await this.baseRequest<{ accessToken: string }>(
-            `user/login`,
-            {
-                method: 'POST',
-                body: JSON.stringify({ login: email, password }),
-            }
-        )
+        const res = await this.baseRequest<LoginResponse>(`user/login`, {
+            method: 'POST',
+            body: JSON.stringify({ login: email, password }),
+        })
 
         return res.accessToken
     }
