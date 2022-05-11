@@ -25,12 +25,14 @@ public class EvaluationController : ControllerBase {
         this.userService = userService;
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluations)]
     public async Task<IActionResult> GetEvaluations() {
         var evaluations = await evaluationService.GetAllEvaluations();
         return Ok(evaluations);
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluation)]
     public async Task<IActionResult> GetEvaluation([FromRoute] int id) {
         var evaluation = await evaluationService.GetEvaluation(id);
@@ -42,6 +44,7 @@ public class EvaluationController : ControllerBase {
         return Ok(evaluation);
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponse)]
     public async Task<IActionResult> GetEvaluationResponse([FromRoute] int id) {
         var response = await evaluationService.GetResponse(id);
@@ -53,6 +56,7 @@ public class EvaluationController : ControllerBase {
         return Ok(response);
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead + "," + UserRoles.EvaluationWrite)]
     [HttpPost(ApiRoutes.Evaluation.PostEvaluationResponse)]
     public async Task<IActionResult> PostEvaluationResponse([FromBody] EvaluationCreateRequest request) {
         try {
@@ -70,6 +74,7 @@ public class EvaluationController : ControllerBase {
         }
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead + "," + UserRoles.EvaluationWrite)]
     [HttpPut(ApiRoutes.Evaluation.PutEvaluationResponse)]
     public async Task<IActionResult> PutEvaluationResponse([FromRoute] int id, [FromBody] EvaluationUpdateRequest request) {
         try {
@@ -80,6 +85,7 @@ public class EvaluationController : ControllerBase {
         }
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead + "," + UserRoles.EvaluationWrite)]
     [HttpDelete(ApiRoutes.Evaluation.DeleteEvaluationResponse)]
     public async Task<IActionResult> DeleteEvaluationResponse([FromRoute] int id) {
         try {
@@ -90,6 +96,7 @@ public class EvaluationController : ControllerBase {
         }
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseById)]
     public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userID")] string userId) {
         var queryUser = await userManager.FindByIdAsync(userId);
@@ -102,6 +109,7 @@ public class EvaluationController : ControllerBase {
         return Ok(responseList);
     }
 
+    [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseByLogin)]
     public async Task<IActionResult> GetResponsesByUserLogin([FromQuery(Name = "login")] string login) {
         var queryUser = await userManager.FindByEmailAsync(login);
