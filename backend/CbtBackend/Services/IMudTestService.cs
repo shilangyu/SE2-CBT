@@ -12,8 +12,8 @@ public interface IEvaluationService {
 
     // response handling
     Task<List<MudTestResponse>> GetResponsesByUser(User user);
-    Task<MudTestResponse> GetResponse(int id);
-    Task<bool> UpdateResponse(int id, EvaluationUpdateRequest request);
-    Task<bool> CreateResponse(EvaluationCreateRequest request);
+    Task<MudTestResponse?> GetResponse(int id);
+    Task<MudTestResponse> UpdateResponse(int id, EvaluationUpdateRequest request);
+    Task<MudTestResponse> CreateResponse(User user, EvaluationCreateRequest request);
     Task<bool> DeleteResponse(int id);
 }
