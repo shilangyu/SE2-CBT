@@ -11,7 +11,7 @@ public interface IUserService {
     Task<bool> UpdateUserAsync(string email, UserUpdateRequest userRequest);
 
     // registration
-    Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest);
+    Task<User?> RegisterUserAsync(UserRegistrationRequest userRequest);
     // authentication
     Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest);
 }

@@ -106,7 +106,7 @@ public class UserService : IUserService {
     }
 
     // implementation of user registration
-    public async Task<UserRegistrationResponse> RegisterUserAsync(UserRegistrationRequest userRequest) {
+    public async Task<User?> RegisterUserAsync(UserRegistrationRequest userRequest) {
         // check if user already exists
         var existingUser = await userManager.FindByEmailAsync(userRequest.Login);
         if (existingUser != null) {
@@ -140,11 +140,7 @@ public class UserService : IUserService {
             throw new RegistrationException("Operation failed");
         }
 
-        var response = new UserRegistrationResponse() { // won't matter much if RegisterUser() returns status code 200 on success
-            User = user
-        };
-
-        return response;
+        return user;
     }
 
     // implementation of user authentication

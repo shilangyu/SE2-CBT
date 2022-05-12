@@ -104,14 +104,14 @@ paths:
         - teamcbt_auth:
             - write:session
             - read:session
-  /session/findByUserID:
+  /session/findByUserId:
     get:
       tags:
         - session
-      summary: Finds Session by UserID
-      operationId: findSessionByUserID
+      summary: Finds Session by UserId
+      operationId: findSessionByUserId
       parameters:
-        - name: UserID
+        - name: UserId
           in: query
           description: Status values that need to be considered for filter
           required: true
@@ -141,17 +141,17 @@ paths:
         - teamcbt_auth:
             - write:session
             - read:session
-  /session/{sessionID}:
+  /session/{sessionId}:
     get:
       tags:
         - session
-      summary: Find Session by ID
+      summary: Find Session by Id
       description: Returns a single session
       operationId: getSessionById
       parameters:
-        - name: sessionID
+        - name: sessionId
           in: path
-          description: ID of session to return
+          description: Id of session to return
           required: true
           schema:
             type: integer
@@ -164,7 +164,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Session"
         400:
-          description: Invalid ID supplied
+          description: Invalid Id supplied
           content: {}
         403:
           description: Access Forbidden
@@ -183,9 +183,9 @@ paths:
       summary: Updates a Session in the database with form data
       operationId: updateSessionWithForm
       parameters:
-        - name: sessionID
+        - name: sessionId
           in: path
-          description: ID of session that needs to be updated
+          description: Id of session that needs to be updated
           required: true
           schema:
             type: integer
@@ -214,7 +214,7 @@ paths:
           in: header
           schema:
             type: string
-        - name: sessionID
+        - name: sessionId
           in: path
           description: Session id to delete
           required: true
@@ -223,7 +223,7 @@ paths:
             format: int64
       responses:
         400:
-          description: Invalid ID supplied
+          description: Invalid Id supplied
           content: {}
         403:
           description: Access Forbidden
@@ -269,7 +269,7 @@ paths:
       summary: get list of users
       operationId: getAllUsers
       responses:
-        201:
+        200:
           description: successful operation
           content:
             application/json:
@@ -316,6 +316,10 @@ paths:
                 properties:
                   accessToken:
                     type: string
+                  userStatus:
+                    type: integer
+                  userId:
+                    type: integer
         401:
           description: Invalid username/password supplied
           content: {}
@@ -424,6 +428,9 @@ paths:
           schema:
             type: string
       responses:
+        204:
+          description: User deleted
+          content: {}
         400:
           description: Invalid username supplied
           content: {}
@@ -434,7 +441,7 @@ paths:
           description: User not found
           content: {}
         500:
-          description: failure
+          description: Failure
           content: {}
         503:
           description: Server is currently down
@@ -530,16 +537,16 @@ paths:
         - teamcbt_auth:
             - write:evaluation
             - read:evaluation
-  /evaluation/findByUserID:
+  /evaluation/findByUserId:
     get:
       tags:
         - evaluation
-      summary: Finds Evaluation by userID
-      operationId: findEvaluationByuserID
+      summary: Finds Evaluation by userId
+      operationId: findEvaluationByuserId
       parameters:
-        - name: userID
+        - name: userId
           in: query
-          description: User's ID
+          description: User's Id
           required: true
           style: form
           explode: true
@@ -570,17 +577,17 @@ paths:
         - teamcbt_auth:
             - write:evaluation
             - read:evaluation
-  /evaluation/{evaluationID}:
+  /evaluation/{evaluationId}:
     get:
       tags:
         - evaluation
-      summary: Find Evaluation by ID
+      summary: Find Evaluation by Id
       description: Returns a single session
       operationId: getEvaluationById
       parameters:
-        - name: evaluationID
+        - name: evaluationId
           in: path
-          description: ID of evaluation to return
+          description: Id of evaluation to return
           required: true
           schema:
             type: integer
@@ -593,7 +600,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Evaluation"
         400:
-          description: Invalid ID supplied
+          description: Invalid Id supplied
           content: {}
         403:
           description: Access Forbidden
@@ -615,9 +622,9 @@ paths:
       summary: Updates an Evaluation in the database with form data
       operationId: updateEvaluationWithForm
       parameters:
-        - name: evaluationID
+        - name: evaluationId
           in: path
-          description: ID of evaluation that needs to be updated
+          description: Id of evaluation that needs to be updated
           required: true
           schema:
             type: integer
@@ -652,7 +659,7 @@ paths:
           in: header
           schema:
             type: string
-        - name: evaluationID
+        - name: evaluationId
           in: path
           description: Evaluation id to delete
           required: true
@@ -661,7 +668,7 @@ paths:
             format: int64
       responses:
         400:
-          description: Invalid ID supplied
+          description: Invalid Id supplied
           content: {}
         403:
           description: Access Forbidden
@@ -679,16 +686,16 @@ paths:
         - teamcbt_auth:
             - write:evaluation
             - read:evaluation
-  /statistics/{statisticID}:
+  /statistics/{statisticId}:
     put:
       tags:
         - statistics
       summary: Update an existing statistic
       operationId: updateStatistics
       parameters:
-        - name: statisticID
+        - name: statisticId
           in: path
-          description: ID of statistic that needs to be updated
+          description: Id of statistic that needs to be updated
           required: true
           schema:
             type: integer
@@ -795,17 +802,17 @@ paths:
         - teamcbt_auth:
             - write:statistics
             - read:statistics
-  /statistics/{userID}:
+  /statistics/{userId}:
     get:
       tags:
         - statistics
       summary: Get Statistics of a user
       description: Returns a statistics object
-      operationId: getStatisticsByUserID
+      operationId: getStatisticsByUserId
       parameters:
-        - name: userID
+        - name: userId
           in: path
-          description: ID of user to return
+          description: Id of user to return
           required: true
           schema:
             type: integer
@@ -817,7 +824,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Statistics"
         400:
-          description: Invalid ID supplied
+          description: Invalid Id supplied
           content: {}
         403:
           description: Access Forbidden
@@ -864,18 +871,15 @@ components:
           type: string
     User:
       required:
-        - userID
+        - userId
         - login
-        - password
         - userStatus
         - banned
       type: object
       properties:
-        userID:
+        userId:
           type: integer
         login:
-          type: string
-        password:
           type: string
         age:
           type: integer
@@ -887,13 +891,13 @@ components:
           type: boolean
     Session:
       required:
-        - sessionID
+        - sessionId
         - testStep
         - agendaStep
         - methodStep
       type: object
       properties:
-        sessionID:
+        sessionId:
           type: integer
           format: int64
         testStep:
@@ -902,7 +906,7 @@ components:
           type: object
         methodStep:
           type: object
-        userID:
+        userId:
           type: integer
         status:
           type: string
@@ -957,7 +961,7 @@ components:
         - addictionTestResults
       type: object
       properties:
-        statisticID:
+        statisticId:
           type: integer
         improvement:
           type: array
@@ -985,7 +989,7 @@ components:
             type: integer
         date:
           type: string
-        userID:
+        userId:
           type: integer
   securitySchemes:
     teamcbt_auth:
