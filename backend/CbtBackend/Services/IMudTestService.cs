@@ -1,8 +1,5 @@
 using CbtBackend.Entities;
-using CbtBackend.Migrations;
-using CbtBackend.Models;
 using CbtBackend.Models.Requests;
-using CbtBackend.Models.Responses;
 
 namespace CbtBackend.Services;
 
