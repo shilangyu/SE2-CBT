@@ -16,7 +16,7 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
 
     [Theory]
     [InlineData("/" + Contracts.ApiRoutes.User.GetAll)]
-    [InlineData("/" + Contracts.ApiRoutes.User.GetByEmail)]
+    [InlineData("/" + Contracts.ApiRoutes.User.GetByUserId)]
     public async Task EndpointIsProtectedFromAnonymous(string endpoint) {
         using var client = factory.GetClient();
         var res = await client.GetAsync(endpoint);
@@ -26,7 +26,7 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
 
     [Theory]
     [InlineData("/" + Contracts.ApiRoutes.User.GetAll)]
-    [InlineData("/" + Contracts.ApiRoutes.User.GetByEmail)]
+    [InlineData("/" + Contracts.ApiRoutes.User.GetByUserId)]
     public async Task EndpointProtectedFromMissingPermissions(string endpoint) {
         using var client = factory.GetClient();
 

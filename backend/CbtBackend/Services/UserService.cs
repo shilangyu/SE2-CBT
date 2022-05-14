@@ -1,5 +1,4 @@
 using CbtBackend.Entities;
-using CbtBackend.Models;
 using CbtBackend.Models.Requests;
 using CbtBackend.Models.Responses;
 using Microsoft.EntityFrameworkCore;
@@ -46,9 +45,9 @@ public class UserService : IUserService {
         return await dbContext.Users.ToListAsync();
     }
 
-    public async Task<bool> UpdateUserAsync(string email, UserUpdateRequest userRequest) {
+    public async Task<User> UpdateUserAsync(int userId, UserUpdateRequest userRequest) {
         // check that user exists
-        var existingUser = await userManager.FindByEmailAsync(email);
+        var existingUser = await userManager.FindByIdAsync(userId);
         if (existingUser == null) {
             throw new RegistrationException("User does not exist");
         }
@@ -87,7 +86,7 @@ public class UserService : IUserService {
             throw new RegistrationException("Operation failed");
         }
 
-        return true;
+        return existingUser;
     }
 
     public async Task<bool> DeleteUserAsync(string email) {
@@ -168,5 +167,13 @@ public class UserService : IUserService {
         };
 
         return response;
+    }
+}
+
+
+public static class UserManagerExtension {
+    public static Task<User> FindByIdAsync(this UserManager<User> self, int userId) {
+        return self.Users.Where(u => u.Id == userId).FirstAsync();
+
     }
 }

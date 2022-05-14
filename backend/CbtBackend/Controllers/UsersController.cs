@@ -37,7 +37,7 @@ public class UsersController : ControllerBase {
             // append token expiration date to header
             Response.Headers.Add(TokenExpireHeader, response.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
 
-            return Ok(new LoginResponseDTO(response.Token, response.User.UserStatus, response.User.Id.GetHashCode()));
+            return Ok(new LoginResponseDTO(response.Token, response.User.UserStatus, response.User.Id));
         } catch (AuthenticationCredentialsException) {
             return Unauthorized(new { message = "invalid login or password" });
         }
@@ -58,9 +58,9 @@ public class UsersController : ControllerBase {
     }
 
     [Authorize(Roles = UserRoles.UserRead)]
-    [HttpGet(ApiRoutes.User.GetByEmail)]
-    public async Task<IActionResult> GetUserByEmail([FromRoute] string login) {
-        var user = await userManager.FindByEmailAsync(login);
+    [HttpGet(ApiRoutes.User.GetByUserId)]
+    public async Task<IActionResult> GetUserByUserId([FromRoute] int userId) {
+        var user = await userManager.FindByIdAsync(userId);
 
         if (user == null) {
             return NotFound();
@@ -70,14 +70,19 @@ public class UsersController : ControllerBase {
     }
 
     [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
-    [HttpPut(ApiRoutes.User.UpdateByEmail)]
-    public async Task<IActionResult> UpdateUser([FromRoute] string login, [FromBody] UserUpdateRequest userRequest) {
+    [HttpPut(ApiRoutes.User.UpdateByUserId)]
+    public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UserUpdateRequest userRequest) {
         logger.LogDebug("Updating user with data [email = {login}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
 
         try {
-            var response = await userService.UpdateUserAsync(login, userRequest);
-            return Ok(new { });
+            var user = await userService.UpdateUserAsync(userId, userRequest);
+
+            return Ok(new UpdateUserResponseDTO(
+                user.Email,
+                user.UserStatus,
+                Request.Headers["Authentication"][0].Split(' ')[1]
+            ));
 
         } catch (RegistrationException e) {
             if (e.Message.Equals("User does not exist")) {
@@ -88,12 +93,12 @@ public class UsersController : ControllerBase {
     }
 
     [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
-    [HttpDelete(ApiRoutes.User.DeleteByEmail)]
-    public async Task<IActionResult> DeleteUser([FromRoute] string login) {
-        logger.LogDebug("Deleting user with data [email = {login}]", login);
+    [HttpDelete(ApiRoutes.User.DeleteByUserId)]
+    public async Task<IActionResult> DeleteUser([FromRoute] int userId) {
+        logger.LogDebug("Deleting user with data [userId = {userId}]", userId);
 
         try {
-            var response = await userManager.FindByEmailAsync(login);
+            var response = await userManager.FindByIdAsync(userId);
             return NoContent();
 
         } catch (DeleteException e) {
