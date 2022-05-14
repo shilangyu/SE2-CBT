@@ -12,12 +12,12 @@ describe('RegisterPage', () => {
     })
 
     it('has all inputs', async () => {
-        const { findByLabelText } = render(<RegisterPage />)
+        const { findByLabelText, findByTestId } = render(<RegisterPage />)
 
         expect(await findByLabelText(/email/i)).toBeTruthy()
         expect(await findByLabelText(/password/i)).toBeTruthy()
         expect(await findByLabelText(/age/i)).toHaveAttribute('type', 'number')
-        expect(await findByLabelText(/gender/i)).toBeTruthy()
+        expect(await findByTestId('register-gender-input')).toBeTruthy()
     })
 
     it('does not call register with invalid data', async () => {
@@ -26,10 +26,12 @@ describe('RegisterPage', () => {
             () => promise
         )
 
-        const { findByRole } = render(<RegisterPage />)
+        const { findByTestId } = render(<RegisterPage />)
 
         await act(async () => {
-            fireEvent.click(await findByRole('button'))
+            fireEvent.click(
+                await findByTestId('register-create-account-button')
+            )
         })
         expect(apiClient.register).not.toHaveBeenCalled()
 
@@ -41,7 +43,37 @@ describe('RegisterPage', () => {
             new EmailUsedError()
         )
 
-        const { findByLabelText, findByRole, findByText } = render(
+        const { findByLabelText, findByRole, findByText, findByTestId } =
+            render(<RegisterPage />)
+
+        fireEvent.change(await findByLabelText(/email/i), {
+            target: { value: 'email@asd' },
+        })
+        fireEvent.change(await findByLabelText(/password/i), {
+            target: { value: 'password' },
+        })
+        fireEvent.change(await findByLabelText(/age/i), {
+            target: { value: 21 },
+        })
+        fireEvent.change(await findByTestId('register-gender-input'), {
+            target: { value: 'male' },
+        })
+        await act(async () => {
+            fireEvent.click(
+                await findByTestId('register-create-account-button')
+            )
+        })
+
+        expect(await findByText(/email taken/i)).toBeTruthy()
+    })
+
+    it('calls register with valid input data', async () => {
+        const promise = Promise.resolve()
+        ;(apiClient.register as unknown as SpyInstance).mockImplementationOnce(
+            () => promise
+        )
+
+        const { findByLabelText, findByRole, findByTestId } = render(
             <RegisterPage />
         )
 
@@ -54,39 +86,14 @@ describe('RegisterPage', () => {
         fireEvent.change(await findByLabelText(/age/i), {
             target: { value: 21 },
         })
-        fireEvent.change(await findByLabelText(/gender/i), {
-            target: { value: 'male' },
-        })
-        await act(async () => {
-            fireEvent.click(await findByRole('button'))
-        })
-
-        expect(await findByText(/email taken/i)).toBeTruthy()
-    })
-
-    it('calls register with valid input data', async () => {
-        const promise = Promise.resolve()
-        ;(apiClient.register as unknown as SpyInstance).mockImplementationOnce(
-            () => promise
-        )
-
-        const { findByLabelText, findByRole } = render(<RegisterPage />)
-
-        fireEvent.change(await findByLabelText(/email/i), {
-            target: { value: 'email@asd' },
-        })
-        fireEvent.change(await findByLabelText(/password/i), {
-            target: { value: 'password' },
-        })
-        fireEvent.change(await findByLabelText(/age/i), {
-            target: { value: 21 },
-        })
-        fireEvent.change(await findByLabelText(/gender/i), {
+        fireEvent.change(await findByTestId('register-gender-input'), {
             target: { value: 'male' },
         })
 
         await act(async () => {
-            fireEvent.click(await findByRole('button'))
+            fireEvent.click(
+                await findByTestId('register-create-account-button')
+            )
         })
 
         expect(apiClient.register).toHaveBeenCalledWith(

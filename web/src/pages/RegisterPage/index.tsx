@@ -2,6 +2,7 @@ import {
     Button,
     CircularProgress,
     Grid,
+    MenuItem,
     TextField,
     Typography,
     useTheme,
@@ -98,13 +99,23 @@ function RegisterPage() {
             </Grid>
             <Grid item>
                 <TextField
+                    select
+                    fullWidth
                     label="Gender"
+                    style={{ minWidth: 226 }}
                     value={gender}
                     error={!!genderError}
                     helperText={genderError}
                     onChange={e => setGender(e.target.value)}
                     {...dataTestInputProp('register-gender-input')}
-                />
+                >
+                    <MenuItem value={'would rather not say'}>
+                        Would rather not say
+                    </MenuItem>
+                    <MenuItem value={'male'}>Male</MenuItem>
+                    <MenuItem value={'female'}>Female</MenuItem>
+                    <MenuItem value={'other'}>Other</MenuItem>
+                </TextField>
             </Grid>
             <Grid
                 item

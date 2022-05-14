@@ -872,6 +872,11 @@ components:
           type: integer
         gender:
           type: string
+          enum:
+            - would rather not say
+            - male
+            - female
+            - other
     LoginUser:
       required:
         - login
