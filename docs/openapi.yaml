@@ -345,19 +345,19 @@ paths:
         503:
           description: Server is currently down
           content: {}
-  /user/{login}:
+  /user/{userId}:
     get:
       tags:
         - user
-      summary: Get user by login (email)
-      operationId: getUserByEmail
+      summary: Get user by userId
+      operationId: getUserByUserId
       parameters:
-        - name: login
+        - name: userId
           in: path
-          description: "The email of the user that needs to be fetched. Use user1@gmail.com for testing. "
+          description: "The ID of the user that needs to be fetched. Use 1 for testing. "
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
           description: successful operation
@@ -384,18 +384,18 @@ paths:
       description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
-        - name: login
+        - name: userId
           in: path
           description: name that need to be updated
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         description: Updated user object
         content:
           "*/*":
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/RegisterUser"
         required: true
       responses:
         400:
@@ -421,12 +421,12 @@ paths:
       description: This can only be done by the logged in user.
       operationId: deleteUser
       parameters:
-        - name: login
+        - name: userId
           in: path
-          description: The email that needs to be deleted
+          description: The ID that needs to be deleted
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         204:
           description: User deleted

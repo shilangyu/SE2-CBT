@@ -13,7 +13,7 @@ public class MudTestResponse {
     public User Author { get; set; } = default!;
 
     [NotMapped]
-    public string? UserId {
+    public int? UserId {
         get {
             if (Author == null) {
                 return null;

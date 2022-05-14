@@ -8,7 +8,7 @@ namespace CbtBackend.Services;
 public interface IUserService {
     // basic operations
     Task<List<User>> GetAllUsersAsync();
-    Task<bool> UpdateUserAsync(string email, UserUpdateRequest userRequest);
+    Task<User> UpdateUserAsync(int userId, UserUpdateRequest userRequest);
 
     // registration
     Task<User?> RegisterUserAsync(UserRegistrationRequest userRequest);

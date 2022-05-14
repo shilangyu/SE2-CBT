@@ -16,7 +16,7 @@ public class UserDTO {
     public bool Banned { get; set; }
 
     public UserDTO(User user) {
-        UserId = user.Id.GetHashCode();
+        UserId = user.Id;
         Login = user.Email;
         Age = user.Age;
         Gender = user.Gender;

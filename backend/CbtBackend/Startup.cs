@@ -85,7 +85,7 @@ public class Startup {
                 options.Password.RequireUppercase = false;
                 options.Lockout.AllowedForNewUsers = false;
             })
-            .AddRoles<IdentityRole>()
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
         }
@@ -96,7 +96,7 @@ public class Startup {
         IApplicationBuilder app,
         IWebHostEnvironment env,
         CbtDbContext dbContext,
-        RoleManager<IdentityRole> roleManager) {
+        RoleManager<Role> roleManager) {
         if (!dbContext.Database.IsInMemory()) {
             dbContext.Database.Migrate();
         }
@@ -126,11 +126,11 @@ public class Startup {
         });
     }
 
-    private async Task SeedRoles(RoleManager<IdentityRole> roleManager) {
+    private async Task SeedRoles(RoleManager<Role> roleManager) {
         foreach (var roleName in UserRoles.All) {
             var roleExist = await roleManager.RoleExistsAsync(roleName);
             if (!roleExist) {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                await roleManager.CreateAsync(new Role(roleName));
             }
         }
     }

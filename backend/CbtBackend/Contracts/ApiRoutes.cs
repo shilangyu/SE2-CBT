@@ -8,9 +8,9 @@ public static class ApiRoutes {
         public const string GetAll = "user";                // GET
         public const string Login = "user/login";           // POST
         public const string Logout = "user/logout";         // POST
-        public const string GetByEmail = "user/{login}";      // GET
-        public const string UpdateByEmail = "user/{login}";   // PUT
-        public const string DeleteByEmail = "user/{login}";   // DELETE
+        public const string GetByUserId = "user/{userId}";      // GET
+        public const string UpdateByUserId = "user/{userId}";   // PUT
+        public const string DeleteByUserId = "user/{userId}";   // DELETE
     }
 
     public static class Evaluation {

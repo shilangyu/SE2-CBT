@@ -12,14 +12,10 @@ public class ResponseNotFoundException : Exception { }
 public class EvaluationNotFoundException : Exception { }
 
 public class EvaluationService : IEvaluationService {
-    private readonly IConfiguration configuration;
     private readonly CbtDbContext dbContext;
-    private readonly UserManager<User> userManager;
 
-    public EvaluationService(IConfiguration configuration, CbtDbContext dbContext, UserManager<User> userManager) {
-        this.configuration = configuration;
+    public EvaluationService(CbtDbContext dbContext) {
         this.dbContext = dbContext;
-        this.userManager = userManager;
     }
 
     public async Task<MudTestResponse> CreateResponse(User user, EvaluationCreateRequest request) {

@@ -14,15 +14,13 @@ namespace CbtBackend.Controllers;
 [Produces("application/json")]
 public class EvaluationController : ControllerBase {
     private readonly IEvaluationService evaluationService;
-    private readonly IUserService userService;
     private readonly ILogger<EvaluationController> logger;
     private readonly UserManager<User> userManager;
 
-    public EvaluationController(IEvaluationService evaluationService, ILogger<EvaluationController> logger, UserManager<User> userManager, IUserService userService) {
+    public EvaluationController(IEvaluationService evaluationService, ILogger<EvaluationController> logger, UserManager<User> userManager) {
         this.evaluationService = evaluationService;
         this.logger = logger;
         this.userManager = userManager;
-        this.userService = userService;
     }
 
     [Authorize(Roles = UserRoles.EvaluationRead)]
