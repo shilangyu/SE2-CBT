@@ -1,10 +1,16 @@
 import create from 'zustand'
 import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
 
-const tokenStorageKey = 'token'
+const userDataStorageKey = 'userData'
+
+export type UserData = {
+    token: string
+    userId: number
+    isAdmin: boolean
+}
 
 type LoginStore = {
-    token?: string
+    userData?: UserData
     isLoggedIn: () => boolean
     logIn: (email: string, password: string) => Promise<boolean>
     register: (
@@ -17,14 +23,23 @@ type LoginStore = {
 }
 
 export const useLoginStore = create<LoginStore>((set, get) => ({
-    token: localStorage[tokenStorageKey],
+    userData:
+        localStorage.getItem(userDataStorageKey) !== null
+            ? JSON.parse(localStorage[userDataStorageKey])
+            : undefined,
     isLoggedIn() {
-        return get().token !== undefined
+        return get().userData !== undefined
     },
     async logIn(email, password) {
         try {
-            const token = await apiClient.logIn(email, password)
-            set(state => ({ token }))
+            const loginResponse = await apiClient.logIn(email, password)
+            set(state => ({
+                userData: {
+                    isAdmin: loginResponse.userStatus === 1,
+                    token: loginResponse.accessToken,
+                    userId: loginResponse.userId,
+                },
+            }))
 
             return true
         } catch (err) {
@@ -53,14 +68,14 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
         }
     },
     logOut() {
-        set(state => ({ token: undefined }))
+        set(state => ({ userData: undefined }))
     },
 }))
 
 useLoginStore.subscribe(state => {
-    if (state.token === undefined) {
-        localStorage.removeItem(tokenStorageKey)
+    if (state.userData === undefined) {
+        localStorage.removeItem(userDataStorageKey)
     } else {
-        localStorage[tokenStorageKey] = state.token
+        localStorage[userDataStorageKey] = JSON.stringify(state.userData)
     }
 })

@@ -21,6 +21,7 @@ import { routes } from '../routes'
 const ToolbarOffset = styled('div')(({ theme }) => theme.mixins.toolbar)
 
 function HomePage() {
+    const isAdmin = useLoginStore(e => e.userData?.isAdmin ?? false)
     const logOut = useLoginStore(e => e.logOut)
     const { enqueueSnackbar } = useSnackbar()
 
@@ -86,7 +87,16 @@ function HomePage() {
             </AppBar>
             <ToolbarOffset />
             <Routes>
-                <Route index element={<div>here</div>} />
+                <Route
+                    index
+                    element={
+                        isAdmin ? (
+                            <div>Welcome admin!</div>
+                        ) : (
+                            <div>Welcome normal user!</div>
+                        )
+                    }
+                />
                 <Route
                     path={routes.profile.pattern}
                     element={<ProfilePage />}

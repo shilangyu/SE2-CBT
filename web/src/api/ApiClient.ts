@@ -9,7 +9,7 @@ export class ApiClient {
     }
 
     private async baseRequest<T>(path: string, options: RequestInit = {}) {
-        const token = useLoginStore.getState().token
+        const token = useLoginStore.getState().userData?.token
         const { headers, ...otherOptions } = options
 
         const res = await fetch(`${this.baseUrl}/${path}`, {
@@ -35,13 +35,13 @@ export class ApiClient {
         }
     }
 
-    async logIn(email: string, password: string): Promise<string> {
+    async logIn(email: string, password: string): Promise<LoginResponse> {
         const res = await this.baseRequest<LoginResponse>(`user/login`, {
             method: 'POST',
             body: JSON.stringify({ login: email, password }),
         })
 
-        return res.accessToken
+        return res
     }
 
     async register(
@@ -71,21 +71,21 @@ export class ApiClient {
         }
     }
 
-    async getUser(login: string): Promise<User> {
-        return await this.baseRequest<User>(`user/${login}`, {
+    async getUser(userId: number): Promise<User> {
+        return await this.baseRequest<User>(`user/${userId}`, {
             method: 'GET',
         })
     }
 
-    async updateUser(login: string, body: UserUpdateRequest): Promise<void> {
-        return await this.baseRequest<void>(`user/${login}`, {
+    async updateUser(userId: number, body: UserUpdateRequest): Promise<void> {
+        return await this.baseRequest<void>(`user/${userId}`, {
             method: 'PUT',
             body: JSON.stringify(body),
         })
     }
 
-    async deleteUser(login: string): Promise<void> {
-        return await this.baseRequest<void>(`user/${login}`, {
+    async deleteUser(userId: number): Promise<void> {
+        return await this.baseRequest<void>(`user/${userId}`, {
             method: 'DELETE',
         })
     }

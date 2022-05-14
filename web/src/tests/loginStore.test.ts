@@ -1,6 +1,18 @@
 import { afterEach, beforeEach, describe, it, vi } from 'vitest'
 import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
-import { useLoginStore } from '../stores/loginStore'
+import { LoginResponse } from '../model/responses'
+import { useLoginStore, UserData } from '../stores/loginStore'
+
+const loginResponse: LoginResponse = {
+    accessToken: 'a.b.c',
+    userId: 123,
+    userStatus: 0,
+}
+const userData: UserData = {
+    isAdmin: false,
+    token: loginResponse.accessToken,
+    userId: loginResponse.userId,
+}
 
 describe('LoginStore', () => {
     afterEach(() => {
@@ -12,20 +24,20 @@ describe('LoginStore', () => {
         expect(useLoginStore.getState().isLoggedIn()).toBe(false)
     })
 
-    it('initially has no token', () => {
-        expect(useLoginStore.getState().token).toBe(undefined)
+    it('initially has no userData', () => {
+        expect(useLoginStore.getState().userData).toBe(undefined)
     })
 
-    it('logout clears the token', () => {
-        useLoginStore.getState().token = 'token'
+    it('logout clears the userData', () => {
+        useLoginStore.getState().userData = userData
 
         useLoginStore.getState().logOut()
 
-        expect(useLoginStore.getState().token).toBe(undefined)
+        expect(useLoginStore.getState().userData).toBe(undefined)
     })
 
-    it('isLoggedIn returns true when a token is present', () => {
-        useLoginStore.getState().token = 'token'
+    it('isLoggedIn returns true when a userData is present', () => {
+        useLoginStore.getState().userData = userData
 
         expect(useLoginStore.getState().isLoggedIn()).toBe(true)
     })
@@ -33,7 +45,7 @@ describe('LoginStore', () => {
     describe('logIn', () => {
         it('returns true on success', async () => {
             ;(apiClient.logIn as jest.Mock).mockImplementationOnce(
-                () => 'token'
+                () => loginResponse
             )
 
             expect(
@@ -43,13 +55,13 @@ describe('LoginStore', () => {
 
         it('is logged in after success', async () => {
             ;(apiClient.logIn as jest.Mock).mockImplementationOnce(
-                () => 'token'
+                () => loginResponse
             )
 
             await useLoginStore.getState().logIn('email', 'password')
 
             expect(useLoginStore.getState().isLoggedIn()).toBe(true)
-            expect(useLoginStore.getState().token).toBe('token')
+            expect(useLoginStore.getState().userData).toEqual(userData)
         })
 
         it('returns false on exception', async () => {
@@ -76,7 +88,7 @@ describe('LoginStore', () => {
     describe('register', () => {
         beforeEach(() => {
             ;(apiClient.logIn as jest.Mock).mockImplementationOnce(
-                () => 'token'
+                () => loginResponse
             )
         })
 

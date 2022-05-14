@@ -23,7 +23,6 @@ function ProfilePage() {
     const theme = useTheme()
     const loginStore = useLoginStore()
 
-    const [userLogin, setUserLogin] = React.useState<string>('...')
     const [userData, setUserData] = React.useState<User | undefined>(undefined)
     const [editMode, setEditMode] = React.useState(false)
     const [backdropOpen, setBackdropOpen] = React.useState(false)
@@ -45,15 +44,10 @@ function ProfilePage() {
     const { enqueueSnackbar } = useSnackbar()
 
     const loadFromToken = () => {
-        // assume token is not null
-        const tokenClaims = parseJwt(loginStore.token! as string)
-        const tokenUserLogin = tokenClaims.unique_name
-
-        setUserLogin(tokenUserLogin)
         setUserData(undefined)
 
         apiClient
-            .getUser(tokenUserLogin)
+            .getUser(loginStore.userData!.userId)
             .then(currentUser => {
                 setUserData(currentUser)
             })
@@ -74,7 +68,7 @@ function ProfilePage() {
         if (validate()) {
             setBackdropOpen(true)
             apiClient
-                .updateUser(userLogin, {
+                .updateUser(loginStore.userData!.userId, {
                     age,
                     email,
                     gender,
@@ -257,7 +251,7 @@ function ProfilePage() {
                                 </Grid>
                                 <Grid item sm={8} sx={{ padding: 3 }}>
                                     <Typography variant="h3">
-                                        {userLogin}
+                                        {userData?.login ?? '...'}
                                     </Typography>
                                     <Typography
                                         variant="h5"
