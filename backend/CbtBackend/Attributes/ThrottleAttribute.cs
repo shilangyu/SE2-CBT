@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -13,6 +14,7 @@ public class Throttle : ActionFilterAttribute {
 
     public bool ByAction { get; set; } = true;
     public bool ByIpAddress { get; set; } = true;
+    public bool BypassLocalHost { get; set; } = true;
 
     private static readonly ConcurrentDictionary<string, List<DateTime>> History = new();
 
@@ -23,6 +25,12 @@ public class Throttle : ActionFilterAttribute {
 
     public override void OnActionExecuting(ActionExecutingContext context) {
         base.OnActionExecuting(context);
+
+        if (BypassLocalHost && context.HttpContext.Connection.RemoteIpAddress is {
+                AddressFamily: AddressFamily.InterNetwork or AddressFamily.InterNetworkV6
+            }) {
+            return;
+        }
 
         var key = BuildKey(context);
         if (key is null) {
