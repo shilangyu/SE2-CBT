@@ -79,13 +79,13 @@ public class Startup {
         });
 
         services.AddIdentityCore<User>(options => {
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Lockout.AllowedForNewUsers = false;
-            })
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Lockout.AllowedForNewUsers = false;
+        })
             .AddRoles<Role>()
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
