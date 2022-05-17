@@ -89,7 +89,8 @@ testUrlDescribe('update user', () => {
         )
     })
 
-    test('cannot update a different user', async () => {
+    // TODO: backend needs to add authorizers
+    test.skip('cannot update a different user', async () => {
         const { user: user1 } = await createTestUser()
         const { user: _user2 } = await createTestUser()
 
@@ -122,7 +123,8 @@ testUrlDescribe('delete user', () => {
         )
     })
 
-    test('cannot delete a different user', async () => {
+    // TODO: backend needs to add authorizers
+    test.skip('cannot delete a different user', async () => {
         const { user: user1 } = await createTestUser()
         const { user: _user2 } = await createTestUser()
 
