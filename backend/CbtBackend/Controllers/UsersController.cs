@@ -12,22 +12,19 @@ namespace CbtBackend.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-public class UsersController : ControllerBase {
+public class UsersController : UserAwareController {
     public const string TokenExpireHeader = "X-Expires-After";
 
     private readonly ILogger<UsersController> logger;
     private readonly IUserService userService;
-    private readonly UserManager<User> userManager;
 
-    public UsersController(IUserService userService, UserManager<User> userManager, ILogger<UsersController> logger) {
+    public UsersController(IUserService userService, UserManager<User> userManager, ILogger<UsersController> logger) : base(userManager) {
         this.userService = userService;
-        this.userManager = userManager;
         this.logger = logger;
     }
 
     [AllowAnonymous]
     [HttpPost(ApiRoutes.User.Login)]
-    [Throttle(5, 1)]
     public async Task<IActionResult> Login([FromBody] UserAuthenticationRequest userRequest) {
         logger.LogDebug("Authenticating user with data [email = {login}, password = {password}]", userRequest.Login, userRequest.Password);
 
@@ -60,7 +57,7 @@ public class UsersController : ControllerBase {
     [Authorize(Roles = UserRoles.UserRead)]
     [HttpGet(ApiRoutes.User.GetByUserId)]
     public async Task<IActionResult> GetUserByUserId([FromRoute] int userId) {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await UserManager.FindByIdAsync(userId);
 
         if (user == null) {
             return NotFound();
@@ -72,6 +69,11 @@ public class UsersController : ControllerBase {
     [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
     [HttpPut(ApiRoutes.User.UpdateByUserId)]
     public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UserUpdateRequest userRequest) {
+        var contextUser = await this.ContextUser();
+        if (contextUser == null || !contextUser.IsAdmin && contextUser.Id != userId) {
+            return Forbid();
+        }
+
         logger.LogDebug("Updating user with data [email = {login}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
 
@@ -95,6 +97,11 @@ public class UsersController : ControllerBase {
     [Authorize(Roles = UserRoles.UserWrite + "," + UserRoles.UserRead)]
     [HttpDelete(ApiRoutes.User.DeleteByUserId)]
     public async Task<IActionResult> DeleteUser([FromRoute] int userId) {
+        var contextUser = await this.ContextUser();
+        if (contextUser == null || !contextUser.IsAdmin && contextUser.Id != userId) {
+            return Forbid();
+        }
+
         logger.LogDebug("Deleting user with data [userId = {userId}]", userId);
 
         try {

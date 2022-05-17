@@ -12,15 +12,13 @@ namespace CbtBackend.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-public class EvaluationController : ControllerBase {
+public class EvaluationController : UserAwareController {
     private readonly IEvaluationService evaluationService;
     private readonly ILogger<EvaluationController> logger;
-    private readonly UserManager<User> userManager;
 
-    public EvaluationController(IEvaluationService evaluationService, ILogger<EvaluationController> logger, UserManager<User> userManager) {
+    public EvaluationController(IEvaluationService evaluationService, ILogger<EvaluationController> logger, UserManager<User> userManager) : base(userManager) {
         this.evaluationService = evaluationService;
         this.logger = logger;
-        this.userManager = userManager;
     }
 
     [Authorize(Roles = UserRoles.EvaluationRead)]
@@ -46,9 +44,13 @@ public class EvaluationController : ControllerBase {
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponse)]
     public async Task<IActionResult> GetEvaluationResponse([FromRoute] int id) {
         var response = await evaluationService.GetResponse(id);
-
         if (response == null) {
             return NotFound();
+        }
+
+        var contextUser = await this.ContextUser();
+        if (contextUser == null || !contextUser.IsAdmin && contextUser.Id != response.UserId) {
+            return Forbid();
         }
 
         return Ok(response);
@@ -58,8 +60,7 @@ public class EvaluationController : ControllerBase {
     [HttpPost(ApiRoutes.Evaluation.PostEvaluationResponse)]
     public async Task<IActionResult> PostEvaluationResponse([FromBody] EvaluationCreateRequest request) {
         try {
-            var contextUser = User;
-            var author = await userManager.GetUserAsync(contextUser);
+            var author = await this.ContextUser();
 
             if (author == null) {
                 return Unauthorized("the context user was null, please try again later");
@@ -96,8 +97,13 @@ public class EvaluationController : ControllerBase {
 
     [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseById)]
-    public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userID")] string userId) {
-        var queryUser = await userManager.FindByIdAsync(userId);
+    public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userID")] int userId) {
+        var contextUser = await this.ContextUser();
+        if (contextUser == null || !contextUser.IsAdmin && contextUser.Id != userId) {
+            return Forbid();
+        }
+
+        var queryUser = await UserManager.FindByIdAsync(userId);
 
         if (queryUser == null) {
             return NotFound();
@@ -110,7 +116,12 @@ public class EvaluationController : ControllerBase {
     [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseByLogin)]
     public async Task<IActionResult> GetResponsesByUserLogin([FromQuery(Name = "login")] string login) {
-        var queryUser = await userManager.FindByEmailAsync(login);
+        var contextUser = await this.ContextUser();
+        if (contextUser == null || !contextUser.IsAdmin && contextUser.Email != login) {
+            return Forbid();
+        }
+
+        var queryUser = await UserManager.FindByEmailAsync(login);
 
         if (queryUser == null) {
             return NotFound();

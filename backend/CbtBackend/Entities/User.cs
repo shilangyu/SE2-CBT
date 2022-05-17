@@ -10,6 +10,8 @@ public class User : IdentityUser<int> {
     public int UserStatus { get; set; }
 
     public bool Banned { get; set; }
+
+    public bool IsAdmin => UserStatus == 1;
 }
 
 

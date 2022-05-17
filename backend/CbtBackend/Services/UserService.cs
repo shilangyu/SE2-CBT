@@ -171,7 +171,7 @@ public class UserService : IUserService {
 }
 
 
-public static class UserManagerExtension {
+public static class UserManagerExtensions {
     public static Task<User?> FindByIdAsync(this UserManager<User> self, int userId) {
         return self.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
     }

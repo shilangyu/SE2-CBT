@@ -85,12 +85,11 @@ testUrlDescribe('update user', () => {
 
         await expect(apiClient.updateUser(19990129, {})).rejects.toHaveProperty(
             'response.status',
-            404
+            403
         )
     })
 
-    // TODO: backend needs to add authorizers
-    test.skip('cannot update a different user', async () => {
+    test('cannot update a different user', async () => {
         const { user: user1 } = await createTestUser()
         const { user: _user2 } = await createTestUser()
 
@@ -119,12 +118,11 @@ testUrlDescribe('delete user', () => {
 
         await expect(apiClient.deleteUser(19990129)).rejects.toHaveProperty(
             'response.status',
-            404
+            403
         )
     })
 
-    // TODO: backend needs to add authorizers
-    test.skip('cannot delete a different user', async () => {
+    test('cannot delete a different user', async () => {
         const { user: user1 } = await createTestUser()
         const { user: _user2 } = await createTestUser()
 
