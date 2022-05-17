@@ -1,5 +1,6 @@
 import create from 'zustand'
 import { apiClient, EmailUsedError, UnauthorizedError } from '../api'
+import { LoginResponse } from '../model/responses'
 
 const userDataStorageKey = 'userData'
 
@@ -34,11 +35,7 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
         try {
             const loginResponse = await apiClient.logIn(email, password)
             set(state => ({
-                userData: {
-                    isAdmin: loginResponse.userStatus === 1,
-                    token: loginResponse.accessToken,
-                    userId: loginResponse.userId,
-                },
+                userData: loginResponseToUserData(loginResponse),
             }))
 
             return true
@@ -71,6 +68,16 @@ export const useLoginStore = create<LoginStore>((set, get) => ({
         set(state => ({ userData: undefined }))
     },
 }))
+
+export function loginResponseToUserData(
+    loginResponse: LoginResponse
+): UserData {
+    return {
+        isAdmin: loginResponse.userStatus === 1,
+        token: loginResponse.accessToken,
+        userId: loginResponse.userId,
+    }
+}
 
 useLoginStore.subscribe(state => {
     if (state.userData === undefined) {

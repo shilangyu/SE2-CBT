@@ -30,8 +30,13 @@ export class ApiClient {
         } else if (!res.ok) {
             throw new FailedRequestError(res)
         } else {
-            const json = await res.json()
-            return json as T
+            try {
+                const json = await res.json()
+                return json as T
+            } catch {
+                // we assume `T` would be void here
+                return null as unknown as T
+            }
         }
     }
 
@@ -91,7 +96,7 @@ export class ApiClient {
     }
 }
 
-class FailedRequestError extends Error {
+export class FailedRequestError extends Error {
     constructor(public response: Response) {
         super()
     }

@@ -89,9 +89,9 @@ public class UserService : IUserService {
         return existingUser;
     }
 
-    public async Task<bool> DeleteUserAsync(string email) {
+    public async Task<bool> DeleteUserAsync(int userId) {
         // check that user exists
-        var user = await userManager.FindByEmailAsync(email);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null) {
             throw new DeleteException("User does not exist");
         }
@@ -172,8 +172,7 @@ public class UserService : IUserService {
 
 
 public static class UserManagerExtension {
-    public static Task<User> FindByIdAsync(this UserManager<User> self, int userId) {
-        return self.Users.Where(u => u.Id == userId).FirstAsync();
-
+    public static Task<User?> FindByIdAsync(this UserManager<User> self, int userId) {
+        return self.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
     }
 }

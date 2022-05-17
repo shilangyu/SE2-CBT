@@ -110,8 +110,6 @@ public class Startup {
         // It also passes X-Forwarded-* headers with true client IPs
         if (Utilities.IsDocker()) {
             app.UseForwardedHeaders();
-        } else {
-            app.UseHttpsRedirection();
         }
 
         SeedRoles(roleManager).Wait();
