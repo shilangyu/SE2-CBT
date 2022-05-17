@@ -37,7 +37,7 @@ testUrlDescribe('user creation', () => {
         })
     })
 
-    test('user exists', async () => {
+    test('user already exists', async () => {
         const email = `user_${+new Date()}@google.com`
         const password = 'qweqweqwe'
         const age = 21
@@ -60,6 +60,8 @@ testUrlDescribe('get user', () => {
     })
 
     test('fails to get nonexisting user', async () => {
+        await createTestUser()
+
         await expect(apiClient.getUser(19990129)).rejects.toHaveProperty(
             'response.status',
             404
@@ -79,6 +81,8 @@ testUrlDescribe('update user', () => {
     })
 
     test('fails to update nonexisting user', async () => {
+        await createTestUser()
+
         await expect(apiClient.updateUser(19990129, {})).rejects.toHaveProperty(
             'response.status',
             404
@@ -87,7 +91,7 @@ testUrlDescribe('update user', () => {
 
     test('cannot update a different user', async () => {
         const { user: user1 } = await createTestUser()
-        const { user: user2 } = await createTestUser()
+        const { user: _user2 } = await createTestUser()
 
         // user2 is now logged in
 
@@ -110,6 +114,8 @@ testUrlDescribe('delete user', () => {
     })
 
     test('fails to delete nonexisting user', async () => {
+        await createTestUser()
+
         await expect(apiClient.deleteUser(19990129)).rejects.toHaveProperty(
             'response.status',
             404
@@ -118,7 +124,7 @@ testUrlDescribe('delete user', () => {
 
     test('cannot delete a different user', async () => {
         const { user: user1 } = await createTestUser()
-        const { user: user2 } = await createTestUser()
+        const { user: _user2 } = await createTestUser()
 
         // user2 is now logged in
 

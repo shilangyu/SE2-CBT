@@ -81,7 +81,7 @@ public class UsersController : ControllerBase {
             return Ok(new UpdateUserResponseDTO(
                 user.Email,
                 user.UserStatus,
-                Request.Headers["Authentication"][0].Split(' ')[1]
+                Request.Headers["Authorization"][0].Split(' ')[1]
             ));
 
         } catch (RegistrationException e) {
@@ -98,9 +98,8 @@ public class UsersController : ControllerBase {
         logger.LogDebug("Deleting user with data [userId = {userId}]", userId);
 
         try {
-            var response = await userManager.FindByIdAsync(userId);
+            var response = await userService.DeleteUserAsync(userId);
             return NoContent();
-
         } catch (DeleteException e) {
             if (e.Message.Equals("User does not exist")) {
                 return NotFound();
