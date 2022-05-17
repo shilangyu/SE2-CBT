@@ -18,7 +18,10 @@ public class UsersController : UserAwareController {
     private readonly ILogger<UsersController> logger;
     private readonly IUserService userService;
 
-    public UsersController(IUserService userService, UserManager<User> userManager, ILogger<UsersController> logger) : base(userManager) {
+    public UsersController(
+        IUserService userService,
+        UserManager<User> userManager,
+        ILogger<UsersController> logger) : base(userManager) {
         this.userService = userService;
         this.logger = logger;
     }
@@ -26,17 +29,19 @@ public class UsersController : UserAwareController {
     [AllowAnonymous]
     [HttpPost(ApiRoutes.User.Login)]
     public async Task<IActionResult> Login([FromBody] UserAuthenticationRequest userRequest) {
-        logger.LogDebug("Authenticating user with data [email = {login}, password = {password}]", userRequest.Login, userRequest.Password);
+        logger.LogDebug("Authenticating user with data [email = {Login}, password = {Password}]", userRequest.Login, userRequest.Password);
 
         try {
             var response = await userService.AuthenticateUserAsync(userRequest);
 
             // append token expiration date to header
-            Response.Headers.Add(TokenExpireHeader, response.TokenExpiration.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
+            Response.Headers.Add(TokenExpireHeader, response.TokenExpiration.ToString("O"));
 
             return Ok(new LoginResponseDTO(response.Token, response.User.UserStatus, response.User.Id));
         } catch (AuthenticationCredentialsException) {
             return Unauthorized(new { message = "invalid login or password" });
+        } catch (AuthenticationBannedException) {
+            return Unauthorized(new { message = "account has been suspended" });
         }
     }
 
@@ -74,7 +79,7 @@ public class UsersController : UserAwareController {
             return Forbid();
         }
 
-        logger.LogDebug("Updating user with data [email = {login}, password = {password}], age= {age}, gender= {gender}, banned= {banned}, userStatus= {status}",
+        logger.LogDebug("Updating user with data [email = {Email}, password = {Password}], age= {Age}, gender= {Gender}, banned= {Banned}, userStatus= {Status}",
             userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
 
         try {
@@ -102,7 +107,7 @@ public class UsersController : UserAwareController {
             return Forbid();
         }
 
-        logger.LogDebug("Deleting user with data [userId = {userId}]", userId);
+        logger.LogDebug("Deleting user with data [userId = {UserId}]", userId);
 
         try {
             var response = await userService.DeleteUserAsync(userId);
@@ -117,7 +122,7 @@ public class UsersController : UserAwareController {
 
     [HttpPost(ApiRoutes.User.Register)]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequest userRequest) {
-        logger.LogDebug("Registering user with data [email = {email}, password = {password}], age= {age}, gender= {gender}",
+        logger.LogDebug("Registering user with data [email = {Email}, password = {Password}], age= {Age}, gender= {Gender}",
             userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
 
         try {
