@@ -1,7 +1,7 @@
 import { EmailUsedError, UnauthorizedError } from '.'
-import { useLoginStore } from '../stores/loginStore'
-import { User, UserUpdateRequest } from '../model/user'
 import { LoginResponse } from '../model/responses'
+import { User, UserUpdateRequest } from '../model/user'
+import { useLoginStore } from '../stores/loginStore'
 
 export class ApiClient {
     constructor(private baseUrl: string) {
@@ -74,6 +74,18 @@ export class ApiClient {
             }
             throw err
         }
+    }
+
+    async getUsers(): Promise<User[] | null> {
+        const users : any = await this.baseRequest<User>(`user`, {
+            method: 'GET',
+        })
+
+        if (users instanceof Array) {
+            return users
+        }
+
+        return null;
     }
 
     async getUser(userId: number): Promise<User> {
