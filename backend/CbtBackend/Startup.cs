@@ -1,3 +1,5 @@
+using CbtBackend.Attributes;
+
 namespace CbtBackend;
 
 using System.Text;
@@ -89,14 +91,20 @@ public class Startup {
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
         }
-
     }
 
     public void Configure(
         IApplicationBuilder app,
         IWebHostEnvironment env,
+        ILogger<Startup> logger,
         CbtDbContext dbContext,
         RoleManager<Role> roleManager) {
+        // Throttle configuration
+        if (Configuration.GetValue("Throttle:Bypass", false)) {
+            logger.LogWarning("Throttle is set to BYPASS mode");
+            Throttle.Bypass = true;
+        }
+
         if (!dbContext.Database.IsInMemory()) {
             dbContext.Database.Migrate();
         }
