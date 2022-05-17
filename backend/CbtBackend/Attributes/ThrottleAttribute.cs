@@ -9,6 +9,8 @@ namespace CbtBackend.Attributes;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class Throttle : ActionFilterAttribute {
+    public static bool Bypass = false;
+
     private readonly int limit;
     private readonly double durationMinutes;
 
@@ -25,6 +27,10 @@ public class Throttle : ActionFilterAttribute {
 
     public override void OnActionExecuting(ActionExecutingContext context) {
         base.OnActionExecuting(context);
+
+        if (Bypass) {
+            return;
+        }
 
         if (BypassLocalHost && context.HttpContext.Connection.RemoteIpAddress is {
                 AddressFamily: AddressFamily.InterNetwork or AddressFamily.InterNetworkV6
