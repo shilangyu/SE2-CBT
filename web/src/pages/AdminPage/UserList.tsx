@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableRow, Typography } from "@mui/material";
+import { Button, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiClient } from "../../api";
 import { User } from "../../model/user";
@@ -28,14 +28,35 @@ const UserList : React.FC<UserListProps> = (props : UserListProps) => {
         refreshUserList()
     }, [])
 
+    const renderUserActions = (user : User) => {
+        return (
+            <Stack direction="row" spacing={2}>
+                <Button variant="outlined">Edit</Button>
+                {user.banned 
+                    ? <Button variant="outlined">Unban</Button>
+                    : <Button variant="outlined">Ban</Button>}
+            </Stack>
+        )
+    }
+
     if (users) {
         return (
             <Table>
+                <TableHead>
+                    <TableCell>User ID</TableCell>
+                    <TableCell>User Login</TableCell>
+                    <TableCell>Banned</TableCell>
+                    <TableCell>User Actions</TableCell>
+                </TableHead>
                 <TableBody>
                     {users.map((user, index) => {
                         return <TableRow key={user.userId}>
                             <TableCell>{user.userId}</TableCell>
                             <TableCell>{user.login}</TableCell>
+                            <TableCell>{user.banned ? 'yes' : 'no'}</TableCell>
+                            <TableCell>
+                                {renderUserActions(user)}
+                            </TableCell>
                         </TableRow>
                     })}
                 </TableBody>
