@@ -5,7 +5,7 @@ import { apiClient, createTestUser, testUrlDescribe } from './setup'
 testUrlDescribe('user creation', () => {
     test('happy path', async () => {
         const email = `user_${+new Date()}@google.com`
-        const password = 'qweqweqwe'
+        const password = 'Qweqweqwe$3'
         const age = 21
         const gender = 'male'
 
@@ -39,7 +39,7 @@ testUrlDescribe('user creation', () => {
 
     test('user already exists', async () => {
         const email = `user_${+new Date()}@google.com`
-        const password = 'qweqweqwe'
+        const password = 'Qweqweqwe$3'
         const age = 21
         const gender = 'male'
         await apiClient.register(email, password, age, gender)
@@ -73,7 +73,7 @@ testUrlDescribe('update user', () => {
     test('updates user', async () => {
         const { user } = await createTestUser()
 
-        await apiClient.updateUser(user.userId, { age: user.age + 1 })
+        await apiClient.updateUser(user.userId, { ...user, age: user.age + 1 })
 
         const apiUser = await apiClient.getUser(user.userId)
 
@@ -81,12 +81,15 @@ testUrlDescribe('update user', () => {
     })
 
     test('fails to update nonexisting user', async () => {
-        await createTestUser()
+        expect.assertions(1)
 
-        await expect(apiClient.updateUser(19990129, {})).rejects.toHaveProperty(
-            'response.status',
-            403
-        )
+        const { user } = await createTestUser()
+
+        try {
+            await apiClient.updateUser(19990129, user)
+        } catch (e: any) {
+            expect([403, 404]).toContain(e.response.status)
+        }
     })
 
     test('cannot update a different user', async () => {
@@ -96,7 +99,7 @@ testUrlDescribe('update user', () => {
         // user2 is now logged in
 
         await expect(
-            apiClient.updateUser(user1.userId, { age: 19 })
+            apiClient.updateUser(user1.userId, user1)
         ).rejects.toHaveProperty('response.status', 403)
     })
 })
@@ -114,12 +117,15 @@ testUrlDescribe('delete user', () => {
     })
 
     test('fails to delete nonexisting user', async () => {
+        expect.assertions(1)
+
         await createTestUser()
 
-        await expect(apiClient.deleteUser(19990129)).rejects.toHaveProperty(
-            'response.status',
-            403
-        )
+        try {
+            await apiClient.deleteUser(19990129)
+        } catch (e: any) {
+            expect([403, 404]).toContain(e.response.status)
+        }
     })
 
     test('cannot delete a different user', async () => {

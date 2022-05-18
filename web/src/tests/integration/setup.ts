@@ -15,7 +15,7 @@ export const testUrlDescribe = testUrl ? describe : describe.skip
 /// Creates a random test user in the remote server, logs this user in, and fetches its info.
 export async function createTestUser(): Promise<{ user: User; token: string }> {
     const email = `user_${+new Date() % Math.random()}@google.com`
-    const password = 'qweqweqwe'
+    const password = 'Qweqweqwe$3'
     const age = 21
     const gender = 'male'
 
