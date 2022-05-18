@@ -1,4 +1,5 @@
 import { Button, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
+import { useSnackbar } from 'notistack';
 import { useEffect, useState } from "react";
 import { apiClient } from "../../api";
 import { User, UserUpdateRequest } from "../../model/user";
@@ -12,6 +13,8 @@ const UserList : React.FC<UserListProps> = (props : UserListProps) => {
     const [users, setUsers] = useState<User[] | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
+
+    const {enqueueSnackbar} = useSnackbar()
 
     const refreshUserList = () => {
         apiClient.getUsers().then(list => {
@@ -36,12 +39,25 @@ const UserList : React.FC<UserListProps> = (props : UserListProps) => {
                 <Button variant="outlined" onClick={() => {
                     setSelectedUser(user)
                 }}>Edit</Button>
-                {user.banned 
-                    ? <Button variant="outlined">Unban</Button>
-                    : <Button variant="outlined">Ban</Button>}
+                <Button variant="outlined" onClick={() => setUserBan(user.userId, !user.banned)}>
+                    {user.banned ? 'Unban' : 'Ban'}
+                </Button>
                 <Button variant="outlined">Delete</Button>
             </Stack>
         )
+    }
+
+    const setUserBan = (userId : number, banned : boolean) => {
+        const req = { banned } as UserUpdateRequest
+        apiClient.updateUser(userId, req).then(() => {
+            refreshUserList()
+        }).catch(err => {
+            enqueueSnackbar(
+                `failed to ${banned?'ban':'unban'} user ${userId} (details in console)`,
+                { variant: 'error' }
+            )
+            console.error(`failed to change user ban: ${err}`)
+        })
     }
 
     const saveUser = async (userId : number, req : UserUpdateRequest) => {
