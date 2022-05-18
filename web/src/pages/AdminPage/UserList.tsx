@@ -1,15 +1,17 @@
 import { Button, Stack, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { apiClient } from "../../api";
-import { User } from "../../model/user";
+import { User, UserUpdateRequest } from "../../model/user";
+import UserEditor from "./UserEditor";
 
 interface UserListProps {
 
 }
 
 const UserList : React.FC<UserListProps> = (props : UserListProps) => {
-    const [users, setUsers] = useState<User[] | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [users, setUsers] = useState<User[] | null>(null)
+    const [error, setError] = useState<string | null>(null)
+    const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
     const refreshUserList = () => {
         apiClient.getUsers().then(list => {
@@ -31,17 +33,32 @@ const UserList : React.FC<UserListProps> = (props : UserListProps) => {
     const renderUserActions = (user : User) => {
         return (
             <Stack direction="row" spacing={2}>
-                <Button variant="outlined">Edit</Button>
+                <Button variant="outlined" onClick={() => {
+                    setSelectedUser(user)
+                }}>Edit</Button>
                 {user.banned 
                     ? <Button variant="outlined">Unban</Button>
                     : <Button variant="outlined">Ban</Button>}
+                <Button variant="outlined">Delete</Button>
             </Stack>
         )
+    }
+
+    const saveUser = async (userId : number, req : UserUpdateRequest) => {
+        await apiClient.updateUser(userId, req)
+        setSelectedUser(null)
+        refreshUserList()
     }
 
     if (users) {
         return (
             <Table>
+                <UserEditor user={selectedUser}
+                    onCancel={() => {
+                        setSelectedUser(null)
+                    }}
+                    onSave={saveUser}
+                />
                 <TableHead>
                     <TableCell>User ID</TableCell>
                     <TableCell>User Login</TableCell>
