@@ -12,8 +12,6 @@ export interface UserUpdateRequest {
     password?: string
     age?: number
     gender?: string
-    userStatus?: number
-    banned?: boolean
 }
 
 export interface UserTokenClaims {
