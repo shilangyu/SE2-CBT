@@ -98,7 +98,8 @@ public class Startup {
         IWebHostEnvironment env,
         ILogger<Startup> logger,
         CbtDbContext dbContext,
-        RoleManager<Role> roleManager) {
+        RoleManager<Role> roleManager,
+        UserManager<User> userManager) {
         // Throttle configuration
         if (Configuration.GetValue("Throttle:Bypass", false)) {
             logger.LogWarning("Throttle is set to BYPASS mode");
@@ -121,6 +122,7 @@ public class Startup {
         }
 
         SeedRoles(roleManager).Wait();
+        SeedAdmin(userManager).Wait();
 
         app.UseCors();
         app.UseAuthentication();
@@ -132,12 +134,32 @@ public class Startup {
         });
     }
 
-    private async Task SeedRoles(RoleManager<Role> roleManager) {
+    private static async Task SeedRoles(RoleManager<Role> roleManager) {
         foreach (var roleName in UserRoles.All) {
             var roleExist = await roleManager.RoleExistsAsync(roleName);
             if (!roleExist) {
                 await roleManager.CreateAsync(new Role(roleName));
             }
+        }
+    }
+
+    private static async Task SeedAdmin(UserManager<User> userManager) {
+        var adminEmail = "admin@admin.com";
+        var adminPassword = "adminadmin";
+        var exists = userManager.FindByEmailAsync(adminEmail) != null;
+
+        if (!exists) {
+            var user = new User {
+                UserName = adminEmail,
+                Email = adminEmail,
+                Banned = false,
+                Age = 21,
+                Gender = "other",
+                UserStatus = 1,
+            };
+
+            await userManager.CreateAsync(user, adminPassword);
+            await userManager.AddToRolesAsync(user, UserRoles.All);
         }
     }
 }
