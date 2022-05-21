@@ -1,5 +1,3 @@
-using Xunit;
-
 namespace CbtBackend.Test;
 
 public class UnitTestTest {
