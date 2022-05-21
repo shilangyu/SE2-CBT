@@ -36,8 +36,17 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     public HttpClient GetClient() {
         var customTestUrl = Environment.GetEnvironmentVariable("TEST_URL");
 
+        // allow untrusted SSL certs
+        var handler = new HttpClientHandler() {
+            ClientCertificateOptions = ClientCertificateOption.Manual,
+            ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) => {
+                return true;
+            },
+        };
+
         var client = customTestUrl switch {
-            not null => new() { BaseAddress = new(customTestUrl) },
+            not null => new(handler) { BaseAddress = new(customTestUrl) },
             _ => CreateClient(),
         };
 
@@ -54,7 +63,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         var email = TestEmail();
         var password = "Qweqweqwe$3";
 
-        var res = await client.PostAsync($"/{ApiRoutes.User.Register}", JsonBody(new UserRegistrationRequest {
+        var res = await client.PostAsync(ApiRoutes.User.Register, JsonBody(new UserRegistrationRequest {
             Login = email,
             Password = password,
             Age = 21,
@@ -62,7 +71,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         }));
         res.EnsureSuccessStatusCode();
 
-        res = await client.PostAsync($"/{ApiRoutes.User.Login}", JsonBody(new UserAuthenticationRequest {
+        res = await client.PostAsync(ApiRoutes.User.Login, JsonBody(new UserAuthenticationRequest {
             Login = email,
             Password = password,
         }));
@@ -71,7 +80,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         var loginResponse = await res.ReadAsJson<LoginResponseDTO>();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse.AccessToken);
 
-        res = await client.GetAsync($"/{ApiRoutes.User.GetByUserId.ReplaceParam("userId", loginResponse.UserId)}");
+        res = await client.GetAsync(ApiRoutes.User.GetByUserId.ReplaceParam("userId", loginResponse.UserId));
         res.EnsureSuccessStatusCode();
 
         var userData = await res.ReadAsJson<UserDTO>();

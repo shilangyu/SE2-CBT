@@ -12,7 +12,7 @@ public class GeneralTests : IClassFixture<CustomWebApplicationFactory<Startup>> 
     [Fact]
     public async Task InvalidEndpointReturnsNotFoundError() {
         using var client = factory.GetClient();
-        var res = await client.GetAsync("/this/isnotavalidendpoint");
+        var res = await client.GetAsync("this/isnotavalidendpoint");
 
         Assert.Equal(HttpStatusCode.NotFound, res.StatusCode);
     }

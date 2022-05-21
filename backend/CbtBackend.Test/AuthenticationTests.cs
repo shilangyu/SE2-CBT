@@ -12,7 +12,7 @@ public class AuthenticationTests : IClassFixture<CustomWebApplicationFactory<Sta
     [Fact]
     public async Task LoginEndpointEmptyLoginFails() {
         using var client = factory.GetClient();
-        var res = await client.GetAsync("/" + Contracts.ApiRoutes.User.Login);
+        var res = await client.GetAsync(ApiRoutes.User.Login);
 
         Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
     }
