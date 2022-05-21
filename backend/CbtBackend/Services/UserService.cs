@@ -6,16 +6,23 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CbtBackend.Services;
 
-public class AuthenticationCredentialsException : Exception { }
+public class AuthenticationCredentialsException : Exception {
+}
+
+public class AuthenticationBannedException : Exception {
+}
 
 public class RegistrationException : Exception {
     public new string Message { get; set; }
+
     public RegistrationException(string message) {
         Message = message;
     }
 }
+
 public class UpdateException : Exception {
     public new string Message { get; set; }
+
     public UpdateException(string message) {
         Message = message;
     }
@@ -23,6 +30,7 @@ public class UpdateException : Exception {
 
 public class DeleteException : Exception {
     public new string Message { get; set; }
+
     public DeleteException(string message) {
         Message = message;
     }
@@ -34,7 +42,11 @@ public class UserService : IUserService {
     private readonly CbtDbContext dbContext;
     private readonly UserManager<User> userManager;
 
-    public UserService(IJwtTokenService tokenService, IConfiguration configuration, CbtDbContext dbContext, UserManager<User> userManager) {
+    public UserService(
+        IJwtTokenService tokenService,
+        IConfiguration configuration,
+        CbtDbContext dbContext,
+        UserManager<User> userManager) {
         this.tokenService = tokenService;
         this.configuration = configuration;
         this.dbContext = dbContext;
@@ -64,20 +76,20 @@ public class UserService : IUserService {
             existingUser.Email = userRequest.Email;
         }
 
-        if (userRequest.Banned is bool banned) {
-            existingUser.Banned = banned;
+        if (userRequest.Banned.HasValue) {
+            existingUser.Banned = userRequest.Banned.Value;
         }
 
-        if (userRequest.Age is int age) {
-            existingUser.Age = age;
+        if (userRequest.Age.HasValue) {
+            existingUser.Age = userRequest.Age;
         }
 
         if (userRequest.Gender != null) {
             existingUser.Gender = userRequest.Gender;
         }
 
-        if (userRequest.UserStatus is int userStatus) {
-            existingUser.UserStatus = userStatus;
+        if (userRequest.UserStatus.HasValue) {
+            existingUser.UserStatus = userRequest.UserStatus.Value;
         }
 
         // update user in db
@@ -116,8 +128,8 @@ public class UserService : IUserService {
             UserName = userRequest.Login,
             Email = userRequest.Login,
             Banned = false,
-            Age = userRequest.Age,          // could it be null in userRequest? if yes then assign it outside like UserStatus below.
-            Gender = userRequest.Gender,    // could it be null in userRequest? if yes then assign it outside like UserStatus below.
+            Age = userRequest.Age, // could it be null in userRequest? if yes then assign it outside like UserStatus below.
+            Gender = userRequest.Gender, // could it be null in userRequest? if yes then assign it outside like UserStatus below.
             UserStatus = 0,
         };
 
@@ -145,7 +157,6 @@ public class UserService : IUserService {
     // implementation of user authentication
     public async Task<UserAuthenticationResponse> AuthenticateUserAsync(UserAuthenticationRequest userRequest) {
         var user = await userManager.FindByEmailAsync(userRequest.Login);
-
         if (user == null) {
             throw new AuthenticationCredentialsException();
         }
@@ -155,12 +166,15 @@ public class UserService : IUserService {
             throw new AuthenticationCredentialsException();
         }
 
+        if (user.Banned) {
+            throw new AuthenticationBannedException();
+        }
+
         var validPeriod = configuration.GetValue<int>("jwt:ValidSeconds");
         var expiration = DateTime.UtcNow.AddSeconds(validPeriod);
         var roles = await userManager.GetRolesAsync(user);
 
-
-        var response = new UserAuthenticationResponse() {
+        var response = new UserAuthenticationResponse {
             User = user,
             Token = tokenService.GenerateToken(user, roles, expiration),
             TokenExpiration = expiration
@@ -170,8 +184,7 @@ public class UserService : IUserService {
     }
 }
 
-
-public static class UserManagerExtensions {
+public static class UserManagerExtension {
     public static Task<User?> FindByIdAsync(this UserManager<User> self, int userId) {
         return self.Users.Where(u => u.Id == userId).FirstOrDefaultAsync();
     }

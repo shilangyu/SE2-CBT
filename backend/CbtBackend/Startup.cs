@@ -4,12 +4,10 @@ namespace CbtBackend;
 
 using System.Text;
 using System.Runtime.InteropServices;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
-
 using CbtBackend.Services;
 using CbtBackend.Entities;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -67,30 +65,30 @@ public class Startup {
         }
 
         // authentication
-        {
-            services.AddAuthentication("jwtauth").AddJwtBearer("jwtauth", options => {
-                options.TokenValidationParameters = new TokenValidationParameters() {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"]))
-                };
-            });
+        services.AddAuthentication("jwtauth").AddJwtBearer("jwtauth", options => {
+            options.TokenValidationParameters = new TokenValidationParameters {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["Jwt:Key"])),
 
-            services.AddIdentityCore<User>(options => {
-                options.User.RequireUniqueEmail = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Lockout.AllowedForNewUsers = false;
-            })
+                ValidateIssuer = true,
+                ValidIssuer = Configuration["Jwt:Issuer"],
+
+                ValidateAudience = true,
+                ValidAudience = Configuration["Jwt:Audience"],
+            };
+        });
+
+        services.AddIdentityCore<User>(options => {
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Lockout.AllowedForNewUsers = false;
+        })
             .AddRoles<Role>()
             .AddEntityFrameworkStores<CbtDbContext>()
             .AddDefaultTokenProviders();
-        }
     }
 
     public void Configure(

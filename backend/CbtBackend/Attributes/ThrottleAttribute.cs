@@ -33,8 +33,8 @@ public class Throttle : ActionFilterAttribute {
         }
 
         if (BypassLocalHost && context.HttpContext.Connection.RemoteIpAddress is {
-                AddressFamily: AddressFamily.InterNetwork or AddressFamily.InterNetworkV6
-            }) {
+            AddressFamily: AddressFamily.InterNetwork or AddressFamily.InterNetworkV6
+        }) {
             return;
         }
 
