@@ -377,6 +377,9 @@ paths:
         503:
           description: Server is currently down
           content: {}
+      security:
+        - teamcbt_auth:
+            - write:user
     put:
       tags:
         - user
@@ -427,6 +430,9 @@ paths:
           description: Server is currently down
           content: {}
       x-codegen-request-body-name: body
+      security:
+        - teamcbt_auth:
+            - write:user
     delete:
       tags:
         - user
@@ -459,7 +465,9 @@ paths:
         503:
           description: Server is currently down
           content: {}
-  /evaluation:
+      security:
+        - teamcbt_auth:
+            - write:user
     post:
       tags:
         - evaluation

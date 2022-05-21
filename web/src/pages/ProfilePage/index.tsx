@@ -70,7 +70,7 @@ function ProfilePage() {
             apiClient
                 .updateUser(loginStore.userData!.userId, {
                     age,
-                    email,
+                    login: email,
                     gender,
                 })
                 .then(() => {

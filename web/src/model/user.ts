@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface UserUpdateRequest {
-    email?: string
+    login?: string
     password?: string
     age?: number
     gender?: string

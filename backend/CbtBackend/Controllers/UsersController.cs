@@ -1,4 +1,3 @@
-using CbtBackend.Attributes;
 using CbtBackend.Contracts;
 using CbtBackend.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -79,8 +78,8 @@ public class UsersController : UserAwareController {
             return Forbid();
         }
 
-        logger.LogDebug("Updating user with data [email = {Email}, password = {Password}], age= {Age}, gender= {Gender}, banned= {Banned}, userStatus= {Status}",
-            userRequest.Email, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned, userRequest.UserStatus);
+        logger.LogDebug("Updating user with data [login = {Login}, password = {Password}], age= {Age}, gender= {Gender}",
+            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
 
         try {
             var user = await userService.UpdateUserAsync(userId, userRequest);
