@@ -20,4 +20,6 @@ public static class Helpers {
     public static string ReplaceParam(this string self, string name, object value) {
         return self.Replace($"{{{name}}}", value.ToString());
     }
+
+    public static string TestEmail() => $"user_{Guid.NewGuid()}@email.com";
 }

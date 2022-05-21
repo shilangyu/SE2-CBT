@@ -51,7 +51,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
     public async Task<(HttpClient, UserDTO)> GetAuthenticatedClient() {
         var client = GetClient();
 
-        var email = $"user_{Guid.NewGuid()}@email.com";
+        var email = TestEmail();
         var password = "Qweqweqwe$3";
 
         var res = await client.PostAsync($"/{ApiRoutes.User.Register}", JsonBody(new UserRegistrationRequest {

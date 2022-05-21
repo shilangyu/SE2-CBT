@@ -163,9 +163,10 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
     [Fact]
     public async Task CanUpdateUser() {
         var (client, user) = await factory.GetAuthenticatedClient();
+        var newEmail = TestEmail();
 
         var res = await client.PutAsync($"/{ApiRoutes.User.UpdateByUserId.ReplaceParam("userId", user.UserId)}", JsonBody(new UserUpdateRequest {
-            Login = "new@email.com",
+            Login = newEmail,
             Password = "Qweqweqwe$4",
             Age = 24,
             Gender = "male",
@@ -177,9 +178,10 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
     [Fact]
     public async Task UpdatesUser() {
         var (client, user) = await factory.GetAuthenticatedClient();
+        var newEmail = TestEmail();
 
         var res = await client.PutAsync($"/{ApiRoutes.User.UpdateByUserId.ReplaceParam("userId", user.UserId)}", JsonBody(new UserUpdateRequest {
-            Login = "new@email.com",
+            Login = newEmail,
             Password = "Qweqweqwe$4",
             Age = 24,
             Gender = "male",
@@ -187,16 +189,17 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
         var updated = await res.ReadAsJson<UpdateUserResponseDTO>();
 
 
-        Assert.Equal("new@email.com", updated.Login);
+        Assert.Equal(newEmail, updated.Login);
     }
 
     [Fact]
     public async Task CannotUpdateDifferentUser() {
         var (client1, _) = await factory.GetAuthenticatedClient();
         var (_, user2) = await factory.GetAuthenticatedClient();
+        var newEmail = TestEmail();
 
         var res = await client1.PutAsync($"/{ApiRoutes.User.UpdateByUserId.ReplaceParam("userId", user2.UserId)}", JsonBody(new UserUpdateRequest {
-            Login = "new@email.com",
+            Login = newEmail,
             Password = "Qweqweqwe$4",
             Age = 24,
             Gender = "male",
