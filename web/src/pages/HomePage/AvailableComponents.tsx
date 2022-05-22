@@ -10,6 +10,7 @@ import {
 import { Link } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
 import { routes } from '../routes'
+import * as React from 'react'
 
 function AvailableComponents() {
     const isAdmin = useLoginStore(e => e.userData?.isAdmin ?? false)
