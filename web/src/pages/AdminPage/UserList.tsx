@@ -63,7 +63,14 @@ const UserList: React.FC<Record<string, never>> = (
                 >
                     {user.banned ? 'Unban' : 'Ban'}
                 </Button>
-                <Button variant="outlined">Delete</Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => {
+                        deleteUser(user.userId)
+                    }}
+                >
+                    Delete
+                </Button>
             </Stack>
         )
     }
@@ -83,6 +90,20 @@ const UserList: React.FC<Record<string, never>> = (
                     { variant: 'error' }
                 )
                 console.error(`failed to change user ban: ${err}`)
+            })
+    }
+
+    const deleteUser = (userId: number) => {
+        apiClient
+            .deleteUser(userId)
+            .then(() => {
+                refreshUserList()
+            })
+            .catch(err => {
+                enqueueSnackbar(`failed to delete user ${userId}`, {
+                    variant: 'error',
+                })
+                console.error(`failed to delete user: ${err}`)
             })
     }
 
