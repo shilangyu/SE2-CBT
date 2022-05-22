@@ -9,14 +9,15 @@ import {
     Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { apiClient } from '../../api'
 import { User, UserUpdateRequest } from '../../model/user'
 import UserEditor from './UserEditor'
 
-interface UserListProps {}
-
-const UserList: React.FC<UserListProps> = (props: UserListProps) => {
+const UserList: React.FC<Record<string, never>> = (
+    props: Record<string, never>
+) => {
     const [users, setUsers] = useState<User[] | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
