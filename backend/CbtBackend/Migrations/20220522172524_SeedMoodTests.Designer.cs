@@ -3,6 +3,7 @@ using System;
 using CbtBackend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CbtBackend.Migrations
 {
     [DbContext(typeof(CbtDbContext))]
-    partial class CbtDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220522172524_SeedMoodTests")]
+    partial class SeedMoodTests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

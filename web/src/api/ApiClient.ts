@@ -2,6 +2,11 @@ import { EmailUsedError, UnauthorizedError } from '.'
 import { LoginResponse } from '../model/responses'
 import { User, UserUpdateRequest } from '../model/user'
 import { useLoginStore } from '../stores/loginStore'
+import {
+    Moodtest,
+    MoodtestFullResponse,
+    MoodtestResponse,
+} from '../model/moodtest'
 
 export class ApiClient {
     constructor(private baseUrl: string) {
@@ -104,6 +109,21 @@ export class ApiClient {
     async deleteUser(userId: number): Promise<void> {
         return await this.baseRequest<void>(`user/${userId}`, {
             method: 'DELETE',
+        })
+    }
+
+    getAllMoodtests = async (): Promise<Moodtest[]> => {
+        return await this.baseRequest<Moodtest[]>('moodtest', {
+            method: 'GET',
+        })
+    }
+
+    saveMoodtestResponse = async (
+        response: MoodtestResponse
+    ): Promise<MoodtestFullResponse> => {
+        return await this.baseRequest<MoodtestFullResponse>('evaluation', {
+            method: 'POST',
+            body: JSON.stringify(response),
         })
     }
 }
