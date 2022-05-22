@@ -1,10 +1,6 @@
 import SettingsIcon from '@mui/icons-material/Settings'
-import {
-    Card, Container, Grid, Typography,
-    useTheme
-} from '@mui/material'
+import { Card, Container, Grid, Typography, useTheme } from '@mui/material'
 import UserList from './UserList'
-
 
 function AdminPage() {
     const theme = useTheme()
@@ -53,13 +49,16 @@ function AdminPage() {
                             elevation={0}
                             sx={{ padding: 3 }}
                         >
-                            <Typography variant="h5">User management</Typography>
+                            <Typography variant="h5">
+                                User management
+                            </Typography>
                             <UserList />
                         </Card>
                     </Grid>
                 </Grid>
             </Container>
-        </>)
+        </>
+    )
 }
 
 export default AdminPage

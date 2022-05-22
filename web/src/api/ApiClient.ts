@@ -77,7 +77,7 @@ export class ApiClient {
     }
 
     async getUsers(): Promise<User[] | null> {
-        const users : any = await this.baseRequest<User>(`user`, {
+        const users: any = await this.baseRequest<User>(`user`, {
             method: 'GET',
         })
 
@@ -85,7 +85,7 @@ export class ApiClient {
             return users
         }
 
-        return null;
+        return null
     }
 
     async getUser(userId: number): Promise<User> {

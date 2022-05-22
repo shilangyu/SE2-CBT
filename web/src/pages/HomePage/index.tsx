@@ -8,7 +8,7 @@ import {
     Stack,
     styled,
     Toolbar,
-    Typography
+    Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
