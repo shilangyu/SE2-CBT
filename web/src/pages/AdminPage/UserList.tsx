@@ -19,7 +19,6 @@ const UserList: React.FC<Record<string, never>> = (
     props: Record<string, never>
 ) => {
     const [users, setUsers] = useState<User[] | null>(null)
-    const [error, setError] = useState<string | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
     const { enqueueSnackbar } = useSnackbar()
@@ -36,8 +35,11 @@ const UserList: React.FC<Record<string, never>> = (
             })
             .catch(error => {
                 console.error(`failed to fetch user list: ${error}`)
-                setError(
-                    'failed to fetch the list of users, check console for details'
+                enqueueSnackbar(
+                    `failed to refresh user list (check console for details)`,
+                    {
+                        variant: 'error',
+                    }
                 )
             })
     }
