@@ -120,7 +120,7 @@ public class Startup {
         }
 
         SeedRoles(roleManager).Wait();
-        SeedAdmin(userManager).Wait();
+        SeedAdmin(userManager, dbContext).Wait();
 
         app.UseCors();
         app.UseAuthentication();
@@ -141,10 +141,10 @@ public class Startup {
         }
     }
 
-    private static async Task SeedAdmin(UserManager<User> userManager) {
+    private static async Task SeedAdmin(UserManager<User> userManager, CbtDbContext dbContext) {
         var adminEmail = "admin@admin.com";
         var adminPassword = "adminadmin";
-        var exists = userManager.FindByEmailAsync(adminEmail) != null;
+        var exists = dbContext.Users.Any(u => u.Email == adminEmail);
 
         if (!exists) {
             var user = new User {
