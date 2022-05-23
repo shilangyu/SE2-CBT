@@ -114,7 +114,12 @@ function RegisterPage() {
                     </MenuItem>
                     <MenuItem value={'male'}>Male</MenuItem>
                     <MenuItem value={'female'}>Female</MenuItem>
-                    <MenuItem value={'other'}>Other</MenuItem>
+                    <MenuItem
+                        value={'other'}
+                        {...dataTestAttr('register-gender-input-item')}
+                    >
+                        Other
+                    </MenuItem>
                 </TextField>
             </Grid>
             <Grid

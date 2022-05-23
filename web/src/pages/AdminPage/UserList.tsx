@@ -13,6 +13,7 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { apiClient } from '../../api'
 import { User, UserUpdateRequest } from '../../model/user'
+import { dataTestAttr } from '../../utils/testing'
 import UserEditor from './UserEditor'
 
 const UserList: React.FC<Record<string, never>> = (
@@ -53,23 +54,22 @@ const UserList: React.FC<Record<string, never>> = (
             <Stack direction="row" spacing={2}>
                 <Button
                     variant="outlined"
-                    onClick={() => {
-                        setSelectedUser(user)
-                    }}
+                    onClick={() => setSelectedUser(user)}
+                    {...dataTestAttr('admin-user-list-edit-button')}
                 >
                     Edit
                 </Button>
                 <Button
                     variant="outlined"
                     onClick={() => setUserBan(user.userId, !user.banned)}
+                    {...dataTestAttr('admin-user-list-ban-button')}
                 >
                     {user.banned ? 'Unban' : 'Ban'}
                 </Button>
                 <Button
                     variant="outlined"
-                    onClick={() => {
-                        deleteUser(user.userId)
-                    }}
+                    onClick={() => deleteUser(user.userId)}
+                    {...dataTestAttr('admin-user-list-delete-button')}
                 >
                     Delete
                 </Button>
@@ -135,9 +135,19 @@ const UserList: React.FC<Record<string, never>> = (
                     {users.map((user, index) => {
                         return (
                             <TableRow key={user.userId}>
-                                <TableCell>{user.userId}</TableCell>
-                                <TableCell>{user.login}</TableCell>
-                                <TableCell>
+                                <TableCell
+                                    {...dataTestAttr('admin-user-list-id')}
+                                >
+                                    {user.userId}
+                                </TableCell>
+                                <TableCell
+                                    {...dataTestAttr('admin-user-list-login')}
+                                >
+                                    {user.login}
+                                </TableCell>
+                                <TableCell
+                                    {...dataTestAttr('admin-user-list-banned')}
+                                >
                                     {user.banned ? 'yes' : 'no'}
                                 </TableCell>
                                 <TableCell>{renderUserActions(user)}</TableCell>
