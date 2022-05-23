@@ -5,4 +5,5 @@ export const routes = createRouting({
     login: segment`/login`,
     register: segment`/register`,
     profile: segment`/profile`,
+    admin: segment`/admin`,
 })

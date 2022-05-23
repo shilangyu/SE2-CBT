@@ -15,6 +15,7 @@ import * as React from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
 import { dataTestAttr } from '../../utils/testing'
+import AdminPage from '../AdminPage'
 import ProfilePage from '../ProfilePage'
 import { routes } from '../routes'
 
@@ -91,7 +92,7 @@ function HomePage() {
                     index
                     element={
                         isAdmin ? (
-                            <div>Welcome admin!</div>
+                            <AdminPage />
                         ) : (
                             <div>Welcome normal user!</div>
                         )
