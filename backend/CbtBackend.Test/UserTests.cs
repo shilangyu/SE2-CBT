@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CbtBackend.Test;
 
+[Collection("Sequential")]
 public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
     private readonly CustomWebApplicationFactory<Startup> factory;
 

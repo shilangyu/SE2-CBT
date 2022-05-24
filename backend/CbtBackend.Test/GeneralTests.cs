@@ -2,6 +2,7 @@ using System.Net;
 
 namespace CbtBackend.Test;
 
+[Collection("Sequential")]
 public class GeneralTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
     private readonly CustomWebApplicationFactory<Startup> factory;
 
