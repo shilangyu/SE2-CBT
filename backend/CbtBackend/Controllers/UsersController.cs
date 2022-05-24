@@ -84,11 +84,7 @@ public class UsersController : UserAwareController {
         try {
             var user = await userService.UpdateUserAsync(userId, userRequest);
 
-            return Ok(new UpdateUserResponseDTO(
-                user.Email,
-                user.UserStatus,
-                Request.Headers["Authorization"][0].Split(' ')[1]
-            ));
+            return Ok(new { });
 
         } catch (RegistrationException e) {
             if (e.Message.Equals("User does not exist")) {

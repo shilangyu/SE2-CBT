@@ -403,17 +403,7 @@ paths:
       responses:
         200:
           description: User updated.
-          content:
-            application/json:
-              schema:
-                properties:
-                  login:
-                    type: string
-                  userStatus:
-                    type: integer
-                  accessToken:
-                    type: string
-
+          content: {}
         400:
           description: Invalid user supplied
           content: {}
