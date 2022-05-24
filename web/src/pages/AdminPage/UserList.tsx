@@ -16,9 +16,7 @@ import { User, UserUpdateRequest } from '../../model/user'
 import { dataTestAttr } from '../../utils/testing'
 import UserEditor from './UserEditor'
 
-const UserList: React.FC<Record<string, never>> = (
-    props: Record<string, never>
-) => {
+const UserList: React.FC = () => {
     const [users, setUsers] = useState<User[] | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
@@ -28,11 +26,7 @@ const UserList: React.FC<Record<string, never>> = (
         apiClient
             .getUsers()
             .then(list => {
-                if (list) {
-                    setUsers(list)
-                } else {
-                    setUsers([])
-                }
+                setUsers(list)
             })
             .catch(error => {
                 console.error(`failed to fetch user list: ${error}`)
@@ -78,7 +72,7 @@ const UserList: React.FC<Record<string, never>> = (
     }
 
     const setUserBan = (userId: number, banned: boolean) => {
-        const req = { banned } as UserUpdateRequest
+        const req: UserUpdateRequest = { banned }
         apiClient
             .updateUser(userId, req)
             .then(() => {

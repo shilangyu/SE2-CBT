@@ -33,7 +33,7 @@ const UserEditor: React.FC<UserEditorProps> = (props: UserEditorProps) => {
 
     const handleSubmit = () => {
         if (user) {
-            const req = { email: login } as UserUpdateRequest
+            const req: UserUpdateRequest = { login }
             props.onSave(user.userId, req).catch(err => {
                 setError(err)
             })

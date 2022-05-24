@@ -76,10 +76,12 @@ public class UserService : IUserService {
             existingUser.Email = userRequest.Login;
         }
 
+        if (userRequest.Banned.HasValue) {
+            existingUser.Banned = userRequest.Banned.Value;
+        }
         if (userRequest.Age.HasValue) {
             existingUser.Age = userRequest.Age;
         }
-
         if (userRequest.Gender != null) {
             existingUser.Gender = userRequest.Gender;
         }
