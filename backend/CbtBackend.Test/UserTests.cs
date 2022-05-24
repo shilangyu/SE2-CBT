@@ -184,8 +184,12 @@ public class UserTests : IClassFixture<CustomWebApplicationFactory<Startup>> {
             Age = 24,
             Gender = "male",
         }));
-        var updated = await res.ReadAsJson<UpdateUserResponseDTO>();
+        res.EnsureSuccessStatusCode();
 
+        res = await client.GetAsync(ApiRoutes.User.GetByUserId.ReplaceParam("userId", user.UserId));
+        res.EnsureSuccessStatusCode();
+
+        var updated = await res.ReadAsJson<UserDTO>();
 
         Assert.Equal(newEmail, updated.Login);
     }
