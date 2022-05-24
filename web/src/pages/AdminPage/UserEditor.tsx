@@ -10,6 +10,7 @@ import {
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { User, UserUpdateRequest } from '../../model/user'
+import { dataTestAttr, dataTestInputProp } from '../../utils/testing'
 
 interface UserEditorProps {
     user: User | null
@@ -57,13 +58,22 @@ const UserEditor: React.FC<UserEditorProps> = (props: UserEditorProps) => {
                         fullWidth
                         variant="standard"
                         onChange={ev => setLogin(ev.target.value)}
+                        {...dataTestInputProp('admin-user-edit-login-input')}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.onCancel} variant="outlined">
+                    <Button
+                        onClick={props.onCancel}
+                        variant="outlined"
+                        {...dataTestAttr('admin-user-edit-cancel')}
+                    >
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} variant="contained">
+                    <Button
+                        onClick={handleSubmit}
+                        variant="contained"
+                        {...dataTestAttr('admin-user-edit-save')}
+                    >
                         Save
                     </Button>
                 </DialogActions>
