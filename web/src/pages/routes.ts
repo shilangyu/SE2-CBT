@@ -1,4 +1,4 @@
-import { createRouting, segment } from 'ts-routes'
+import { createRouting, number, segment } from 'ts-routes'
 
 export const routes = createRouting({
     home: segment`/`,
@@ -6,4 +6,6 @@ export const routes = createRouting({
     register: segment`/register`,
     profile: segment`/profile`,
     admin: segment`/admin`,
+    moodtests: segment`/moodtests`,
+    moodtest: segment`/moodtests/${number('testId')}`,
 })

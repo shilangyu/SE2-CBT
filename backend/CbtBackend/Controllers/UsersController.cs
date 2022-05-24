@@ -78,8 +78,8 @@ public class UsersController : UserAwareController {
             return Forbid();
         }
 
-        logger.LogDebug("Updating user with data [login = {Login}, password = {Password}], age= {Age}, gender= {Gender}",
-            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender);
+        logger.LogDebug("Updating user with data [login = {Login}, password = {Password}], age= {Age}, gender= {Gender}, banned= {Banned}",
+            userRequest.Login, userRequest.Password, userRequest.Age, userRequest.Gender, userRequest.Banned);
 
         try {
             var user = await userService.UpdateUserAsync(userId, userRequest);
