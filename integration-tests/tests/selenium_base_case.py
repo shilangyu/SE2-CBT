@@ -116,15 +116,17 @@ class SeleniumBaseCase(TestCase):
         self._logout_login(admin=True)
 
         # check existence (successful login)
-        self._find_test_element('admin-page')
+        self._find_test_element('dashboard-user-management')
 
     def testAdminUserList(self):
         self._logout_login(admin=True)
+        self._find_test_element('dashboard-user-management').click()
 
         self.assertIn(self.email, (el.text for el in self._find_test_elements('admin-user-list-login')))
 
     def testAdminUserEditLogin(self):
         self._logout_login(admin=True)
+        self._find_test_element('dashboard-user-management').click()
 
         entry = next(el for el in self._find_test_elements('admin-user-list-login') if el.text == self.email)
         entry = entry.find_element(By.XPATH, '..')
@@ -142,6 +144,7 @@ class SeleniumBaseCase(TestCase):
 
     def testAdminUserEditCancel(self):
         self._logout_login(admin=True)
+        self._find_test_element('dashboard-user-management').click()
 
         entry = next(el for el in self._find_test_elements('admin-user-list-login') if el.text == self.email)
         entry = entry.find_element(By.XPATH, '..')
@@ -158,6 +161,7 @@ class SeleniumBaseCase(TestCase):
 
     def testAdminUserBan(self):
         self._logout_login(admin=True)
+        self._find_test_element('dashboard-user-management').click()
 
         entry = next(el for el in self._find_test_elements('admin-user-list-login') if el.text == self.email)
         entry = entry.find_element(By.XPATH, '..')
@@ -171,6 +175,7 @@ class SeleniumBaseCase(TestCase):
 
     def testAdminUserDelete(self):
         self._logout_login(admin=True)
+        self._find_test_element('dashboard-user-management').click()
 
         entry = next(el for el in self._find_test_elements('admin-user-list-login') if el.text == self.email)
         entry = entry.find_element(By.XPATH, '..')

@@ -1,14 +1,13 @@
 import SettingsIcon from '@mui/icons-material/Settings'
 import { Card, Container, Grid, Typography, useTheme } from '@mui/material'
 import * as React from 'react'
-import { dataTestAttr } from '../../utils/testing'
 import UserList from './UserList'
 
 function AdminPage() {
     const theme = useTheme()
 
     return (
-        <Container maxWidth="xl" {...dataTestAttr('admin-page')}>
+        <Container maxWidth="xl">
             <Grid
                 container
                 spacing={2}

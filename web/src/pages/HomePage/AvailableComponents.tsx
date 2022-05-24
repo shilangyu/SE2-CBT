@@ -7,10 +7,11 @@ import {
     Stack,
     Typography,
 } from '@mui/material'
+import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
+import { dataTestAttr } from '../../utils/testing'
 import { routes } from '../routes'
-import * as React from 'react'
 
 function AvailableComponents() {
     const isAdmin = useLoginStore(e => e.userData?.isAdmin ?? false)
@@ -38,6 +39,7 @@ function AvailableComponents() {
                         component={Link}
                         to={routes.moodtests()}
                         size="small"
+                        {...dataTestAttr('dashboard-moodtests')}
                     >
                         See all moodtests
                     </Button>
@@ -66,6 +68,7 @@ function AvailableComponents() {
                             component={Link}
                             to={routes.admin()}
                             size="small"
+                            {...dataTestAttr('dashboard-user-management')}
                         >
                             Manage existing users
                         </Button>
