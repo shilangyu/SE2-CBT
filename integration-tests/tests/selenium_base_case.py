@@ -112,6 +112,16 @@ class SeleniumBaseCase(TestCase):
     #
     #     # TODO: implement data-testid on "wrong credentials" error text
 
+    def testMoodtestDashboard(self):
+        self._find_test_element('dashboard-moodtests')
+
+    def testMoodtestNavigation(self):
+        self._find_test_element('dashboard-moodtests').click()
+
+        # TODO: improve (implement data-testid)
+        self.driver_wait.until(
+            lambda _: 'moodtest' in self.driver.current_url)
+
     def testAdminLogin(self):
         self._logout_login(admin=True)
 
