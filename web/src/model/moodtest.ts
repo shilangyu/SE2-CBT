@@ -1,3 +1,17 @@
+export type MoodtestResultsTableEntry = {
+    id: number
+    scoreFrom: number
+    scoreTo: number
+    entryName: string
+    description: string
+}
+
+export type MoodtestResultsTable = {
+    id: number
+    entryCategory: string
+    entries: MoodtestResultsTableEntry[]
+}
+
 export type Moodtest = {
     id: number
     name: string
@@ -7,6 +21,7 @@ export type Moodtest = {
     question3: string
     question4: string
     question5: string
+    resultsTable: MoodtestResultsTable
 }
 
 export type MoodtestResponse = {
