@@ -118,6 +118,15 @@ export class ApiClient {
     saveMoodtestResponse = async (
         response: MoodtestResponse
     ): Promise<MoodtestFullResponse> => {
+        response = {
+            ...response,
+            response1: response.response1 - 1,
+            response2: response.response2 - 1,
+            response3: response.response3 - 1,
+            response4: response.response4 - 1,
+            response5: response.response5 - 1,
+        }
+
         const res = await this.baseRequest<MoodtestFullResponseDto>(
             'evaluation',
             {

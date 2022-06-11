@@ -29,7 +29,7 @@ const MoodTestResultsList: React.FC<Props> = ({
                     items: [
                         ...(acc[curr.evaluation.id]?.items ?? []),
                         curr,
-                    ].sort((a, b) => +a.submitted - +b.submitted),
+                    ].sort((a, b) => +b.submitted - +a.submitted),
                 },
             }),
             {}
