@@ -16,4 +16,6 @@ public class MudTest {
     public string Question4 { get; set; } = default!;
 
     public string Question5 { get; set; } = default!;
+
+    public MudTestResultsTable ResultsTable { get; set; } = default!;
 }

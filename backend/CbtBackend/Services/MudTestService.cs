@@ -63,23 +63,35 @@ public class EvaluationService : IEvaluationService {
         return true;
     }
 
-    public async Task<List<MudTest>> GetAllEvaluations() {
-        return await dbContext.Evaluations.ToListAsync();
+    public Task<List<MudTest>> GetAllEvaluations() {
+        return dbContext.Evaluations
+            .Include(e => e.ResultsTable)
+            .Include(e => e.ResultsTable.Entries)
+            .ToListAsync();
     }
 
-    public async Task<MudTest?> GetEvaluation(int id) {
-        return await dbContext.Evaluations.SingleOrDefaultAsync(e => e.Id == id);
+    public Task<MudTest?> GetEvaluation(int id) {
+        return dbContext.Evaluations
+            .Include(e => e.ResultsTable)
+            .Include(e => e.ResultsTable.Entries)
+            .SingleOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<MudTestResponse?> GetResponse(int id) {
-        return await dbContext.EvaluationResponses
+    public Task<MudTestResponse?> GetResponse(int id) {
+        return dbContext.EvaluationResponses
             .Include(e => e.Evaluation)
+                .Include(e => e.Evaluation.ResultsTable)
+                .Include(e => e.Evaluation.ResultsTable.Entries)
             .Include(e => e.Author)
             .SingleOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<List<MudTestResponse>> GetResponsesByUser(User user) {
-        return await dbContext.EvaluationResponses.Include(e => e.Evaluation).Where(e => e.Author.Id == user.Id).ToListAsync();
+    public Task<List<MudTestResponse>> GetResponsesByUser(User user) {
+        return dbContext.EvaluationResponses
+            .Include(e => e.Evaluation)
+                .Include(e => e.Evaluation.ResultsTable)
+                .Include(e => e.Evaluation.ResultsTable.Entries)
+            .Where(e => e.Author.Id == user.Id).ToListAsync();
     }
 
     public async Task<MudTestResponse> UpdateResponse(int id, EvaluationUpdateRequest request) {

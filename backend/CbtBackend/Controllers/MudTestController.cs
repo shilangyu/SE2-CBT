@@ -97,7 +97,7 @@ public class EvaluationController : UserAwareController {
 
     [Authorize(Roles = UserRoles.EvaluationRead)]
     [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseById)]
-    public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userID")] int userId) {
+    public async Task<IActionResult> GetResponsesByUserId([FromQuery(Name = "userId")] int userId) {
         var contextUser = await this.ContextUser();
         if (contextUser == null || !contextUser.IsAdmin && contextUser.Id != userId) {
             return Forbid();
