@@ -5,6 +5,7 @@ import { useLoginStore } from '../stores/loginStore'
 import {
     Moodtest,
     MoodtestFullResponse,
+    MoodtestFullResponseDto,
     MoodtestResponse,
 } from '../model/moodtest'
 
@@ -117,18 +118,25 @@ export class ApiClient {
     saveMoodtestResponse = async (
         response: MoodtestResponse
     ): Promise<MoodtestFullResponse> => {
-        return await this.baseRequest<MoodtestFullResponse>('evaluation', {
-            method: 'POST',
-            body: JSON.stringify(response),
-        })
+        const res = await this.baseRequest<MoodtestFullResponseDto>(
+            'evaluation',
+            {
+                method: 'POST',
+                body: JSON.stringify(response),
+            }
+        )
+
+        return mapMoodtestResponseDto(res)
     }
 
     getAllMoodtestResponses = async (
         userId: number
     ): Promise<MoodtestFullResponse[]> => {
-        return await this.baseRequest<MoodtestFullResponse[]>(
+        const res = await this.baseRequest<MoodtestFullResponseDto[]>(
             `evaluation/findByUserId?userId=${userId}`
         )
+
+        return res.map(mapMoodtestResponseDto)
     }
 }
 
@@ -136,4 +144,10 @@ export class FailedRequestError extends Error {
     constructor(public response: Response) {
         super()
     }
+}
+
+function mapMoodtestResponseDto(
+    dto: MoodtestFullResponseDto
+): MoodtestFullResponse {
+    return { ...dto, submitted: new Date(dto.submitted) }
 }

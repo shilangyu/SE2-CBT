@@ -33,9 +33,16 @@ export type MoodtestResponse = {
     response5: number
 }
 
-export type MoodtestFullResponse = Omit<MoodtestResponse, 'testId'> & {
+export type MoodtestFullResponseDto = Omit<MoodtestResponse, 'testId'> & {
     id: number
     userId: number
     submitted: string
+    evaluation: Moodtest
+}
+
+export type MoodtestFullResponse = Omit<MoodtestResponse, 'testId'> & {
+    id: number
+    userId: number
+    submitted: Date
     evaluation: Moodtest
 }
