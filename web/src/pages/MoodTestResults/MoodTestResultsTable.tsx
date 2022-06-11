@@ -16,7 +16,7 @@ export type Props = {
 
 const MoodTestResultsTable: React.FC<Props> = ({ moodtest, totalScore }) => {
     return (
-        <div>
+        <>
             <Typography variant="h4" sx={{ textAlign: 'center' }}>
                 Results table for {moodtest.name}
             </Typography>
@@ -42,32 +42,34 @@ const MoodTestResultsTable: React.FC<Props> = ({ moodtest, totalScore }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {moodtest.resultsTable.entries.map(entry => (
-                            <TableRow
-                                key={entry.id}
-                                hover
-                                selected={
-                                    totalScore <= entry.scoreTo &&
-                                    totalScore >= entry.scoreFrom
-                                }
-                            >
-                                <TableCell align="center">
-                                    {entry.scoreFrom !== entry.scoreTo
-                                        ? `${entry.scoreFrom}-${entry.scoreTo}`
-                                        : entry.scoreFrom.toString()}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {entry.entryName}
-                                </TableCell>
-                                <TableCell align="center">
-                                    {entry.description}
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {moodtest.resultsTable.entries
+                            .sort((a, b) => a.scoreFrom - b.scoreFrom)
+                            .map(entry => (
+                                <TableRow
+                                    key={entry.id}
+                                    hover
+                                    selected={
+                                        totalScore <= entry.scoreTo &&
+                                        totalScore >= entry.scoreFrom
+                                    }
+                                >
+                                    <TableCell align="center">
+                                        {entry.scoreFrom !== entry.scoreTo
+                                            ? `${entry.scoreFrom}-${entry.scoreTo}`
+                                            : entry.scoreFrom.toString()}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {entry.entryName}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {entry.description}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
+        </>
     )
 }
 
