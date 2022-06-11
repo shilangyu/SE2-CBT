@@ -112,22 +112,4 @@ public class EvaluationController : UserAwareController {
         var responseList = await evaluationService.GetResponsesByUser(queryUser);
         return Ok(responseList);
     }
-
-    [Authorize(Roles = UserRoles.EvaluationRead)]
-    [HttpGet(ApiRoutes.Evaluation.GetEvaluationResponseByLogin)]
-    public async Task<IActionResult> GetResponsesByUserLogin([FromQuery(Name = "login")] string login) {
-        var contextUser = await this.ContextUser();
-        if (contextUser == null || !contextUser.IsAdmin && contextUser.Email != login) {
-            return Forbid();
-        }
-
-        var queryUser = await UserManager.FindByEmailAsync(login);
-
-        if (queryUser == null) {
-            return NotFound();
-        }
-
-        var responseList = await evaluationService.GetResponsesByUser(queryUser);
-        return Ok(responseList);
-    }
 }

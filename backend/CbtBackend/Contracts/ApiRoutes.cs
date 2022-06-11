@@ -23,7 +23,6 @@ public static class ApiRoutes {
         public const string PutEvaluationResponse = "evaluation/{id}";
         public const string DeleteEvaluationResponse = "evaluation/{id}";
         public const string GetEvaluationResponseById = "evaluation/findByUserId";
-        public const string GetEvaluationResponseByLogin = "evaluation/findByUserLogin";
     }
 
 }
