@@ -7,5 +7,6 @@ export const routes = createRouting({
     profile: segment`/profile`,
     admin: segment`/admin`,
     moodtests: segment`/moodtests`,
+    moodtestResults: segment`/moodtests/results`,
     moodtest: segment`/moodtests/${number('testId')}`,
 })

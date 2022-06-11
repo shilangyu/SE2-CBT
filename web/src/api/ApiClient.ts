@@ -122,6 +122,14 @@ export class ApiClient {
             body: JSON.stringify(response),
         })
     }
+
+    getAllMoodtestResponses = async (
+        userId: number
+    ): Promise<MoodtestFullResponse[]> => {
+        return await this.baseRequest<MoodtestFullResponse[]>(
+            `evaluation/findByUserId?userId=${userId}`
+        )
+    }
 }
 
 export class FailedRequestError extends Error {

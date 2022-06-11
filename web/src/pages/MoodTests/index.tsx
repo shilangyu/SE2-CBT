@@ -9,6 +9,8 @@ import {
     Typography,
 } from '@mui/material'
 
+import { BarChart } from '@mui/icons-material'
+
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useEffect } from 'react'
@@ -42,70 +44,84 @@ function MoodTests() {
     }, [error])
 
     return (
-        <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            minHeight="100%"
-            spacing={5}
-        >
-            {loading && (
-                <Stack alignItems="center">
-                    <CircularProgress />
-                    <Typography>Fetching moodtests</Typography>
-                </Stack>
-            )}
-            {error && (
-                <Button variant="outlined" onClick={fetchMoodtests}>
-                    Try again
-                </Button>
-            )}
-            {moodtests && (
-                <>
-                    <Routes>
-                        {params['*'] && (
-                            <Route
-                                path="*"
-                                element={
-                                    <MoodTest
-                                        moodtest={
-                                            moodtests.find(
-                                                e => e.id === +params['*']!
-                                            )!
-                                        }
-                                    />
-                                }
-                            />
-                        )}
-                    </Routes>
-                    {moodtests.map(test => (
-                        <Grid item key={test.id}>
-                            <Card sx={{ minWidth: 275 }}>
-                                <CardContent>
-                                    <Typography variant="h5" component="div">
-                                        {test.name}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        {test.description}
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button
-                                        component={Link}
-                                        size="small"
-                                        to={routes.moodtest({
-                                            testId: test.id.toString(),
-                                        })}
-                                    >
-                                        Take test
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-                    ))}
-                </>
-            )}
-        </Grid>
+        <>
+            <Button
+                color="inherit"
+                variant="text"
+                component={Link}
+                to={routes.moodtestResults()}
+                startIcon={<BarChart />}
+            >
+                See all results
+            </Button>
+            <Grid
+                container
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100%"
+                spacing={5}
+            >
+                {loading && (
+                    <Stack alignItems="center">
+                        <CircularProgress />
+                        <Typography>Fetching moodtests</Typography>
+                    </Stack>
+                )}
+                {error && (
+                    <Button variant="outlined" onClick={fetchMoodtests}>
+                        Try again
+                    </Button>
+                )}
+                {moodtests && (
+                    <>
+                        <Routes>
+                            {params['*'] && (
+                                <Route
+                                    path="*"
+                                    element={
+                                        <MoodTest
+                                            moodtest={
+                                                moodtests.find(
+                                                    e => e.id === +params['*']!
+                                                )!
+                                            }
+                                        />
+                                    }
+                                />
+                            )}
+                        </Routes>
+                        {moodtests.map(test => (
+                            <Grid item key={test.id}>
+                                <Card sx={{ minWidth: 275 }}>
+                                    <CardContent>
+                                        <Typography
+                                            variant="h5"
+                                            component="div"
+                                        >
+                                            {test.name}
+                                        </Typography>
+                                        <Typography variant="body2">
+                                            {test.description}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button
+                                            component={Link}
+                                            size="small"
+                                            to={routes.moodtest({
+                                                testId: test.id.toString(),
+                                            })}
+                                        >
+                                            Take test
+                                        </Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </>
+                )}
+            </Grid>
+        </>
     )
 }
 
