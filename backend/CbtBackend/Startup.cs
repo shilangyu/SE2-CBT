@@ -163,6 +163,55 @@ public class Startup {
     }
 
     private static async Task SeedMoodtests(CbtDbContext dbContext) {
+        var dummyResultsTable = new MudTestResultsTable {
+            Id = 1,
+            EntryCategory = "Severity",
+            Entries = new() {
+                new() {
+                    Id = 1,
+                    ScoreFrom = 0,
+                    ScoreTo = 0,
+                    EntryName = "No symptoms",
+                    Description = "That's terrific! You don't seem to have any symptoms at all."
+                },
+                new() {
+                    Id = 2,
+                    ScoreFrom = 1,
+                    ScoreTo = 2,
+                    EntryName = "Borderline",
+                    Description = "These scores are normal, but you could use a little tune-up."
+                },
+                new() {
+                    Id = 3,
+                    ScoreFrom = 3,
+                    ScoreTo = 5,
+                    EntryName = "Mild",
+                    Description = "Although your scores are not greatly elevated, this is enough depression or anxiety to take the joy out of life. If we work together, we can probably get your scores down to 0, which would be terrific!"
+                },
+                new() {
+                    Id = 4,
+                    ScoreFrom = 6,
+                    ScoreTo = 10,
+                    EntryName = "Moderate",
+                    Description = "You're feeling quite a bit of depression or anxiety. Although you're not in the severe range, these scores reflect consider- able unhappiness."
+                },
+                new() {
+                    Id = 5,
+                    ScoreFrom = 11,
+                    ScoreTo = 15,
+                    EntryName = "Severe",
+                    Description = "You have fairly strong feelings of depression or anxiety. That makes me sad, but there's some really good news. The tools in this book can help you transform your negative feelings into joy."
+                },
+                new() {
+                    Id = 6,
+                    ScoreFrom = 16,
+                    ScoreTo = 20,
+                    EntryName = "Extreme",
+                    Description = "Scores in this range indicate that your suffering is intense. Friends or family may have trouble grasping how much pain you're in. The good news is that the prognosis for improvement is very positive. In fact, recovery is one of the greatest feelings a human being can have."
+                },
+            }
+        };
+
         var moodtests = new MudTest[] {
             new() {
                 Id = 1,
@@ -172,7 +221,8 @@ public class Startup {
                 Question2 = "Discouraged or hopeless",
                 Question3 = "Low in self-esteem, inferior, or worthless",
                 Question4 = "Unmotivated to do things",
-                Question5 = "Decreased pleasure or satisfaction in life"
+                Question5 = "Decreased pleasure or satisfaction in life",
+                ResultsTable = dummyResultsTable
             },
             new() {
                 Id = 2,
@@ -182,7 +232,8 @@ public class Startup {
                 Question2 = "Frightened",
                 Question3 = "Worrying about things",
                 Question4 = "Tense or on edge",
-                Question5 = "Nervous"
+                Question5 = "Nervous",
+                ResultsTable = dummyResultsTable
             },
             new() {
                 Id = 3,
@@ -192,7 +243,8 @@ public class Startup {
                 Question2 = "Sometimes I have the urge to use drugs or alcohol",
                 Question3 = "Sometimes it's hard to resist the urge to use drugs or alcohol",
                 Question4 = "Sometimes I struggle with the temptaion to use drugs or alcohol",
-                Question5 = "Nervous"
+                Question5 = "Nervous",
+                ResultsTable = dummyResultsTable
             },
             new() {
                 Id = 4,
@@ -202,7 +254,8 @@ public class Startup {
                 Question2 = "Annoyed",
                 Question3 = "Resentful",
                 Question4 = "Angry",
-                Question5 = "Irritated"
+                Question5 = "Irritated",
+                ResultsTable = dummyResultsTable
             },
             new() {
                 Id = 5,
@@ -212,7 +265,8 @@ public class Startup {
                 Question2 = "Resolving conflicts",
                 Question3 = "Degree of affection and caring",
                 Question4 = "Intimacy and closeness",
-                Question5 = "Overall satisfaction"
+                Question5 = "Overall satisfaction",
+                ResultsTable = dummyResultsTable
             },
             new() {
                 Id = 6,
@@ -222,7 +276,8 @@ public class Startup {
                 Question2 = "Hopeful and optimistic",
                 Question3 = "Worthwhile, high self-esteem",
                 Question4 = "Motivated, productive",
-                Question5 = "Pleased and satisfied with life"
+                Question5 = "Pleased and satisfied with life",
+                ResultsTable = dummyResultsTable
              }
         };
 
