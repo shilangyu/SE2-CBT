@@ -1,10 +1,11 @@
-import * as React from 'react'
-import Rating, { IconContainerProps } from '@mui/material/Rating'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied'
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied'
+import Rating, { IconContainerProps } from '@mui/material/Rating'
+import * as React from 'react'
+import { dataTestAttr } from '../../../utils/testing'
 
 export const ratingPickerOptions: {
     [index: string]: {
@@ -54,6 +55,7 @@ const RatingPicker: React.FC<Props> = ({ value, onChange }) => {
             onChange={(_, val) => val && onChange(val)}
             IconContainerComponent={IconContainer}
             highlightSelectedOnly
+            {...dataTestAttr('moodtests-test-rating')}
         />
     )
 }

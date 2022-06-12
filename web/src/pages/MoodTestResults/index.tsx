@@ -9,14 +9,13 @@ import {
 } from '@mui/material'
 
 import { useSnackbar } from 'notistack'
-import * as React from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { apiClient } from '../../api'
 import { useAsync } from '../../hooks/useAsync'
 import { MoodtestFullResponse } from '../../model/moodtest'
 import { useLoginStore } from '../../stores/loginStore'
+import { dataTestAttr } from '../../utils/testing'
 
 import { routes } from '../routes'
 import MoodTestResultsList from './MoodTestResultsList'
@@ -53,7 +52,12 @@ function MoodTestResults() {
 
     return (
         <>
-            <IconButton size="large" component={Link} to={routes.moodtests()}>
+            <IconButton
+                size="large"
+                component={Link}
+                to={routes.moodtests()}
+                {...dataTestAttr('moodtests-results-back-button')}
+            >
                 <ArrowBack fontSize="inherit" />
             </IconButton>
 

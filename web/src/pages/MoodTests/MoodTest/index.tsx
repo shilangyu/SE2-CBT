@@ -1,23 +1,23 @@
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
+    Dialog,
+    DialogTitle as MiuDialogTitle,
     IconButton,
     Stack,
-    DialogTitle as MiuDialogTitle,
-    Dialog,
 } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiClient } from '../../../api'
 import { useAsync } from '../../../hooks/useAsync'
 import { Moodtest, MoodtestResponse } from '../../../model/moodtest'
 import { routes } from '../../routes'
-import { useState } from 'react'
 
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
 import CloseIcon from '@mui/icons-material/Close'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import { dataTestAttr } from '../../../utils/testing'
 import Question from './Question'
 
 export interface DialogTitleProps {
@@ -153,6 +153,7 @@ const MoodTest: React.FC<Props> = ({ moodtest }) => {
                         loading={loading}
                         variant="outlined"
                         onClick={handleSaveResponse}
+                        {...dataTestAttr('moodtests-test-save-button')}
                     >
                         Save response
                     </LoadingButton>

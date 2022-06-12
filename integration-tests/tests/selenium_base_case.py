@@ -1,6 +1,7 @@
 import logging
 import os
 import random
+import re
 from functools import cache
 from unittest import TestCase
 from uuid import uuid4
@@ -117,10 +118,32 @@ class SeleniumBaseCase(TestCase):
 
     def testMoodtestNavigation(self):
         self._find_test_element('dashboard-moodtests').click()
+        self._find_test_element('moodtests-results-button').click()
+        self._find_test_element('moodtests-results-back-button').click()
+        self._find_test_element('moodtests-test-start-button')
 
-        # TODO: improve (implement data-testid)
-        self.driver_wait.until(
-            lambda _: 'moodtest' in self.driver.current_url)
+    def testMoodtestTest(self):
+        self._find_test_element('dashboard-moodtests').click()
+        self._find_test_element('moodtests-test-start-button').click()
+
+        ratings = []
+
+        for entry in self._find_test_elements('moodtests-test-rating'):
+            rating_entries = entry.find_elements(By.CSS_SELECTOR, 'label[for]')
+            ratings.append(rating := random.randint(1, len(rating_entries)))
+            rating_entries[rating - 1].click()
+
+        self._find_test_element('moodtests-test-save-button').click()
+        self._find_test_element('moodtests-results-button').click()
+        self._find_test_element('moodtests-results-details-button').click()
+
+        score_remote_text = self._find_test_element('moodtests-results-details-score').text
+        score_remote_match = re.search(r'\d+', score_remote_text)
+        assert score_remote_match is not None
+
+        score_local = sum(ratings) - len(ratings)
+        score_remote = int(score_remote_match.group(0))
+        self.assertEqual(score_local, score_remote)
 
     def testAdminLogin(self):
         self._logout_login(admin=True)

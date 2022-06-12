@@ -1,11 +1,12 @@
-import * as React from 'react'
+import { Done } from '@mui/icons-material'
+import { ListItemButton, ListItemIcon } from '@mui/material'
 import List from '@mui/material/List'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
+import * as React from 'react'
 import { useMemo } from 'react'
 import { MoodtestFullResponse } from '../../model/moodtest'
-import { ListItemButton, ListItemIcon } from '@mui/material'
-import { Done } from '@mui/icons-material'
+import { dataTestAttr } from '../../utils/testing'
 
 export type Props = {
     responses: MoodtestFullResponse[]
@@ -60,6 +61,9 @@ const MoodTestResultsList: React.FC<Props> = ({
                                             ? onResponseSelected(undefined)
                                             : onResponseSelected(item)
                                     }
+                                    {...dataTestAttr(
+                                        'moodtests-results-details-button'
+                                    )}
                                 >
                                     <ListItemText
                                         primary={formatListItem(item)}
