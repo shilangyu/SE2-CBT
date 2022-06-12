@@ -163,7 +163,7 @@ public class Startup {
     }
 
     private static async Task SeedMoodtests(CbtDbContext dbContext) {
-        var dummyResultsTable = new MudTestResultsTable {
+        var resultsTable1 = new MudTestResultsTable {
             Id = 1,
             EntryCategory = "Severity",
             Entries = new() {
@@ -211,6 +211,157 @@ public class Startup {
                 },
             }
         };
+        var resultsTable2 = new MudTestResultsTable {
+            Id = 2,
+            EntryCategory = "Severity",
+            Entries = new() {
+                new() {
+                    Id = 7,
+                    ScoreFrom = 0,
+                    ScoreTo = 0,
+                    EntryName = "No symptoms",
+                    Description = "No anger"
+                },
+                new() {
+                    Id = 8,
+                    ScoreFrom = 1,
+                    ScoreTo = 2,
+                    EntryName = "Borderline",
+                    Description = "A little anger"
+                },
+                new() {
+                    Id = 9,
+                    ScoreFrom = 3,
+                    ScoreTo = 5,
+                    EntryName = "Mild",
+                    Description = "Mild anger"
+                },
+                new() {
+                    Id = 10,
+                    ScoreFrom = 6,
+                    ScoreTo = 10,
+                    EntryName = "Moderate",
+                    Description = "Moderate anger"
+                },
+                new() {
+                    Id = 11,
+                    ScoreFrom = 11,
+                    ScoreTo = 15,
+                    EntryName = "Severe",
+                    Description = "Severe anger"
+                },
+                new() {
+                    Id = 12,
+                    ScoreFrom = 16,
+                    ScoreTo = 20,
+                    EntryName = "Extreme",
+                    Description = "Extreme anger"
+                },
+            }
+        };
+        var resultsTable3 = new MudTestResultsTable {
+            Id = 3,
+            EntryCategory = "Severity",
+            Entries = new() {
+                new() {
+                    Id = 13,
+                    ScoreFrom = 0,
+                    ScoreTo = 0,
+                    EntryName = "",
+                    Description = "Extremely dissatisfied"
+                },
+                new() {
+                    Id = 14,
+                    ScoreFrom = 1,
+                    ScoreTo = 2,
+                    EntryName = "",
+                    Description = "Very dissatisfied"
+                },
+                new() {
+                    Id = 15,
+                    ScoreFrom = 3,
+                    ScoreTo = 5,
+                    EntryName = "",
+                    Description = "Moderately dissatisfied"
+                },
+                new() {
+                    Id = 16,
+                    ScoreFrom = 6,
+                    ScoreTo = 10,
+                    EntryName = "",
+                    Description = "Somewhat satisfied"
+                },
+                new() {
+                    Id = 17,
+                    ScoreFrom = 11,
+                    ScoreTo = 15,
+                    EntryName = "",
+                    Description = "Moderately satisfied"
+                },
+                new() {
+                    Id = 18,
+                    ScoreFrom = 16,
+                    ScoreTo = 20,
+                    EntryName = "",
+                    Description = "Extremely satisfied"
+                },
+            }
+        };
+        var resultsTable4 = new MudTestResultsTable {
+            Id = 4,
+            EntryCategory = "Happiness Level",
+            Entries = new() {
+                new() {
+                    Id = 19,
+                    ScoreFrom = 0,
+                    ScoreTo = 1,
+                    EntryName = "No happiness",
+                    Description = "It seems like you're barely having any positive feelings at all right now. That's really sad, but there's some good news—if you want, we can work together and fix that."
+                },
+                new() {
+                    Id = 20,
+                    ScoreFrom = 2,
+                    ScoreTo = 4,
+                    EntryName = "Minimal happiness",
+                    Description = "These scores indicate that you have very few positive feelings. There's lots of room for improvement."
+                },
+                new() {
+                    Id = 21,
+                    ScoreFrom = 5,
+                    ScoreTo = 5,
+                    EntryName = "Some happiness",
+                    Description = "Your feelings are somewhat positive, which is promis- ing. If we work together, we should be able to make things a lot better."
+                },
+                new() {
+                    Id = 22,
+                    ScoreFrom = 6,
+                    ScoreTo = 10,
+                    EntryName = "Moderate happiness",
+                    Description = "You seem to be feeling moderately positive. That's good! I'd love to see your scores increase even more."
+                },
+                new() {
+                    Id = 23,
+                    ScoreFrom = 11,
+                    ScoreTo = 15,
+                    EntryName = "A lot of happiness",
+                    Description = "You seem to be feeling very positive and happy, but there's room for feeling even happier."
+                },
+                new() {
+                    Id = 24,
+                    ScoreFrom = 16,
+                    ScoreTo = 19,
+                    EntryName = "Extreme happiness",
+                    Description = "Scores in this range are really good. You're feeling extremely positive in at least one of the five areas on the test. Way to go! There's still a little room for feeling even better."
+                },
+                new() {
+                    Id = 25,
+                    ScoreFrom = 20,
+                    ScoreTo = 20,
+                    EntryName = "Tremendous happiness",
+                    Description = "This is fabulous!"
+                },
+            }
+        };
 
         var moodtests = new MudTest[] {
             new() {
@@ -222,7 +373,7 @@ public class Startup {
                 Question3 = "Low in self-esteem, inferior, or worthless",
                 Question4 = "Unmotivated to do things",
                 Question5 = "Decreased pleasure or satisfaction in life",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable1
             },
             new() {
                 Id = 2,
@@ -233,7 +384,7 @@ public class Startup {
                 Question3 = "Worrying about things",
                 Question4 = "Tense or on edge",
                 Question5 = "Nervous",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable1
             },
             new() {
                 Id = 3,
@@ -244,7 +395,7 @@ public class Startup {
                 Question3 = "Sometimes it's hard to resist the urge to use drugs or alcohol",
                 Question4 = "Sometimes I struggle with the temptaion to use drugs or alcohol",
                 Question5 = "Nervous",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable1
             },
             new() {
                 Id = 4,
@@ -255,7 +406,7 @@ public class Startup {
                 Question3 = "Resentful",
                 Question4 = "Angry",
                 Question5 = "Irritated",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable2
             },
             new() {
                 Id = 5,
@@ -266,7 +417,7 @@ public class Startup {
                 Question3 = "Degree of affection and caring",
                 Question4 = "Intimacy and closeness",
                 Question5 = "Overall satisfaction",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable3
             },
             new() {
                 Id = 6,
@@ -277,7 +428,7 @@ public class Startup {
                 Question3 = "Worthwhile, high self-esteem",
                 Question4 = "Motivated, productive",
                 Question5 = "Pleased and satisfied with life",
-                ResultsTable = dummyResultsTable
+                ResultsTable = resultsTable4
              }
         };
 

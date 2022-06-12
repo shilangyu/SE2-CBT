@@ -15,6 +15,7 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
 import { dataTestAttr } from '../../utils/testing'
 import AdminPage from '../AdminPage'
+import MoodTestResults from '../MoodTestResults'
 import MoodTests from '../MoodTests'
 import ProfilePage from '../ProfilePage'
 import { routes } from '../routes'
@@ -72,6 +73,10 @@ function HomePage() {
                 <Route
                     path={routes.profile.pattern}
                     element={<ProfilePage />}
+                />
+                <Route
+                    path={routes.moodtestResults.pattern}
+                    element={<MoodTestResults />}
                 />
                 <Route
                     path={routes.moodtests.pattern + '/*'}
