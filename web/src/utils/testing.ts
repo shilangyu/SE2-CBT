@@ -26,6 +26,13 @@ export enum DataTestId {
     'admin-user-edit-login-input',
     'admin-user-edit-cancel',
     'admin-user-edit-save',
+    'moodtests-test-start-button',
+    'moodtests-test-rating',
+    'moodtests-test-save-button',
+    'moodtests-results-button',
+    'moodtests-results-details-button',
+    'moodtests-results-details-score',
+    'moodtests-results-back-button',
 }
 
 export const dataTestAttr = (key: keyof typeof DataTestId) => ({

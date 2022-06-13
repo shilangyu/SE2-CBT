@@ -12,12 +12,12 @@ import {
 import { BarChart } from '@mui/icons-material'
 
 import { useSnackbar } from 'notistack'
-import * as React from 'react'
 import { useEffect } from 'react'
 import { Link, Route, Routes, useParams } from 'react-router-dom'
 import { apiClient } from '../../api'
 import { useAsync } from '../../hooks/useAsync'
 
+import { dataTestAttr } from '../../utils/testing'
 import { routes } from '../routes'
 import MoodTest from './MoodTest'
 
@@ -51,6 +51,7 @@ function MoodTests() {
                 component={Link}
                 to={routes.moodtestResults()}
                 startIcon={<BarChart />}
+                {...dataTestAttr('moodtests-results-button')}
             >
                 See all results
             </Button>
@@ -111,6 +112,9 @@ function MoodTests() {
                                             to={routes.moodtest({
                                                 testId: test.id.toString(),
                                             })}
+                                            {...dataTestAttr(
+                                                'moodtests-test-start-button'
+                                            )}
                                         >
                                             Take test
                                         </Button>
