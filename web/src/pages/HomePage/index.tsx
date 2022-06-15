@@ -7,10 +7,9 @@ import {
     Stack,
     styled,
     Toolbar,
-    Typography,
+    Typography
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import * as React from 'react'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { useLoginStore } from '../../stores/loginStore'
 import { dataTestAttr } from '../../utils/testing'
@@ -82,7 +81,10 @@ function HomePage() {
                     path={routes.moodtests.pattern + '/*'}
                     element={<MoodTests />}
                 />
-                <Route path={routes.admin.pattern} element={<AdminPage />} />
+                <Route 
+                    path={routes.admin.pattern} 
+                    element={<AdminPage />} 
+                />
                 <Route
                     path="*"
                     element={<Navigate to={routes.home()} replace />}

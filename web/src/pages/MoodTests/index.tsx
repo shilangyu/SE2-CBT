@@ -6,7 +6,7 @@ import {
     CircularProgress,
     Grid,
     Stack,
-    Typography,
+    Typography
 } from '@mui/material'
 
 import { BarChart } from '@mui/icons-material'
@@ -17,6 +17,7 @@ import { Link, Route, Routes, useParams } from 'react-router-dom'
 import { apiClient } from '../../api'
 import { useAsync } from '../../hooks/useAsync'
 
+import { useIdStore } from '../../stores/idStore'
 import { dataTestAttr } from '../../utils/testing'
 import { routes } from '../routes'
 import MoodTest from './MoodTest'
@@ -30,6 +31,8 @@ function MoodTests() {
     } = useAsync(apiClient.getAllMoodtests)
     const { enqueueSnackbar } = useSnackbar()
     const params = useParams<'*'>()
+    const idStore = useIdStore()
+    idStore.userId = -1
 
     useEffect(() => {
         fetchMoodtests()
