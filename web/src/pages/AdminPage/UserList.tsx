@@ -1,3 +1,4 @@
+import { BarChart } from '@mui/icons-material'
 import {
     Button,
     Stack,
@@ -11,14 +12,19 @@ import {
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { apiClient } from '../../api'
 import { User, UserUpdateRequest } from '../../model/user'
+import { useIdStore } from '../../stores/idStore'
 import { dataTestAttr } from '../../utils/testing'
+import { routes } from '../routes'
 import UserEditor from './UserEditor'
 
 const UserList: React.FC = () => {
     const [users, setUsers] = useState<User[] | null>(null)
     const [selectedUser, setSelectedUser] = useState<User | null>(null)
+    const idStore = useIdStore()
+    const navigate = useNavigate()
 
     const { enqueueSnackbar } = useSnackbar()
 
@@ -67,8 +73,20 @@ const UserList: React.FC = () => {
                 >
                     Delete
                 </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => showResults(user.userId)}
+                    startIcon={<BarChart />}
+                >
+                    Test Results
+                </Button>
             </Stack>
         )
+    }
+
+    const showResults = (userId: number) => {
+        idStore.userId = userId
+        navigate(routes.moodtestResults())
     }
 
     const setUserBan = (userId: number, banned: boolean) => {

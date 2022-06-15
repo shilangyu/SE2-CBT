@@ -14,15 +14,16 @@ import { Link } from 'react-router-dom'
 import { apiClient } from '../../api'
 import { useAsync } from '../../hooks/useAsync'
 import { MoodtestFullResponse } from '../../model/moodtest'
+import { useIdStore } from '../../stores/idStore'
 import { useLoginStore } from '../../stores/loginStore'
 import { dataTestAttr } from '../../utils/testing'
-
 import { routes } from '../routes'
 import MoodTestResultsList from './MoodTestResultsList'
 import MoodTestResultsTable from './MoodTestResultsTable'
 
 function MoodTestResults() {
     const loginStore = useLoginStore()
+    const idStore = useIdStore()
     const {
         result: moodtests,
         call: fetchMoodtests,
@@ -30,7 +31,9 @@ function MoodTestResults() {
         error,
     } = useAsync(() =>
         // assuming to be logged in in this route
-        apiClient.getAllMoodtestResponses(loginStore.userData!.userId)
+        apiClient.getAllMoodtestResponses(
+            idStore.userId > -1 ? idStore.userId : loginStore.userData!.userId
+        )
     )
     const { enqueueSnackbar } = useSnackbar()
 
@@ -55,7 +58,7 @@ function MoodTestResults() {
             <IconButton
                 size="large"
                 component={Link}
-                to={routes.moodtests()}
+                to={idStore.userId > -1 ? routes.admin() : routes.moodtests()}
                 {...dataTestAttr('moodtests-results-back-button')}
             >
                 <ArrowBack fontSize="inherit" />
