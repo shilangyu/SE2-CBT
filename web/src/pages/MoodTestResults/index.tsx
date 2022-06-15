@@ -5,7 +5,7 @@ import {
     Divider,
     IconButton,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material'
 
 import { useSnackbar } from 'notistack'
@@ -31,13 +31,15 @@ function MoodTestResults() {
         error,
     } = useAsync(() =>
         // assuming to be logged in in this route
-        apiClient.getAllMoodtestResponses(idStore.userId > -1 ? idStore.userId : loginStore.userData!.userId)
+        apiClient.getAllMoodtestResponses(
+            idStore.userId > -1 ? idStore.userId : loginStore.userData!.userId
+        )
     )
     const { enqueueSnackbar } = useSnackbar()
 
     const [selectedResponse, setSelectedResponse] = useState<
         MoodtestFullResponse | undefined
-    >(undefined)    
+    >(undefined)
 
     useEffect(() => {
         fetchMoodtests()

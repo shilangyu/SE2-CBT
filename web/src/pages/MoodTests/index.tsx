@@ -6,7 +6,7 @@ import {
     CircularProgress,
     Grid,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material'
 
 import { BarChart } from '@mui/icons-material'

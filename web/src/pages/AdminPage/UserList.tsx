@@ -7,7 +7,7 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Typography
+    Typography,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import * as React from 'react'
@@ -19,7 +19,6 @@ import { useIdStore } from '../../stores/idStore'
 import { dataTestAttr } from '../../utils/testing'
 import { routes } from '../routes'
 import UserEditor from './UserEditor'
-
 
 const UserList: React.FC = () => {
     const [users, setUsers] = useState<User[] | null>(null)
@@ -76,8 +75,8 @@ const UserList: React.FC = () => {
                 </Button>
                 <Button
                     variant="outlined"
-                    onClick={() => showResults(user.userId)}                    
-                    startIcon={<BarChart />}                  
+                    onClick={() => showResults(user.userId)}
+                    startIcon={<BarChart />}
                 >
                     Test Results
                 </Button>
